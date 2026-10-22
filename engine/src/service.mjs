@@ -325,7 +325,7 @@ export class CatchService {
 
   status() {
     return {
-      network: { key: this.net.key, label: this.net.label, chainId: this.net.chain.id, explorer: this.net.explorer },
+      network: { key: this.net.key, label: this.net.label, chainId: this.net.chain.id, explorer: this.net.explorer, rpc: this.net.rpc },
       head: this.head != null ? Number(this.head) : null,
       system: this.system ? { marginBank: this.system.marginBank, liquidationEngine: this.system.liquidationEngine, insuranceFund: this.system.insuranceFund, collateral: this.system.collateralToken } : null,
       engine: this.engine,
