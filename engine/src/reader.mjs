@@ -3,7 +3,7 @@ import { bankAbi, poolAbi } from "./chain.mjs";
 import { liquidationPrice } from "./math.mjs";
 
 const PAGE = 1000n;
-const BATCH = 400;
+const BATCH = Number(process.env.READ_BATCH || 800);
 
 async function holders(client, bank, pool, isLong, blockNumber) {
   const out = [];
@@ -17,7 +17,7 @@ async function holders(client, bank, pool, isLong, blockNumber) {
   }
 }
 
-const CONCURRENCY = Number(process.env.READ_CONCURRENCY || 6);
+const CONCURRENCY = Number(process.env.READ_CONCURRENCY || 10);
 
 async function multicall(client, contracts, blockNumber) {
   const chunks = [];
@@ -46,17 +46,17 @@ export async function snapshotPool(client, { bank, pool }) {
     holders(client, bank, pool, false, blockNumber),
   ]);
   const accounts = [...new Set([...longs, ...shorts])];
+  // pass 1: position + health for everyone
   const calls = [];
   for (const a of accounts) {
     calls.push({ address: bank, abi: bankAbi, functionName: "getPosition", args: [a, pool] });
     calls.push({ address: bank, abi: bankAbi, functionName: "getAccountHealth", args: [a] });
-    calls.push({ address: bank, abi: bankAbi, functionName: "getBankruptcyPrice", args: [a, pool] });
   }
   const res = await multicall(client, calls, blockNumber);
   const positions = [];
   let unpriced = 0;
   for (let i = 0; i < accounts.length; i++) {
-    const [pos, health, bk] = res.slice(i * 3, i * 3 + 3);
+    const [pos, health] = res.slice(i * 2, i * 2 + 2);
     if (pos.status !== "success" || pos.result.size === 0n) continue;
     const size = pos.result.size;
     let liq = null;
@@ -64,15 +64,12 @@ export async function snapshotPool(client, { bank, pool }) {
       const [equity, , mmReq] = health.result;
       liq = liquidationPrice({ size, equity, mmReq, markPrice: snap.markPrice, oneBase: snap.oneBase, maintenanceMarginBps: snap.maintenanceMarginBps });
     } else unpriced++;
-    positions.push({
-      account: accounts[i],
-      size,
-      entry: pos.result.avgEntryPrice,
-      liq,
-      bankruptcy: bk.status === "success" ? bk.result : null,
-      equity: health.status === "success" ? health.result[0] : null,
-    });
+    positions.push({ account: accounts[i], size, entry: pos.result.avgEntryPrice, liq, bankruptcy: null, equity: health.status === "success" ? health.result[0] : null });
   }
+  // pass 2: bankruptcy price only where a catch window can matter (liquidation within 20% of mark)
+  const near = positions.filter((p) => p.liq != null && (p.liq > snap.markPrice ? p.liq - snap.markPrice : snap.markPrice - p.liq) * 5n <= snap.markPrice);
+  const bk = await multicall(client, near.map((p) => ({ address: bank, abi: bankAbi, functionName: "getBankruptcyPrice", args: [p.account, pool] })), blockNumber);
+  near.forEach((p, i) => { if (bk[i].status === "success") p.bankruptcy = bk[i].result; });
   return {
     pool,
     blockNumber,
