@@ -10,7 +10,7 @@
 [![Engine tests](https://img.shields.io/badge/engine%20tests-12%20passing-16a34a)](#the-engine)
 ![Stack](https://img.shields.io/badge/Solidity%20%2B%20Somnia%20Reactivity%20%2B%20markets--sdk-1f1f23)
 
-[![Run it](https://img.shields.io/badge/Run%20it-three%20commands-14151a?labelColor=0f1420)](#run-it) [![Mechanism](https://img.shields.io/badge/Mechanism-step%20by%20step-14151a?labelColor=0f1420)](#the-catch-loop-step-by-step) [![Evidence](https://img.shields.io/badge/Evidence-what%20is%20proven-14151a?labelColor=0f1420)](#whats-real-vs-pending)
+[![Live](https://img.shields.io/badge/Live-catch--backstop.vercel.app-1c6cff?labelColor=0f1420)](https://catch-backstop.vercel.app) [![Run it](https://img.shields.io/badge/Run%20it-three%20commands-14151a?labelColor=0f1420)](#run-it) [![Mechanism](https://img.shields.io/badge/Mechanism-step%20by%20step-14151a?labelColor=0f1420)](#the-catch-loop-step-by-step) [![Evidence](https://img.shields.io/badge/Evidence-what%20is%20proven-14151a?labelColor=0f1420)](#whats-real-vs-pending)
 
 </div>
 
@@ -29,7 +29,7 @@ No admin can move depositor funds, no order rests where a liquidation cannot rea
 | `CatchVault` contract | **Built** | `contracts/src/CatchVault.sol`, 55 Foundry tests passing |
 | Contract against the live venue | **Rehearsed** | constructor run against the Hideki MarginBank by `eth_call`; its catch windows for 16 real accounts are identical to the engine's, to the wei ([`deployments/rehearsal-hideki.txt`](deployments/rehearsal-hideki.txt)) |
 | Liquidation map engine | **Running on live data** | reads all 21 tradeable Hideki markets from head state, about 5,900 BTC positions in one block-pinned pass |
-| Dashboard | **Built** | `app/`, served by the engine at `/app/` |
+| Dashboard | **Live** | [catch-backstop.vercel.app/app/](https://catch-backstop.vercel.app/app/), reading Hideki through Vercel functions in Tokyo, next to the Somnia RPC |
 | Vault deployed on Hideki | **Pending** | the operator address needs STT; [`engine/scripts/live/`](engine/scripts/live) runs fund → deploy → subscribe → keeper |
 | A liquidation filled into a Catch order | **Pending** | follows the deploy; every transaction is recorded in `deployments/hideki.json` |
 
