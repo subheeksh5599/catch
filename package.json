@@ -1,0 +1,13 @@
+{
+  "name": "catch",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-static.mjs"
+  },
+  "dependencies": {
+    "@somnia-chain/markets-sdk": "0.32.1",
+    "viem": "^2.57.10"
+  },
+  "engines": { "node": "22.x" }
+}
