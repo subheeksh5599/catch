@@ -70,7 +70,17 @@ export const vaultAbi = parseAbi([
   "event Redeemed(address indexed owner, uint256 shares, uint256 assets)",
 ]);
 
+export const systemAbi = parseAbi([
+  "function getSystemConfig() view returns ((address marginBank, address collateralToken, address perpPoolFactory, address liquidationEngine, address insuranceFund, address feeRecipient, uint16 maxLeverageLimit, bool fullyWired))",
+]);
+
+export const engineAbi = parseAbi([
+  "function getMaxLiquidationSpreadBps() view returns (uint256)",
+  "function getMinLiquidationSpreadBps() view returns (uint256)",
+]);
+
 export const erc20Abi = parseAbi([
+  "function allowance(address owner, address spender) view returns (uint256)",
   "function approve(address spender, uint256 amount) returns (bool)",
   "function balanceOf(address) view returns (uint256)",
   "function mint(address to, uint256 amount)",
