@@ -30,6 +30,7 @@ No admin can move depositor funds, no order rests where a liquidation cannot rea
 | Contract against the live venue | **Rehearsed** | constructor run against the Hideki MarginBank by `eth_call`; its catch windows for 16 real accounts are identical to the engine's, to the wei ([`deployments/rehearsal-hideki.txt`](deployments/rehearsal-hideki.txt)) |
 | Liquidation map engine | **Running on live data** | reads all 21 tradeable Hideki markets from head state, about 5,900 BTC positions in one block-pinned pass |
 | Dashboard | **Live** | [catch-backstop.vercel.app/app/](https://catch-backstop.vercel.app/app/), reading Hideki through Vercel functions in Tokyo, next to the Somnia RPC |
+| Vault page | **Simulated, labelled** | until deploy, `/app/#/vault` shows what a 100,000 USDso vault would rest now, sized by the contract caps from the live map; no order is on the book |
 | Vault deployed on Hideki | **Pending** | the operator address needs STT; [`engine/scripts/live/`](engine/scripts/live) runs fund → deploy → subscribe → keeper |
 | A liquidation filled into a Catch order | **Pending** | follows the deploy; every transaction is recorded in `deployments/hideki.json` |
 
