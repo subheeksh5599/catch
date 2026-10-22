@@ -2,198 +2,221 @@
 
 # CATCH
 
-### The liquidation backstop for dreamDEX perps. Resting liquidity where liquidations land, re-quoted by the chain.
+### The liquidation backstop for dreamDEX perps. Resting liquidity where liquidations land, re-checked by the chain.
 
-[![Status](https://img.shields.io/badge/status-design%20%C2%B7%20not%20built%20yet-f59e0b)](#live-status)
+[![Status](https://img.shields.io/badge/status-built%20%C2%B7%20vault%20deploy%20pending%20funding-f59e0b)](#live-status)
 [![Network](https://img.shields.io/badge/network-Somnia%20Hideki%20testnet%2050383-4DA2FF)](#live-status)
-[![Measured](https://img.shields.io/badge/measured-27%25%20of%20liquidations%20hit%20an%20empty%20book-dc2626)](#the-problem-i-set-out-to-solve)
+[![Contract tests](https://img.shields.io/badge/forge%20tests-55%20passing-16a34a)](#invariants)
+[![Engine tests](https://img.shields.io/badge/engine%20tests-12%20passing-16a34a)](#the-engine)
 ![Stack](https://img.shields.io/badge/Solidity%20%2B%20Somnia%20Reactivity%20%2B%20markets--sdk-1f1f23)
 
-[![The problem](https://img.shields.io/badge/The%20problem-measured%20on%20chain-14151a?labelColor=0f1420)](#the-problem-i-set-out-to-solve) [![Mechanism](https://img.shields.io/badge/Mechanism-step%20by%20step-14151a?labelColor=0f1420)](#the-catch-loop-step-by-step) [![Build plan](https://img.shields.io/badge/Build%20plan-what%20comes%20first-14151a?labelColor=0f1420)](#build-plan)
+[![Run it](https://img.shields.io/badge/Run%20it-three%20commands-14151a?labelColor=0f1420)](#run-it) [![Mechanism](https://img.shields.io/badge/Mechanism-step%20by%20step-14151a?labelColor=0f1420)](#the-catch-loop-step-by-step) [![Evidence](https://img.shields.io/badge/Evidence-what%20is%20proven-14151a?labelColor=0f1420)](#whats-real-vs-pending)
 
 </div>
 
-**Status: design stage. Nothing in this repository is built or deployed yet. Every figure below is a measurement of dreamDEX itself, not of Catch.**
-
-On dreamDEX, a liquidation does not go to a private liquidator first. The engine cancels the account's resting orders and then closes the position **into the public order book**. Only if that fails does it reach a backstop bidder, then the insurance fund, then auto-deleveraging of profitable traders. So the order book is the first line of defence in every liquidation, and on a young venue that book is often empty. Catch is a vault whose only job is to be standing in the book at the prices where liquidations will land, re-placed by Somnia Reactivity in the same block every time a position changes.
+On dreamDEX, a liquidation does not go to a private liquidator first. The engine cancels the account's resting orders and then closes the position **into the public order book**, limit-priced at most its maximum liquidation spread from the mark. Only if that fails does it reach a backstop bidder, then the insurance fund, then auto-deleveraging of profitable traders. The book is the first line of defence, and on a young venue it is often empty. Catch is a vault that stands in the book at the prices where liquidations will land, and drops each order the moment the positions behind it change.
 
 ```
-liquidation price of every open position   →   resting order waiting at that level   →   the liquidation always has a buyer
+every open position's liquidation price   →   a post-only order inside the engine's close window   →   the liquidation has a buyer
 ```
 
-No admin can move depositor funds, no order rests anywhere a liquidation is not expected, and no exposure is taken beyond a published cap.
+No admin can move depositor funds, no order rests where a liquidation cannot reach it, and no exposure is taken beyond a cap fixed at deploy.
 
 ## Live status
 
-| Surface | Status | The evidence |
+| Surface | Status | Evidence |
 |---|---|---|
-| Vault contract | **Not built** | design below |
-| Reactivity re-quoting | **Not built** | spike 2 in the [build plan](#build-plan) |
-| Liquidation map | **Not built** | reads already confirmed against the live SDK (`getPerpSideHolders`, `getLiquidationPrice`) |
-| A liquidation filled into a Catch order | **Not yet** | the first proof this repository will carry, with its transaction hash |
-| The problem it addresses | **Measured** | 98 of 363 liquidations on Hideki found an empty book (see below) |
-
-## The 20-second pitch
-
-A trader is liquidated. The engine tries to close the position into the book and finds nobody there. The account's orders are cancelled, the position stays open, and the loss moves on toward the insurance fund and, past it, toward closing out traders who were winning. Nothing broke. The book was simply empty at the one moment it was needed.
-
-Every position on dreamDEX is public, and so is the price at which each one would be liquidated. That means the levels where forced selling will happen can be read in advance. Catch reads them, waits there with real orders, and keeps those orders where they belong without a server.
+| `CatchVault` contract | **Built** | `contracts/src/CatchVault.sol`, 55 Foundry tests passing |
+| Contract against the live venue | **Rehearsed** | constructor run against the Hideki MarginBank by `eth_call`; its catch windows for 16 real accounts are identical to the engine's, to the wei ([`deployments/rehearsal-hideki.txt`](deployments/rehearsal-hideki.txt)) |
+| Liquidation map engine | **Running on live data** | reads all 21 tradeable Hideki markets from head state, about 5,900 BTC positions in one block-pinned pass |
+| Dashboard | **Built** | `app/`, served by the engine at `/app/` |
+| Vault deployed on Hideki | **Pending** | the operator address needs STT; [`engine/scripts/live/`](engine/scripts/live) runs fund → deploy → subscribe → keeper |
+| A liquidation filled into a Catch order | **Pending** | follows the deploy; every transaction is recorded in `deployments/hideki.json` |
 
 ```mermaid
 flowchart TD
-    A["every open position<br/>getPerpSideHolders + getLiquidationPrice"] --> B["liquidation map<br/>clusters by price level"]
-    B --> C["vault rests real perps orders<br/>just inside each cluster, inside its caps"]
-    D["position opened, changed or closed<br/>(event on chain)"] -->|Somnia Reactivity, same block| C
-    C --> E{"account becomes liquidatable"}
-    E --> F["engine closes the position into the book<br/>it fills against Catch"]
-    F --> G["vault unwinds the caught position<br/>gradually, never below its entry"]
-    E -. without Catch .-> H["empty book · positionsProcessed 0<br/>loss moves down the waterfall"]
+    A["every open position<br/>getSideHoldersPaginated + getAccountHealth + getBankruptcyPrice"] --> B["liquidation map<br/>catch windows, clusters by price"]
+    B --> C["anyone calls CatchVault.place<br/>the vault re-derives every number and rests a post-only order"]
+    D["a backer's position changes<br/>MarginBank PositionUpdated"] -->|Somnia Reactivity, same block| E["CatchVault.onEvent<br/>re-checks every order that account backs"]
+    E -->|window no longer holds| X["order cancelled"]
+    C --> F{"account becomes liquidatable"}
+    F --> G["engine closes the position into the book<br/>it fills against Catch"]
+    G --> H["vault's own PositionUpdated<br/>unwind order at or beyond entry"]
+    F -. without Catch .-> I["empty book · positionsProcessed 0<br/>loss moves down the waterfall"]
 ```
 
 ## Table of contents
 
 - [Live status](#live-status)
-- [The 20-second pitch](#the-20-second-pitch)
-- [Table of contents](#table-of-contents)
-- [What Catch is NOT](#what-catch-is-not)
-- [The problem I set out to solve](#the-problem-i-set-out-to-solve)
-- [What I am building](#what-i-am-building)
-- [Architecture](#architecture)
+- [What Catch is not](#what-catch-is-not)
+- [The problem](#the-problem)
 - [The catch loop, step by step](#the-catch-loop-step-by-step)
+- [The catch window](#the-catch-window)
 - [Invariants](#invariants)
-- [Where the guarantee is enforced](#where-the-guarantee-is-enforced)
 - [Attack → test](#attack--test)
-- [Risks I am designing around](#risks-i-am-designing-around)
-- [What's real vs pending — the honesty table](#whats-real-vs-pending--the-honesty-table)
-- [Build plan](#build-plan)
-- [Tech stack](#tech-stack)
+- [Risks](#risks)
+- [The engine](#the-engine)
+- [The dashboard](#the-dashboard)
+- [Run it](#run-it)
+- [Going live on Hideki](#going-live-on-hideki)
+- [What's real vs pending](#whats-real-vs-pending)
+- [Repository layout](#repository-layout)
 - [How the numbers were measured](#how-the-numbers-were-measured)
 
-## What Catch is NOT
+## What Catch is not
 
-Not a liquidation guard. Guards help a trader avoid being liquidated; Catch is the buyer a liquidation sells into. Not a market maker quoting around the mid either: it places nothing near the market price and only stands where the liquidation map says forced flow will arrive. And not a keeper: Catch never triggers anyone's liquidation. It only makes sure that when the engine runs one, the book answers.
+Not a liquidation guard: guards help a trader avoid liquidation, Catch is the buyer a liquidation sells into. Not a market maker: it rests nothing near the mark and only stands where the map says forced flow will arrive. Not a keeper: it has no liquidation entry point and never triggers anyone's liquidation.
 
-## The problem I set out to solve
+## The problem
 
-Measured from the dreamDEX perps indexer on Hideki (chain 50383), covering 2026-10-20 14:55 UTC to 2026-10-22 07:10 UTC, the most recent 1,000 liquidation rows:
+From the venue's own LiquidationEngine history on Hideki:
 
-| | Count |
-|---|---|
-| Accounts liquidated | **363** |
-| Liquidations that closed a position into the book (`stageReached 1`, `positionsProcessed > 0`) | 265 |
-| Liquidations that found an **empty book** and closed nothing (`stageReached 1`, `positionsProcessed 0`) | **98 (27%)** |
-| Positions force-closed | 264, about **4.37M USDso** notional (paper USDso) |
-| Liquidations clamped at the takeover price band | 137, of which 136 on XRP |
-
-The SDK's own documentation describes the empty-book row exactly: "Against an empty book you get `CLOBPartial` with a `positionsProcessed` of 0, which means the account's orders were cancelled and no position was closed." It also notes that with no registered backstop bidders, "the waterfall reaches ADL sooner than the configuration implies". The live LiquidationEngine reports one registered bidder, and the SDK exposes no way to register another.
-
-Liquidity is also concentrated. Of all perps volume to date, BTC and ETH carry 65.5%, and fifteen of the twenty-one markets each carry 1.6% or less. The thinnest books are where an empty book at liquidation time is most likely.
-
-## What I am building
-
-- **A vault** that owns its own dreamDEX perps account. Depositors put in USDso and receive shares; the vault's margin backs its resting orders.
-- **A liquidation map**: every open position's liquidation price, read from chain and clustered by level and side, per market.
-- **Resting orders** placed just inside each cluster: bids under clusters of long liquidations, asks over clusters of short liquidations. They are sized from vault equity and bounded by per-market caps.
-- **Re-quoting by Somnia Reactivity**: a subscription on the perps events that change positions invokes the vault in the same block, and it moves its orders to the new levels. No bot process keeps it running.
-- **An unwind** that sells a caught position back out gradually and never below the price it was caught at.
-- **A public page**: the live map, the vault's resting orders, every catch with its transaction, and depositor results.
-
-## Architecture
-
-| Component | Where it runs | What it does |
+| Window | Account liquidations | Closed into an empty book (`CLOBPartial`, `positionsProcessed 0`) |
 |---|---|---|
-| `CatchVault` | Hideki, on chain | deposits and shares, its own MarginBank account, caps, order placement and cancellation, unwind |
-| Reactivity subscription | Somnia validators | invokes the vault's handler when a position-changing event fires |
-| Map reader | inside the handler and in the page | holders per side, liquidation prices, clustering |
-| Page | static site | map, orders, catches, results; reads chain and indexer only |
+| 2026-10-20 14:55 → 2026-10-22 07:10 UTC | 363 | **98 (27%)** |
+| 2026-10-15 → 2026-10-22 (last 1,000) | 1,000 | **103 (10.3%)** |
 
-Every write is on chain. The page and any monitoring are read-only, so turning them off changes nothing about how the vault behaves.
+The dashboard recomputes the second row live. On the busiest markets, the resting book inside the windows where the largest clusters would be closed is close to zero; the map page shows it per cluster.
+
+The live LiquidationEngine reports one registered bidder and a 0.5–5% liquidation spread. With the book empty, a liquidation falls toward the insurance fund and ADL sooner than the configuration implies. Liquidity is also concentrated: BTC and ETH carry 65.5% of all perps volume to date, and fifteen of the twenty-one markets each carry 1.6% or less.
 
 ## The catch loop, step by step
 
-1. **Read.** For a market, list the holders on each side and their liquidation prices.
-2. **Cluster.** Group liquidation notional by price level.
-3. **Place.** For each cluster inside the caps, rest a limit order a few ticks inside the level, on the side that will be forced: a bid for a long liquidation, an ask for a short one.
-4. **React.** When a position opens, changes or closes, Reactivity invokes the vault in the same block. It recomputes the affected clusters and cancels or moves only the orders whose level changed.
-5. **Catch.** When the engine liquidates an account at that level, the forced close fills against the vault's order.
-6. **Unwind.** The vault closes what it caught with passive orders back toward the mark, never below its entry, until it is flat or the exposure cap is restored.
+1. **Read.** For a market, list every holder on each side (`getSideHoldersPaginated`), then read each position, its account health and its bankruptcy price, all pinned to one block.
+2. **Map.** Solve each position's liquidation trigger (the venue's single-market solve, with the `10000 ∓ mmBps` factor) and bin liquidation notional by price.
+3. **Cluster.** Sweep the catch windows and pick the price inside the most forced size, discounted by distance from the mark so a reachable cluster outranks a distant heap.
+4. **Place.** Anyone calls `CatchVault.place(pool, isBid, price, qty, backers)`. The vault re-derives everything on chain: each backer's position, side and catch window, the mark, both caps. It rests a post-only order or reverts with the numbers that failed.
+5. **React.** A Somnia Reactivity subscription on MarginBank `PositionUpdated` calls `CatchVault.onEvent` in the same block. Every order the changed account backs is re-checked and cancelled if its window no longer contains the price.
+6. **Catch.** When the engine closes a liquidated position into the book, it fills against the vault's order.
+7. **Unwind.** The vault's own `PositionUpdated` rests an unwind order at or beyond entry. Anyone may re-price it further from the mark; nobody may price it past entry.
+
+## The catch window
+
+The engine closes a liquidated position into the book no further than its maximum liquidation spread from the mark at trigger. An order can only catch a position if it sits in:
+
+| Side | Window | Bound |
+|---|---|---|
+| Long (vault bids) | `[liq × (1 − maxSpread), liq]` | floored at the venue's bankruptcy price when it lies inside |
+| Short (vault asks) | `[liq, liq × (1 + maxSpread)]` | capped at the bankruptcy price when the venue reports one above `liq` |
+
+The short-side rule exists because the live venue reports a short's bankruptcy price at its entry, below the liquidation price. The contract ignores a bankruptcy figure on the wrong side instead of refusing every ask. `CatchVault.catchWindow(account, pool)` exposes the window; `engine/src/math.mjs` computes the same one, and the rehearsal checks they agree.
 
 ## Invariants
 
-1. Per-market open exposure never exceeds its cap. An order that would breach the cap is not placed.
-2. A resting order exists only where the current map has a liquidation cluster. Without a cluster, the order is cancelled.
-3. A caught position is never sold below the price at which it was caught.
-4. Depositors can always redeem their share. No admin path moves vault funds.
-5. The vault never triggers a liquidation. It only provides liquidity to liquidations the engine runs.
+| # | Invariant | Enforced in | Tests |
+|---|---|---|---|
+| 1 | Per-market exposure ≤ `MARKET_CAP_BPS` of assets; one cluster order ≤ `CLUSTER_CAP_BPS` | `_enforceCaps` | `test_invariant1_clusterCap`, `test_invariant1_marketCap`, `test_invariant1_marketCapRevertsWithNumbers`, `testFuzz_placementNeverExceedsCaps` |
+| 2 | An order rests only while every backer's catch window contains its price | `_validateCluster`, `_bandHolds`, `onEvent` | `test_invariant2_*` (7), `test_window_*` (6), `test_onEvent_survivorsStayIndexed` |
+| 3 | A caught position is never offered back past its entry | `_unwind` | `test_invariant3_unwindBelowEntryReverts`, `test_invariant3_unwindShortAboveEntryReverts`, `test_catch_emitsAndRestsAnUnwindAtOrAboveEntry` |
+| 4 | Redemption cancels resting orders to free collateral; no other outflow exists | `redeem`, `_releaseUntilFree` | `test_invariant4_restingOrdersAreCancelledToRedeem`, `testFuzz_roundTripNeverProfits`, `test_noAdminSurface` |
+| 5 | The vault never takes liquidity | post-only orders, `CrossesMark` | `test_invariant5_neverCrossesTheMark`, `test_invariant5_postOnlyThatWouldCrossDoesNotRest` |
 
-## Where the guarantee is enforced
-
-| Guarantee | Module | Test |
-|---|---|---|
-| Exposure cap per market | `CatchVault` | planned |
-| Orders only at live clusters | `CatchVault` handler | planned |
-| No unwind below catch price | `CatchVault` unwind | planned |
-| Redemption always available, no admin withdrawal | `CatchVault` shares | planned |
-| Same-block re-quote on position events | Reactivity subscription | planned, live on Hideki |
+`cd contracts && forge test` → 55 passed.
 
 ## Attack → test
 
-| Attack | Intended answer | Test |
+| Attack | Answer | Test |
 |---|---|---|
-| Spoof a liquidation cluster with a large leveraged position to pull the vault's orders, then trade against them | orders are capped per market and per cluster, and placed inside the level, not at the mark | planned |
-| Crash a market so the vault catches a falling position | per-market exposure cap and an unwind that never sells below entry; losses are bounded by the cap | planned |
-| Starve the handler of gas so orders go stale | stale-order check on every invocation cancels anything whose cluster no longer exists | planned |
-| An admin key drains the vault | no such key exists in the design; redemption is the only outflow | planned |
+| Open a large leveraged position to pull the vault's bid, close it, then trade into the stale order | the close emits `PositionUpdated`; the same-block callback cancels every order that account backs | `test_invariant2_backerUpdateCancelsInTheSameCallback` |
+| Cite a backer whose window does not contain the price | refused, with the window in the revert data | `test_invariant2_aboveLiquidationPriceReverts`, `test_invariant2_belowBankruptcyReverts` |
+| Cite the same backer twice to inflate cluster size | backers must be strictly increasing | `test_place_unsortedOrDuplicateBackersRevert` |
+| Cite the vault itself as a backer | refused | `test_place_vaultCannotBackItself` |
+| Fill every order slot with dust | a larger cluster evicts the smallest; an equal one is refused | `test_slots_largerClusterEvictsTheSmallest`, `test_slots_fullWithEqualSizeReverts` |
+| Call the reactivity handler directly | only the precompile `0x0100` may | `test_onEvent_onlyThePrecompile` |
+| Force a fire-sale of a caught position | the unwind price is bounded by entry for every caller | `test_invariant3_*` |
+| Inflate shares with a donation | virtual shares and assets in the conversion | `testFuzz_roundTripNeverProfits` |
+| Drain through an admin key | there is no owner and no sweep | `test_noAdminSurface` |
 
-## Risks I am designing around
+## Risks
 
-- **Catching a falling position.** A vault that buys liquidations in a crash can lose money. The exposure caps and the no-loss unwind bound it; they do not remove it.
-- **Handler gas.** Perps orders are estimated at 3M to 8M gas each, and a Reactivity handler needs a generous gas limit. Re-quoting only the clusters that changed keeps each invocation small. This is the first thing to measure.
-- **Subscription cost.** A subscription owner needs 32 STT at creation and pays for every invocation, so the subscription listens to position events, not to every block.
+- **Catching a falling position.** A vault that buys liquidations in a crash can lose money. The caps and the entry-bounded unwind limit it; they do not remove it.
+- **Handler gas.** The callback re-checks only the orders the changed account backs, at most six per market, so each invocation stays bounded. Its live cost is the first thing the subscription run measures.
+- **Subscription cost.** The subscription owner holds 32 STT and pays for every callback, so the subscription filters on the MarginBank emitter and the `PositionUpdated` topic, not on every block.
 
-## What's real vs pending — the honesty table
+## The engine
+
+`engine/` is a Node service with no framework:
+
+| File | Role |
+|---|---|
+| `src/chain.mjs` | network bindings and read ABIs, transcribed from `@somnia-chain/markets-sdk` 0.32.1 |
+| `src/reader.mjs` | block-pinned snapshot of one market: holders, positions, health, bankruptcy prices, via Multicall3 |
+| `src/math.mjs` | liquidation solve, bins, at-risk notional, catch window, cluster sweep, order sizing |
+| `src/service.mjs` | markets, maps, the venue's liquidation history, vault state and events |
+| `src/server.mjs` | `/api/status`, `/api/markets`, `/api/map/:pool`, `/api/liquidations`, `/api/vault`; serves `site/` at `/` and `app/` at `/app/` |
+| `scripts/live/*` | rehearse, fund, deploy, subscribe, keeper |
+
+`npm test` checks the liquidation solve against the SDK's own `perpLiquidationPrice` and every cluster rule (12 tests).
+
+## The dashboard
+
+`/app/` uses the layout perps venues and vault products use: a persistent left rail, a sticky top bar with the market picker and the wallet, KPI cards, then detail.
+
+| Page | What it shows |
+|---|---|
+| Overview | notional within 1% and 5% of mark across markets, book coverage inside catch windows, the empty-book rate, the BTC map, the largest clusters, the latest liquidations |
+| Liquidation map | liquidation notional by trigger price with the resting book in the same bins, cumulative curves from the mark, the best bid and ask cluster with its window, size and the vault order it would produce, and the accounts closest to liquidation |
+| Markets | every tradeable perp: mark, open interest, funding, positions, at-risk notional, a small map, book coverage |
+| Vault | assets, share price, free and locked collateral, exposure against cap per market, resting orders, events, deposit and redeem through any EIP-1193 wallet |
+| Liquidations | the venue's waterfall stage distribution, position liquidations, recent accounts |
+| Contracts | every address the app reads |
+
+Every number is read from chain or from the venue's indexer by the engine. Where the vault is not deployed, the page says so.
+
+## Run it
+
+```bash
+git clone --recurse-submodules <this repo> && cd catch
+cd contracts && forge test                      # 55 passed
+cd ../engine && npm install && npm test          # 12 passed
+npm start                                        # http://127.0.0.1:8787 (site) and /app/ (dashboard), live Hideki data
+```
+
+`NETWORK=shannon npm start` reads Shannon instead. Nothing above needs a key.
+
+## Going live on Hideki
+
+The operator key lives in `~/.catch/deployer.key` (mode 0600, outside the repo; override with `CATCH_KEY_FILE`). The scripts load it and never print it.
+
+```bash
+cd engine
+npm run rehearse                        # free: constructor and catch windows against the live venue
+npm run fund -- 36 20000                # Shannon: mint USDso, bridge 36 STT and 20,000 USDso to Hideki
+npm run deploy                          # CatchVault(marginBank, 25% market cap, 10% cluster cap, 0.3% unwind spread)
+npm run subscribe                       # reactivity: MarginBank PositionUpdated → CatchVault.onEvent (owner holds ≥ 32 STT)
+npm run keeper -- --deposit 10000 --once
+```
+
+Deployment costs about 96M gas (`eth_estimateGas` on Hideki at 6 gwei, about 0.58 STT). Every transaction lands in `deployments/hideki.json`, which the engine and the dashboard read.
+
+## What's real vs pending
 
 | | State | Evidence |
 |---|---|---|
-| Liquidations close into the public book first | **Real — documented and observed** | SDK `docs/PERPS.md` stage table; live `stageReached` values |
-| 27% of liquidations found an empty book | **Real — measured** | see [How the numbers were measured](#how-the-numbers-were-measured) |
-| Every position and liquidation price is readable on chain | **Real — confirmed** | `getPerpSideHolders`, `getLiquidationPrice` in `@somnia-chain/markets-sdk` 0.32.1 |
-| Reactivity runs on the perps chain | **Real — observed** | the perps stop registry is itself a Reactivity handler on Hideki |
-| A contract-owned account resting and moving perps orders | **Pending** | spike 1 |
-| Same-block re-quote from a Reactivity handler | **Pending** | spike 2 |
-| A liquidation filled into a Catch order | **Pending** | spike 3 |
-| Vault, map, page | **Pending** | not built |
+| Liquidations close into the public book first | **Real** | the venue's stage table; live `stageReached` values on the Liquidations page |
+| A large share of liquidations found an empty book | **Measured** | the table above, recomputed live |
+| Every position and its liquidation price readable from head state | **Real** | the engine maps all 21 markets |
+| Contract windows match the engine on real accounts | **Rehearsed** | 16/16 identical, `deployments/rehearsal-hideki.txt` |
+| Vault rules | **Tested** | 55 Foundry tests against venue doubles that follow the published ABIs |
+| A contract-owned account resting orders on Hideki | **Pending** | `npm run keeper` after the deploy |
+| Same-block cancel from a reactivity callback on Hideki | **Pending** | `npm run subscribe` after the deploy |
+| A liquidation filled into a Catch order | **Pending** | needs a live cluster to trigger |
 
-## Build plan
+A fork test was tried and dropped: neither Somnia RPC serves historical state, so neither Foundry nor anvil can fork it. The rehearsal script replaces it.
 
-1. **Spike 1.** A contract-owned dreamDEX account places, moves and cancels a resting perps order on Hideki. Output: transaction hashes.
-2. **Spike 2.** A Reactivity handler, invoked by a position event, re-quotes in the same block. Output: the handler transaction and its gas.
-3. **Spike 3.** A test position is pushed into liquidation and the engine's close fills against the vault's order (`positionsProcessed > 0`), next to the same run with the vault off (`positionsProcessed 0`).
-4. Vault contract with shares, caps and unwind, and Foundry tests for every invariant.
-5. Liquidation map reader and clustering.
-6. Page: map, resting orders, catches with transactions, results.
-7. A recorded live run with every transaction hash kept in `evidence/`.
+## Repository layout
 
-If a spike fails, this file says so before anything else is built on top of it.
-
-## Tech stack
-
-| | |
-|---|---|
-| Chain | Somnia Hideki testnet (chain 50383) |
-| Venue | dreamDEX perps: MarginBank, perp pools, LiquidationEngine |
-| Automation | Somnia Reactivity (`@somnia-chain/reactivity`, precompile `0x0100`) |
-| Contracts | Solidity, Foundry |
-| Reads | `@somnia-chain/markets-sdk` 0.32.1 and the perps indexer |
-| Page | static HTML and TypeScript |
+```
+contracts/    CatchVault, venue interfaces, tests (Foundry)
+engine/       reader, map math, API server, live scripts (Node)
+app/          dashboard (HTML, CSS, ES modules, no build step)
+site/         landing page
+deployments/  rehearsal output; per-network deployment records once live
+```
 
 ## How the numbers were measured
 
-All figures were read on 2026-10-22 with `@somnia-chain/markets-sdk` 0.32.1 against the Hideki indexer (`https://hideki-dev.smk.somnia.host/v1/graphql`), read-only, with no key:
-
-- `client.listLiquidations({ limit: 1000 })` returned 1,000 rows from 2026-10-20 14:55 UTC to 2026-10-22 07:10 UTC: 363 `AccountLiquidated`, 264 `PositionLiquidated`, 236 `KeeperReward`, 137 `TakeoverBandClamped`.
-- Of the 363 `AccountLiquidated` rows, all reached `stageReached 1`: 265 with `positionsProcessed > 0` and 98 with `positionsProcessed 0`.
-- Notional is the sum over `PositionLiquidated` rows of |size| × price, scaled by each market's base decimals.
-- Volume shares are each market's `cumulativeQuoteVolume` from `client.listPerpMarkets()`.
-
-The measurement script goes into this repository with the first spike, so the figures can be re-read by anyone.
+- **27% (98 of 363):** `client.listLiquidations({ limit: 1000 })` on 2026-10-22 returned 1,000 rows from 2026-10-20 14:55 UTC to 2026-10-22 07:10 UTC, 363 of them `AccountLiquidated`; 98 had `stageReached 1` and `positionsProcessed 0`.
+- **10.3% (103 of 1,000):** `client.listLiquidations({ kind: "AccountLiquidated", limit: 1000 })` with the same rule, recomputed every 20 s by `engine/src/service.mjs`.
+- **65.5% BTC and ETH:** each market's `cumulativeQuoteVolume`.
+- **Map figures:** `engine/scripts/snapshot.mjs` prints them for any market at the current block.
