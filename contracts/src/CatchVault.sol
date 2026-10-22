@@ -1,20 +1,23 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-import {IERC20, IMarginBank, IPerpPool, ISomniaEventHandler} from "./interfaces/IVenue.sol";
+import {IERC20, IMarginBank, IPerpPool, ILiquidationEngine, ISomniaEventHandler} from "./interfaces/IVenue.sol";
 
 /// @title CatchVault
 /// @notice A liquidation backstop for dreamDEX perps. Depositors put in the venue's collateral
 /// and receive shares. The vault owns one MarginBank account and rests post-only orders at the
-/// price levels where open positions would be liquidated: bids between a long's bankruptcy price
-/// and its liquidation price, asks between a short's liquidation price and its bankruptcy price.
+/// price levels where open positions would be liquidated. The venue's liquidation engine first
+/// closes a liquidated position into the order book, limit-priced no further than its maximum
+/// liquidation spread from the mark; the vault's order sits inside that window. For a long the
+/// window is [liq - maxSpread, liq], floored at the venue's bankruptcy price; for a short it is
+/// [liq, liq + maxSpread], capped at the bankruptcy price when the venue reports one above liq.
 /// When the engine closes a liquidated position into the book, it fills against the vault.
 ///
 /// Every rule is enforced here, not by an operator:
 ///  1. Per-market exposure never exceeds MARKET_CAP_BPS of vault assets; a single cluster order
 ///     never exceeds CLUSTER_CAP_BPS.
 ///  2. An order rests only while every account backing it still has a position whose
-///     [bankruptcy, liquidation] band contains the order price. Anyone can re-check an order, and
+///     catch window (see above) contains the order price. Anyone can re-check an order, and
 ///     Somnia reactivity re-checks the orders an account backs on every PositionUpdated it emits.
 ///  3. A caught position is only ever offered back at or beyond its entry price.
 ///  4. Shares redeem against free collateral; resting orders are cancelled to make room and no
@@ -39,6 +42,7 @@ contract CatchVault is ISomniaEventHandler {
     // ---------------------------------------------------------------- immutables
 
     IMarginBank public immutable BANK;
+    ILiquidationEngine public immutable ENGINE;
     IERC20 public immutable ASSET;
     uint256 public immutable MARKET_CAP_BPS;
     uint256 public immutable CLUSTER_CAP_BPS;
@@ -111,7 +115,7 @@ contract CatchVault is ISomniaEventHandler {
     error PoolRestricted(address pool);
     error BadBackers();
     error BackerSide(address account);
-    error OutsideBand(address account, uint256 bankruptcy, uint256 liquidation, uint256 price);
+    error OutsideBand(address account, uint256 lo, uint256 hi, uint256 price);
     error CrossesMark(uint256 price, uint256 mark);
     error QuantityExceedsCluster(uint256 quantity, uint256 clusterSize);
     error ClusterCap(uint256 notional, uint256 cap);
@@ -136,7 +140,9 @@ contract CatchVault is ISomniaEventHandler {
         require(clusterCapBps > 0 && clusterCapBps <= marketCapBps, "cluster cap");
         require(unwindSpreadBps < 1_000, "spread");
         BANK = bank;
-        ASSET = IERC20(bank.getSystemConfig().collateralToken);
+        IMarginBank.SystemConfig memory cfg = bank.getSystemConfig();
+        ASSET = IERC20(cfg.collateralToken);
+        ENGINE = ILiquidationEngine(cfg.liquidationEngine);
         MARKET_CAP_BPS = marketCapBps;
         CLUSTER_CAP_BPS = clusterCapBps;
         UNWIND_SPREAD_BPS = unwindSpreadBps;
@@ -381,6 +387,14 @@ contract CatchVault is ISomniaEventHandler {
         }
     }
 
+    /// @notice The price window in which the vault may rest an order backed by `account`.
+    function catchWindow(address account, address pool) external view returns (uint256 lo, uint256 hi) {
+        IPerpPool.HealthSnapshot memory s = IPerpPool(pool).getHealthSnapshot();
+        IMarginBank.Position memory p = BANK.getPosition(account, pool);
+        if (p.size == 0) return (0, 0);
+        return _window(account, pool, p.size, s);
+    }
+
     /// @notice Liquidation trigger estimate for `account` on `pool` (single-market solve of
     /// equity == maintenance requirement, the same solve the venue's SDK publishes).
     function liquidationPrice(address account, address pool) public view returns (uint256) {
@@ -412,11 +426,29 @@ contract CatchVault is ISomniaEventHandler {
         IMarginBank.Position memory p = BANK.getPosition(a, pool);
         // a bid catches a long being sold; an ask catches a short being bought back
         if (isBid ? p.size <= 0 : p.size >= 0) revert BackerSide(a);
-        uint256 bankruptcy = BANK.getBankruptcyPrice(a, pool);
-        uint256 liq = _liquidationPrice(a, p.size, s);
-        bool inside = isBid ? (price >= bankruptcy && price <= liq) : (price <= bankruptcy && price >= liq);
-        if (!inside) revert OutsideBand(a, bankruptcy, liq, price);
+        (uint256 lo, uint256 hi) = _window(a, pool, p.size, s);
+        if (price < lo || price > hi) revert OutsideBand(a, lo, hi, price);
         size = p.size > 0 ? uint256(uint128(p.size)) : uint256(uint128(-p.size));
+    }
+
+    /// @dev The prices at which the engine can close `account`'s position into the book.
+    function _window(address account, address pool, int128 size, IPerpPool.HealthSnapshot memory s)
+        internal
+        view
+        returns (uint256 lo, uint256 hi)
+    {
+        uint256 liq = _liquidationPrice(account, size, s);
+        uint256 spread = ENGINE.getMaxLiquidationSpreadBps();
+        uint256 bankruptcy = BANK.getBankruptcyPrice(account, pool);
+        if (size > 0) {
+            hi = liq;
+            lo = liq * (BPS - spread) / BPS;
+            if (bankruptcy < liq && bankruptcy > lo) lo = bankruptcy;
+        } else {
+            lo = liq;
+            hi = liq * (BPS + spread) / BPS;
+            if (bankruptcy > liq && bankruptcy < hi) hi = bankruptcy;
+        }
     }
 
     function _liquidationPrice(address account, int128 size, IPerpPool.HealthSnapshot memory s)
@@ -443,11 +475,8 @@ contract CatchVault is ISomniaEventHandler {
             address a = sl.backers[i];
             IMarginBank.Position memory p = BANK.getPosition(a, sl.pool);
             if (sl.isBid ? p.size <= 0 : p.size >= 0) return false;
-            uint256 bankruptcy = BANK.getBankruptcyPrice(a, sl.pool);
-            uint256 liq = _liquidationPrice(a, p.size, s);
-            bool inside =
-                sl.isBid ? (sl.price >= bankruptcy && sl.price <= liq) : (sl.price <= bankruptcy && sl.price >= liq);
-            if (!inside) return false;
+            (uint256 lo, uint256 hi) = _window(a, sl.pool, p.size, s);
+            if (sl.price < lo || sl.price > hi) return false;
         }
         return true;
     }

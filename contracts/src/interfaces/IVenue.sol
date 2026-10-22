@@ -103,6 +103,12 @@ interface IPerpPool {
     function getOwnOpenOrders() external view returns (uint128[] memory);
 }
 
+interface ILiquidationEngine {
+    function getMaxLiquidationSpreadBps() external view returns (uint256);
+    function getMinLiquidationSpreadBps() external view returns (uint256);
+    function isLiquidatable(address account) external view returns (bool);
+}
+
 /// @notice Somnia reactivity: the precompile calls `onEvent` on a subscribed handler.
 interface ISomniaEventHandler {
     function onEvent(address emitter, bytes32[] calldata eventTopics, bytes calldata data) external;

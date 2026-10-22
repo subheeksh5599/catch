@@ -37,8 +37,29 @@ contract MockToken {
     }
 }
 
+contract MockEngine {
+    uint256 public spreadBps = 500;
+
+    function setSpread(uint256 s) external {
+        spreadBps = s;
+    }
+
+    function getMaxLiquidationSpreadBps() external view returns (uint256) {
+        return spreadBps;
+    }
+
+    function getMinLiquidationSpreadBps() external pure returns (uint256) {
+        return 50;
+    }
+
+    function isLiquidatable(address) external pure returns (bool) {
+        return false;
+    }
+}
+
 contract MockBank {
     MockToken public token;
+    MockEngine public engine = new MockEngine();
     mapping(address => int256) public unlocked;
     mapping(address => uint256) public locked;
     mapping(address => mapping(address => IMarginBank.Position)) internal _pos;
@@ -99,6 +120,7 @@ contract MockBank {
     function getSystemConfig() external view returns (IMarginBank.SystemConfig memory c) {
         c.marginBank = address(this);
         c.collateralToken = address(token);
+        c.liquidationEngine = address(engine);
         c.fullyWired = true;
     }
 
