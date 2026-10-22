@@ -275,9 +275,9 @@ function marketsView() {
 }
 
 async function vaultView() {
-  const v = state.vault?.state;
+  let v = state.vault?.state;
   const d = state.vault?.deployment;
-  setHead("Vault", v ? short(v.address) : "Not deployed on this network");
+  setHead("Vault", v ? short(v.address) : "Simulated on live data");
   marketPicker(false);
   const rules = `<ol class="rules">
     <li>Per-market exposure stays under the market cap; a single cluster order stays under the cluster cap. Both are fixed at deploy.</li>
@@ -285,18 +285,11 @@ async function vaultView() {
     <li>A caught position is offered back at or beyond its entry, never below.</li>
     <li>Redemptions cancel resting orders until enough collateral is free.</li>
     <li>Orders are post-only. The vault never takes liquidity and has no owner.</li></ol>`;
-  if (!v) {
-    view.innerHTML = `<section class="grid two">
-      <div class="card pad fade"><h2 style="margin:0 0 12px;font-size:14px;font-weight:670">The vault on ${esc(state.status?.network?.label ?? "this network")}</h2>
-        <div class="notice"><span class="dot stale" style="margin-top:6px"></span><div><b>No vault address is recorded for this network.</b> The map and the cluster proposals on every other page are live; deposits open once <span class="mono">deployments/${esc(state.status?.network?.key ?? "")}.json</span> names a vault.</div></div>
-        <h3 style="font-size:13px;font-weight:670;margin:20px 0 10px">Rules the contract enforces</h3>${rules}</div>
-      <div class="card pad fade"><h2 style="margin:0 0 12px;font-size:14px;font-weight:670">Deposit</h2><input class="big" placeholder="0.00" disabled /><div style="height:12px"></div><button class="btn wide" disabled>Deposit USDso</button></div>
-    </section>`;
-    return;
-  }
+  const sim = !v;
+  if (sim) v = simulateVault();
   const w = state.wallet;
   let mine = null;
-  if (w?.account) {
+  if (w?.account && !sim) {
     try {
       const sh = BigInt(await w.call(v.address, calldata.balanceOf(w.account)));
       const as = sh ? BigInt(await w.call(v.address, calldata.convertToAssets(sh))) : 0n;
@@ -306,20 +299,21 @@ async function vaultView() {
   }
   const orders = v.markets.flatMap((m) => m.slots.map((s) => ({ ...s, m })));
   view.innerHTML = `
+    ${sim ? `<div class="notice fade"><span class="dot stale" style="margin-top:6px"></span><div><b>Simulated vault.</b> CatchVault is not deployed on ${esc(state.status?.network?.label ?? "this network")} yet. This page shows what a ${usd(v.totalAssets, { compact: false })} USDso vault would rest right now, sized by the contract's caps from the live liquidation map. No order below is on the book, and deposits open at deploy.</div></div>` : ""}
     <section class="grid kpis">
-      ${kpi("Vault assets", usd(v.totalAssets, { compact: false, digits: 2 }), "Idle + bank equity + locked")}
+      ${kpi("Vault assets", usd(v.totalAssets, { compact: false, digits: 2 }), sim ? "Simulated deposit" : "Idle + bank equity + locked")}
       ${kpi("Share price", v.sharePrice.toFixed(6), `${qty(v.totalSupply)} shares`)}
-      ${kpi("Free collateral", usd(v.free), "Withdrawable now")}
-      ${kpi("Locked in orders", usd(v.locked), `${orders.length} resting`)}
+      ${kpi("Free collateral", usd(v.free), sim ? "After initial margin" : "Withdrawable now")}
+      ${kpi("Locked in orders", usd(v.locked), sim ? `${orders.length} orders, venue initial margin` : `${orders.length} resting`)}
       ${kpi("Caps", `${v.marketCapBps / 100}% / ${v.clusterCapBps / 100}%`, "Per market / per cluster")}
     </section>
     <section class="grid two">
       <div class="grid" style="align-content:start">
         <div class="card fade"><div class="card-h"><h2>Exposure by market</h2><span class="hint">Cap ${usd((v.totalAssets * v.marketCapBps) / 10000)} each</span></div>
           <div class="card-b">${v.markets.length ? v.markets.map((m) => `<div style="display:grid;grid-template-columns:120px 1fr 110px;gap:12px;align-items:center;margin:8px 0"><div class="sym">${coin(m.symbol)}<b>${esc(baseOf(m.symbol))}</b></div><div class="meter"><i style="width:${Math.min(100, (m.exposure / ((v.totalAssets * v.marketCapBps) / 10000 || 1)) * 100)}%"></i></div><div class="r num" style="text-align:right">${usd(m.exposure)}</div></div>`).join("") : '<div class="empty">No market quoted yet.</div>'}</div></div>
-        <div class="card fade"><div class="card-h"><h2>Resting orders</h2><span class="hint">On the venue's book</span></div>
-          ${orders.length ? `<div class="scroll"><table class="table"><thead><tr><th>Slot</th><th>Market</th><th>Kind</th><th class="r">Price</th><th class="r">Backers</th><th class="r">Order id</th></tr></thead><tbody>${orders.map((o) => `<tr><td class="mono">#${o.id}</td><td>${esc(baseOf(o.m.symbol))}</td><td><span class="tag ${o.unwind ? "blue" : o.side === "bid" ? "long" : "short"}">${o.unwind ? "Unwind" : o.side === "bid" ? "Bid" : "Ask"}</span></td><td class="r">${price(o.price)}</td><td class="r">${o.backers.length}</td><td class="r mono muted">${esc(o.orderId)}</td></tr>`).join("")}</tbody></table></div>` : '<div class="empty">No orders resting.</div>'}</div>
-        <div class="card fade"><div class="card-h"><h2>Activity</h2><span class="hint">Vault events</span></div>${eventsTable()}</div>
+        <div class="card fade"><div class="card-h"><h2>${sim ? "Orders it would rest" : "Resting orders"}</h2><span class="hint">${sim ? "From the current clusters" : "On the venue's book"}</span></div>
+          ${orders.length ? `<div class="scroll"><table class="table"><thead><tr><th>Slot</th><th>Market</th><th>Kind</th><th class="r">Price</th><th class="r">Notional</th><th class="r">Backers</th><th class="r">Order id</th></tr></thead><tbody>${orders.map((o) => `<tr><td class="mono">#${o.id}</td><td>${esc(baseOf(o.m.symbol))}</td><td><span class="tag ${o.unwind ? "blue" : o.side === "bid" ? "long" : "short"}">${o.unwind ? "Unwind" : o.side === "bid" ? "Bid" : "Ask"}</span></td><td class="r">${price(o.price)}</td><td class="r">${o.notional != null ? usd(o.notional) : "—"}</td><td class="r">${o.backers.length}</td><td class="r mono muted">${esc(o.orderId)}</td></tr>`).join("")}</tbody></table></div>` : '<div class="empty">No orders resting.</div>'}</div>
+        ${sim ? "" : `<div class="card fade"><div class="card-h"><h2>Activity</h2><span class="hint">Vault events</span></div>${eventsTable()}</div>`}
       </div>
       <div class="grid" style="align-content:start">
         <div class="card pad fade">
@@ -328,11 +322,11 @@ async function vaultView() {
           <input class="big" id="amt" placeholder="0.00" inputmode="decimal" autocomplete="off" />
           <div class="muted" id="preview" style="font-size:12.5px;margin-top:8px">At share price ${v.sharePrice.toFixed(6)}</div>
           <div class="kv" style="margin:12px 0 14px"><dt>Wallet</dt><dd>${mine?.wallet != null ? usd(fromUnits(mine.wallet), { compact: false, digits: 2 }) + " USDso" : "—"}</dd><dt>Your shares</dt><dd>${mine?.shares != null ? qty(fromUnits(mine.shares)) : "—"}</dd><dt>Worth</dt><dd>${mine?.assets != null ? usd(fromUnits(mine.assets), { compact: false, digits: 2 }) : "—"}</dd></div>
-          <button class="btn wide" id="dwGo">${w?.account ? "Deposit USDso" : "Connect wallet"}</button>
+          <button class="btn wide" id="dwGo" ${sim ? "disabled" : ""}>${sim ? "Opens at deploy" : w?.account ? "Deposit USDso" : "Connect wallet"}</button>
           <p class="muted" style="font-size:12px;margin:10px 0 0">Deposits go straight into the vault's MarginBank account. Redemptions cancel resting orders if collateral is needed.</p>
         </div>
         <div class="card pad fade"><h2 style="margin:0 0 12px;font-size:14px;font-weight:670">Rules the contract enforces</h2>${rules}
-          <p class="muted" style="font-size:12px;margin:14px 0 0">Contract ${addrLink(v.address)}${d?.deployTx ? ` · deployed in ${txLink(d.deployTx)}` : ""}</p></div>
+          <p class="muted" style="font-size:12px;margin:14px 0 0">${sim ? "Contract: not deployed yet. Source in contracts/src/CatchVault.sol, 55 tests." : `Contract ${addrLink(v.address)}${d?.deployTx ? ` · deployed in ${txLink(d.deployTx)}` : ""}`}</p></div>
       </div>
     </section>`;
   let mode = "deposit";
@@ -370,6 +364,30 @@ async function vaultView() {
       await loadCore(); render();
     } catch (e) { toast(e.message || String(e)); $("#dwGo").disabled = false; }
   });
+}
+
+/** What a fresh vault would rest right now: each market's best clusters from the live map,
+ *  sized by the contract's rules (cluster cap 10%, market cap 25%), with the venue's initial
+ *  margin locked against each order. Shown only while no vault is deployed, and labelled. */
+function simulateVault(assets = 100_000, marketCapBps = 2500, clusterCapBps = 1000) {
+  const clusterCap = (assets * clusterCapBps) / 10000, marketCap = (assets * marketCapBps) / 10000;
+  const markets = [];
+  let id = 1, locked = 0;
+  for (const m of state.markets || []) {
+    let exposure = 0;
+    const slots = [];
+    for (const c of (m.clusters || []).filter(Boolean).sort((a, b) => b.notional - a.notional)) {
+      const notional = Math.min(c.notional, clusterCap, marketCap - exposure);
+      const margin = (notional * (m.initialMarginBps || 1000)) / 10000;
+      if (notional < 50 || locked + margin > assets) continue; // the venue refuses an order the margin cannot back
+      exposure += notional;
+      locked += margin;
+      slots.push({ id: id++, side: c.side, unwind: false, price: c.price, quantity: notional / c.price, notional, orderId: "not placed", backers: c.backers });
+    }
+    if (slots.length) markets.push({ pool: m.pool, symbol: m.symbol, exposure, slots });
+  }
+  markets.sort((a, b) => b.exposure - a.exposure);
+  return { address: null, asset: null, totalAssets: assets, totalSupply: assets, sharePrice: 1, marketCapBps, clusterCapBps, locked, free: assets - locked, markets };
 }
 
 function eventsTable() {
