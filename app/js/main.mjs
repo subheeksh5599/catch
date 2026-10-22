@@ -54,8 +54,10 @@ function renderChrome() {
   if (!s) return;
   $("#netName").textContent = s.network.label;
   $("#headBlock").textContent = s.head ? `block ${int(s.head)}` : "reading chain";
-  const dot = $("#liveDot");
-  dot.className = "dot " + (s.head ? "live" : "stale");
+  if (s.head !== renderChrome.head) { renderChrome.head = s.head; renderChrome.at = Date.now(); }
+  const stale = !s.head || Date.now() - renderChrome.at > 90_000;
+  $("#liveDot").className = "dot " + (stale ? "stale" : "live");
+  if (stale && s.head) $("#headBlock").textContent = `block ${int(s.head)} · stale`;
 }
 
 function renderConnect() {
@@ -213,6 +215,16 @@ async function mapView() {
         ${(m.clusters || []).map((c) => clusterCard(c, m)).join("")}
       </div>
     </section>
+    <section class="card fade"><div class="card-h"><h2>Stress</h2><span class="hint">Liquidation notional a mark move crosses, at block ${int(m.block)}</span></div>
+      <div class="scroll"><table class="table"><thead><tr><th>Mark move</th><th class="r">Price</th><th>Side forced</th><th class="r">Notional crossed</th><th class="r">Book resting on that side</th></tr></thead><tbody>
+      ${["10%", "5%", "3%", "1%"].map((k) => ({ k, d: -parseFloat(k) / 100, v: r[k].long, side: "Longs sold" }))
+        .concat(["1%", "3%", "5%", "10%"].map((k) => ({ k, d: parseFloat(k) / 100, v: r[k].short, side: "Shorts bought" })))
+        .map(({ d, v, side }) => {
+          const p = m.markPrice * (1 + d);
+          const book = m.bins.reduce((t, b) => t + (d < 0 ? (b.price >= p && b.price < m.markPrice ? b.bidDepth : 0) : (b.price <= p && b.price > m.markPrice ? b.askDepth : 0)), 0);
+          return `<tr><td class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${(d * 100).toFixed(0)}%</td><td class="r">${price(p, m.markPrice)}</td><td class="fog">${side}</td><td class="r">${usd(v)}</td><td class="r ${v > 0 && book < v * 0.25 ? "down" : ""}">${usd(book)}</td></tr>`;
+        }).join("")}
+      </tbody></table></div></section>
     <section class="card fade"><div class="card-h"><h2>Closest to liquidation</h2><span class="hint">Single-market solve, as the venue publishes it</span></div>
       <div class="scroll"><table class="table"><thead><tr><th>Account</th><th>Side</th><th class="r">Size</th><th class="r">Entry</th><th class="r">Liquidation</th><th class="r">From mark</th><th class="r">Notional</th></tr></thead><tbody>
       ${m.near.map((p) => `<tr><td>${addrLink(p.account)}</td><td><span class="tag ${p.side}">${p.side === "long" ? "Long" : "Short"}</span></td><td class="r">${qty(p.size)} ${esc(m.base)}</td><td class="r">${price(p.entry, m.markPrice)}</td><td class="r">${price(p.liq, m.markPrice)}</td><td class="r ${p.distance < 0.02 ? "down" : "muted"}">${pct(p.distance, 2)}</td><td class="r">${usd(p.notional)}</td></tr>`).join("")}
@@ -314,6 +326,7 @@ async function vaultView() {
           <div class="seg" id="dwSeg"><button class="on" data-k="deposit">Deposit</button><button data-k="redeem">Redeem</button></div>
           <div style="height:14px"></div>
           <input class="big" id="amt" placeholder="0.00" inputmode="decimal" autocomplete="off" />
+          <div class="muted" id="preview" style="font-size:12.5px;margin-top:8px">At share price ${v.sharePrice.toFixed(6)}</div>
           <div class="kv" style="margin:12px 0 14px"><dt>Wallet</dt><dd>${mine?.wallet != null ? usd(fromUnits(mine.wallet), { compact: false, digits: 2 }) + " USDso" : "—"}</dd><dt>Your shares</dt><dd>${mine?.shares != null ? qty(fromUnits(mine.shares)) : "—"}</dd><dt>Worth</dt><dd>${mine?.assets != null ? usd(fromUnits(mine.assets), { compact: false, digits: 2 }) : "—"}</dd></div>
           <button class="btn wide" id="dwGo">${w?.account ? "Deposit USDso" : "Connect wallet"}</button>
           <p class="muted" style="font-size:12px;margin:10px 0 0">Deposits go straight into the vault's MarginBank account. Redemptions cancel resting orders if collateral is needed.</p>
@@ -323,11 +336,19 @@ async function vaultView() {
       </div>
     </section>`;
   let mode = "deposit";
+  const preview = () => {
+    const x = parseFloat($("#amt").value);
+    $("#preview").textContent = !(x > 0) ? `At share price ${v.sharePrice.toFixed(6)}`
+      : mode === "deposit" ? `You deposit ${usd(x, { compact: false, digits: 2 })} USDso → about ${qty(x / v.sharePrice)} shares`
+      : `You redeem ${qty(x)} shares → about ${usd(x * v.sharePrice, { compact: false, digits: 2 })} USDso`;
+  };
+  $("#amt").addEventListener("input", preview);
   $("#dwSeg").addEventListener("click", (e) => {
     const k = e.target.dataset.k; if (!k) return;
     mode = k;
     for (const b of $("#dwSeg").children) b.classList.toggle("on", b.dataset.k === k);
     $("#dwGo").textContent = w?.account ? (k === "deposit" ? "Deposit USDso" : "Redeem shares") : "Connect wallet";
+    preview();
   });
   $("#dwGo").addEventListener("click", async () => {
     try {
