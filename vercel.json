@@ -4,6 +4,12 @@
   "installCommand": "npm install --no-audit --no-fund",
   "framework": null,
   "functions": {
-    "api/**/*.mjs": { "maxDuration": 300, "includeFiles": "{engine/src/**,deployments/**}" }
-  }
+    "api/**/*.mjs": {
+      "maxDuration": 300,
+      "includeFiles": "{engine/src/**,deployments/**}"
+    }
+  },
+  "regions": [
+    "hnd1"
+  ]
 }
