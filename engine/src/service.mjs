@@ -60,8 +60,14 @@ export class CatchService {
 
   async refreshMarkets() {
     const all = await this.ex.loadMarkets(true);
-    for (const m of Object.values(all)) {
-      if (m.type !== "swap" || !m.perpStatus?.tradeable) continue;
+    // the SDK can report registration as unknown (null); settle it with one read per pool
+    const perps = Object.values(all).filter((m) => m.type === "swap" && m.perpStatus?.restricted === false);
+    const reg = await this.client.multicall({
+      contracts: perps.map((m) => ({ address: this.net.addresses.marginBank, abi: bankAbi, functionName: "isPerpPoolRegistered", args: [m.info.poolAddress] })),
+      allowFailure: true,
+    });
+    for (const [k, m] of perps.entries()) {
+      if (!(reg[k].status === "success" && reg[k].result === true)) continue;
       const i = m.info;
       const pool = i.poolAddress.toLowerCase();
       const prev = this.markets.get(pool);

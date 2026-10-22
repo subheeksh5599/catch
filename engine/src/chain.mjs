@@ -36,6 +36,7 @@ export const bankAbi = parseAbi([
   "function getAccountHealth(address account) view returns (int256 equity, uint256 imReq, uint256 mmReq, uint256 cmReq)",
   "function getBankruptcyPrice(address account, address perpPool) view returns (uint256 price)",
   "function getWithdrawableCollateral(address account) view returns (uint256)",
+  "function isPerpPoolRegistered(address perpPool) view returns (bool)",
   "function getAccountState(address account) view returns ((int256 unlockedCollateralBalance, uint256 lockedCollateral, address[] activePerpPools))",
   "event PositionUpdated(address indexed account, address indexed perpPool, int128 newSize, uint128 avgEntryPrice, int256 realizedPnl, int256 entryFundingIndex)",
 ]);
