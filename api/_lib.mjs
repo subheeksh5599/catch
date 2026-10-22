@@ -29,7 +29,7 @@ export async function cached(key, ttl, fn) {
 
 export function send(res, body, sMaxAge = 30) {
   res.setHeader("content-type", "application/json");
-  res.setHeader("cache-control", `public, s-maxage=${sMaxAge}, stale-while-revalidate=600`);
+  res.setHeader("cache-control", `public, s-maxage=${sMaxAge}, stale-while-revalidate=86400`);
   res.setHeader("access-control-allow-origin", "*");
   res.status(200).end(JSON.stringify(body));
 }
