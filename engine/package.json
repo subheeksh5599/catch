@@ -7,5 +7,18 @@
     "@somnia-chain/markets-sdk": "^0.32.1",
     "@somnia-chain/reactivity": "^0.2.1",
     "viem": "^2.57.10"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "test": "node --test test/*.test.mjs",
+    "snapshot": "node scripts/snapshot.mjs",
+    "rehearse": "node scripts/live/rehearse.mjs",
+    "fund": "node scripts/live/fund.mjs",
+    "deploy": "node scripts/live/deploy.mjs",
+    "subscribe": "node scripts/live/subscribe.mjs",
+    "keeper": "node scripts/live/keeper.mjs"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
