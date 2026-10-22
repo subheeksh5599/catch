@@ -1,0 +1,333 @@
+{
+ "perpPoolWriteAbi": [
+  {
+   "name": "placeOrder",
+   "type": "function",
+   "stateMutability": "nonpayable",
+   "inputs": [
+    {
+     "type": "bool",
+     "name": "isBid"
+    },
+    {
+     "type": "uint64",
+     "name": "userData"
+    },
+    {
+     "type": "uint256",
+     "name": "price"
+    },
+    {
+     "type": "uint256",
+     "name": "quantity"
+    },
+    {
+     "type": "uint64",
+     "name": "expireTimestampNs"
+    },
+    {
+     "type": "uint8",
+     "name": "orderType"
+    },
+    {
+     "type": "uint8",
+     "name": "selfMatchingOption"
+    },
+    {
+     "type": "address",
+     "name": "builder"
+    },
+    {
+     "type": "uint96",
+     "name": "builderFeeBpsTimes1k"
+    }
+   ],
+   "outputs": []
+  },
+  {
+   "name": "cancelOrder",
+   "type": "function",
+   "stateMutability": "nonpayable",
+   "inputs": [
+    {
+     "type": "uint128",
+     "name": "orderId"
+    }
+   ],
+   "outputs": []
+  }
+ ],
+ "orderBookBatchWriteAbi": [
+  {
+   "name": "placeOrders",
+   "type": "function",
+   "stateMutability": "nonpayable",
+   "inputs": [
+    {
+     "type": "tuple[]",
+     "name": "requests",
+     "components": [
+      {
+       "type": "bool",
+       "name": "isBid"
+      },
+      {
+       "type": "uint64",
+       "name": "userData"
+      },
+      {
+       "type": "uint256",
+       "name": "price"
+      },
+      {
+       "type": "uint256",
+       "name": "quantity"
+      },
+      {
+       "type": "uint64",
+       "name": "expireTimestampNs"
+      },
+      {
+       "type": "uint8",
+       "name": "orderType"
+      },
+      {
+       "type": "uint8",
+       "name": "selfMatchingOption"
+      },
+      {
+       "type": "address",
+       "name": "builder"
+      },
+      {
+       "type": "uint96",
+       "name": "builderFeeBpsTimes1k"
+      }
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "type": "bool[]",
+     "name": "successes"
+    },
+    {
+     "type": "uint128[]",
+     "name": "ids"
+    }
+   ]
+  },
+  {
+   "name": "cancelOrders",
+   "type": "function",
+   "stateMutability": "nonpayable",
+   "inputs": [
+    {
+     "type": "uint128[]",
+     "name": "orderIds"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "bool[]",
+     "name": "cancelled"
+    }
+   ]
+  },
+  {
+   "name": "amendOrders",
+   "type": "function",
+   "stateMutability": "nonpayable",
+   "inputs": [
+    {
+     "type": "tuple[]",
+     "name": "requests",
+     "components": [
+      {
+       "type": "uint128",
+       "name": "oldOrderId"
+      },
+      {
+       "type": "bool",
+       "name": "alwaysPlace"
+      },
+      {
+       "type": "tuple",
+       "name": "newOrder",
+       "components": [
+        {
+         "type": "bool",
+         "name": "isBid"
+        },
+        {
+         "type": "uint64",
+         "name": "userData"
+        },
+        {
+         "type": "uint256",
+         "name": "price"
+        },
+        {
+         "type": "uint256",
+         "name": "quantity"
+        },
+        {
+         "type": "uint64",
+         "name": "expireTimestampNs"
+        },
+        {
+         "type": "uint8",
+         "name": "orderType"
+        },
+        {
+         "type": "uint8",
+         "name": "selfMatchingOption"
+        },
+        {
+         "type": "address",
+         "name": "builder"
+        },
+        {
+         "type": "uint96",
+         "name": "builderFeeBpsTimes1k"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "type": "uint128[]",
+     "name": "newOrderIds"
+    }
+   ]
+  }
+ ],
+ "marginBankWriteAbi": [
+  {
+   "name": "deposit",
+   "type": "function",
+   "stateMutability": "nonpayable",
+   "inputs": [
+    {
+     "type": "uint256",
+     "name": "amount"
+    }
+   ],
+   "outputs": []
+  },
+  {
+   "name": "withdraw",
+   "type": "function",
+   "stateMutability": "nonpayable",
+   "inputs": [
+    {
+     "type": "uint256",
+     "name": "amount"
+    }
+   ],
+   "outputs": []
+  }
+ ],
+ "marginBankEventsAbi": [
+  {
+   "type": "event",
+   "name": "PositionUpdated",
+   "inputs": [
+    {
+     "name": "account",
+     "type": "address",
+     "indexed": true
+    },
+    {
+     "name": "perpPool",
+     "type": "address",
+     "indexed": true
+    },
+    {
+     "name": "newSize",
+     "type": "int128",
+     "indexed": false
+    },
+    {
+     "name": "avgEntryPrice",
+     "type": "uint128",
+     "indexed": false
+    },
+    {
+     "name": "realizedPnl",
+     "type": "int256",
+     "indexed": false
+    },
+    {
+     "name": "entryFundingIndex",
+     "type": "int256",
+     "indexed": false
+    }
+   ],
+   "anonymous": false
+  }
+ ],
+ "liquidationEngineEventsAbi": [
+  {
+   "type": "event",
+   "name": "AccountLiquidated",
+   "inputs": [
+    {
+     "name": "account",
+     "type": "address",
+     "indexed": true
+    },
+    {
+     "name": "positionsProcessed",
+     "type": "uint256",
+     "indexed": false
+    },
+    {
+     "name": "stageReached",
+     "type": "uint8",
+     "indexed": false
+    },
+    {
+     "name": "marginStatusBefore",
+     "type": "uint8",
+     "indexed": false
+    },
+    {
+     "name": "marginStatusAfter",
+     "type": "uint8",
+     "indexed": false
+    }
+   ],
+   "anonymous": false
+  },
+  {
+   "type": "event",
+   "name": "PositionLiquidated",
+   "inputs": [
+    {
+     "name": "account",
+     "type": "address",
+     "indexed": true
+    },
+    {
+     "name": "perpPool",
+     "type": "address",
+     "indexed": true
+    },
+    {
+     "name": "sizeDelta",
+     "type": "int128",
+     "indexed": false
+    },
+    {
+     "name": "markPrice",
+     "type": "uint256",
+     "indexed": false
+    }
+   ],
+   "anonymous": false
+  }
+ ]
+}
