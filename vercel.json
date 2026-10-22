@@ -1,0 +1,9 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install --no-audit --no-fund",
+  "framework": null,
+  "functions": {
+    "api/**/*.mjs": { "maxDuration": 60, "includeFiles": "{engine/src/**,deployments/**}" }
+  }
+}
