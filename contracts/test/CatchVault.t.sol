@@ -186,6 +186,49 @@ contract CatchVaultTest is Test {
         vault.place(address(pool), true, 58_400e18, 1e18, _one(l1));
     }
 
+    function test_window_longFlooredAtBankruptcy() public view {
+        (uint256 lo, uint256 hi) = vault.catchWindow(l1, address(pool));
+        assertEq(lo, 58_500e18);
+        assertEq(hi, 59_000e18);
+    }
+
+    function test_window_longFlooredAtEngineSpreadWhenBankruptcyIsFurther() public {
+        bank.setBankruptcy(l1, address(pool), 50_000e18);
+        (uint256 lo, uint256 hi) = vault.catchWindow(l1, address(pool));
+        assertEq(lo, 56_050e18); // 59,000 x (1 - 5%)
+        assertEq(hi, 59_000e18);
+    }
+
+    /// The venue reports a short's bankruptcy price at its entry (below liq); the window then
+    /// runs to the engine's maximum spread.
+    function test_window_shortIgnoresABankruptcyBelowLiquidation() public {
+        bank.setBankruptcy(s1, address(pool), 60_000e18);
+        (uint256 lo, uint256 hi) = vault.catchWindow(s1, address(pool));
+        assertEq(lo, 61_000e18);
+        assertEq(hi, 64_050e18);
+        vault.place(address(pool), false, 63_000e18, 0.1e18, _one(s1));
+    }
+
+    function test_window_shortCappedAtBankruptcy() public view {
+        (uint256 lo, uint256 hi) = vault.catchWindow(s1, address(pool));
+        assertEq(lo, 61_000e18);
+        assertEq(hi, 61_500e18);
+    }
+
+    function test_window_tracksTheEngineSpread() public {
+        bank.setBankruptcy(l1, address(pool), 1);
+        bank.engine().setSpread(100);
+        (uint256 lo,) = vault.catchWindow(l1, address(pool));
+        assertEq(lo, 58_410e18);
+        vm.expectRevert(abi.encodeWithSelector(CatchVault.OutsideBand.selector, l1, 58_410e18, 59_000e18, 58_400e18));
+        vault.place(address(pool), true, 58_400e18, 0.1e18, _one(l1));
+    }
+
+    function test_window_flatIsEmpty() public view {
+        (uint256 lo, uint256 hi) = vault.catchWindow(alice, address(pool));
+        assertEq(lo + hi, 0);
+    }
+
     function test_invariant2_wrongSideBackerReverts() public {
         vm.expectRevert(abi.encodeWithSelector(CatchVault.BackerSide.selector, s1));
         vault.place(address(pool), true, 58_800e18, 1e18, _one(s1));
