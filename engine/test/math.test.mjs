@@ -108,3 +108,23 @@ test("catch window mirrors the contract's worked examples", () => {
   assert.deepEqual(w({ size: -E18, liq: 61_000n * E18, bankruptcy: 61_500n * E18 }), { lo: 61_000n * E18, hi: 61_500n * E18 });
   assert.equal(w({ size: 0n, liq: 1n }), null);
 });
+
+test("best cluster ignores levels beyond the distance limit", () => {
+  const pos = [
+    { account: "0x01", size: 100n * E18, liq: 30_000n * E18, bankruptcy: 29_000n * E18 }, // -50%
+    { account: "0x02", size: E18, liq: 58_000n * E18, bankruptcy: 57_500n * E18 },
+  ];
+  const c = bestCluster(pos, { markPrice: base.markPrice, tickSize: 10n ** 16n, isBid: true, spreadBps: 500n, maxDistanceBps: 1500n });
+  assert.equal(c.size, E18);
+  assert.deepEqual(c.backers, ["0x02"]);
+});
+
+test("best cluster prefers a reachable level over a bigger, distant one", () => {
+  const pos = [
+    { account: "0x01", size: 3n * E18, liq: 52_000n * E18, bankruptcy: 51_500n * E18 }, // -13%
+    { account: "0x02", size: 2n * E18, liq: 58_800n * E18, bankruptcy: 58_000n * E18 }, // -2%
+  ];
+  const c = bestCluster(pos, { markPrice: base.markPrice, tickSize: 10n ** 16n, isBid: true, spreadBps: 500n });
+  assert.deepEqual(c.backers, ["0x02"]);
+  assert.equal(c.price, 58_800n * E18, "at the edge nearest the mark");
+});

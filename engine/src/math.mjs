@@ -89,7 +89,7 @@ export function catchWindow({ size, liq, bankruptcy, spreadBps }) {
  *  would cite (largest first, at most maxBackers, then sorted by address as the contract
  *  requires) and the size they would force through the book.
  *  isBid=true: longs are sold into bids below the mark. */
-export function bestCluster(positions, { markPrice, tickSize, isBid, spreadBps, maxBackers = 8 }) {
+export function bestCluster(positions, { markPrice, tickSize, isBid, spreadBps, maxBackers = 8, maxDistanceBps = 1500n }) {
   const side = positions.filter((p) => p.liq != null && (isBid ? p.size > 0n : p.size < 0n));
   const bands = [];
   for (const p of side) {
@@ -98,6 +98,11 @@ export function bestCluster(positions, { markPrice, tickSize, isBid, spreadBps, 
     // passive side of the mark only
     if (isBid && hi >= markPrice) hi = markPrice - tickSize;
     if (!isBid && lo <= markPrice) lo = markPrice + tickSize;
+    // only levels a plausible move reaches
+    const floor = markPrice - (markPrice * maxDistanceBps) / BPS;
+    const ceil = markPrice + (markPrice * maxDistanceBps) / BPS;
+    if (isBid && lo < floor) lo = floor;
+    if (!isBid && hi > ceil) hi = ceil;
     // tick grid: round inward
     lo = ((lo + tickSize - 1n) / tickSize) * tickSize;
     hi = (hi / tickSize) * tickSize;
@@ -112,23 +117,29 @@ export function bestCluster(positions, { markPrice, tickSize, isBid, spreadBps, 
     events.push([b.hi, 1, -abs(b.p.size)]);
   }
   events.sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : a[1] - b[1]));
-  let cur = 0n, best = 0n, bestPrice = null;
+  // Score = forced size x how reachable the level is (1 at the mark, 0 at the distance limit),
+  // so a heap of positions 15% away does not outrank a real cluster 3% away.
+  const reach = (markPrice * maxDistanceBps) / BPS;
+  const score = (size, price) => {
+    const dist = price > markPrice ? price - markPrice : markPrice - price;
+    return dist >= reach ? 0n : (size * (reach - dist)) / reach;
+  };
+  let cur = 0n, best = -1n, bestPrice = null;
+  const consider = (price) => {
+    const sc = score(cur, price);
+    if (sc > best) { best = sc; bestPrice = price; }
+  };
   for (const [price, kind, d] of events) {
-    if (kind === 0) {
-      cur += d;
-      // tie-break toward the mark: closer clusters fill first
-      if (cur > best || (cur === best && bestPrice != null && (isBid ? price > bestPrice : price < bestPrice))) {
-        best = cur;
-        bestPrice = price;
-      }
-    } else cur += d;
+    if (kind === 0) { cur += d; consider(price); }
+    else { consider(price); cur += d; } // the band's own edge still counts it
   }
+  if (bestPrice == null || best <= 0n) return null;
   const inside = bands.filter((b) => b.lo <= bestPrice && bestPrice <= b.hi).map((b) => b.p);
   inside.sort((a, b) => (abs(b.size) > abs(a.size) ? 1 : abs(b.size) < abs(a.size) ? -1 : 0));
   const chosen = inside.slice(0, maxBackers);
   const size = chosen.reduce((s, p) => s + abs(p.size), 0n);
   const backers = chosen.map((p) => p.account).sort((a, b) => (BigInt(a) < BigInt(b) ? -1 : 1));
-  return { isBid, price: bestPrice, size, backers, accountsInBand: inside.length, sizeInBand: best };
+  return { isBid, price: bestPrice, size, backers, accountsInBand: inside.length, sizeInBand: inside.reduce((t, p) => t + abs(p.size), 0n) };
 }
 
 /** Size the vault order: cluster size, clipped to the cluster cap and the venue lot grid. */
