@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Catch — App</title>
+  <meta name="description" content="Liquidation map and backstop vault for dreamDEX perps on Somnia." />
+  <link rel="icon" href="./mark.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./app.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="side">
+      <a class="brand" href="/" aria-label="Catch home">
+        <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><path fill="#fff" fill-rule="evenodd" d="M 21.76 0 C 25.344 0 27.137 0 28.506 0.697 C 29.71 1.311 30.689 2.29 31.303 3.494 C 32 4.863 32 6.656 32 10.24 L 32 21.76 C 32 25.344 32 27.137 31.303 28.506 C 30.689 29.71 29.71 30.689 28.506 31.303 C 27.137 32 25.344 32 21.76 32 L 10.24 32 C 6.656 32 4.863 32 3.494 31.303 C 2.29 30.689 1.311 29.71 0.697 28.506 C 0 27.137 0 25.344 0 21.76 L 0 10.24 C 0 6.656 0 4.863 0.697 3.494 C 1.311 2.29 2.29 1.311 3.494 0.697 C 4.863 0 6.656 0 10.24 0 Z M 8 14 L 8 19 C 8 23.4 11.6 26 16 26 C 20.4 26 24 23.4 24 19 L 24 14 L 20.8 14 L 20.8 19 C 20.8 21.6 18.6 22.8 16 22.8 C 13.4 22.8 11.2 21.6 11.2 19 L 11.2 14 Z M 18.5 9 A 2.5 2.5 0 0 0 13.5 9 A 2.5 2.5 0 0 0 18.5 9 Z"/></svg>
+        <span>Catch</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="#/" data-route="overview"><svg viewBox="0 0 20 20"><path d="M3 3h6v6H3zM11 3h6v4h-6zM11 9h6v8h-6zM3 11h6v6H3z"/></svg>Overview</a>
+        <a href="#/map" data-route="map"><svg viewBox="0 0 20 20"><path d="M3 17V9M7 17V5M11 17v-6M15 17V7M2 17h16"/></svg>Liquidation map</a>
+        <a href="#/markets" data-route="markets"><svg viewBox="0 0 20 20"><path d="M3 5h14M3 10h14M3 15h14"/></svg>Markets</a>
+        <a href="#/vault" data-route="vault"><svg viewBox="0 0 20 20"><path d="M3 4h14v12H3zM10 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0-6 0M10 7v-1M13 10h1"/></svg>Vault</a>
+        <a href="#/liquidations" data-route="liquidations"><svg viewBox="0 0 20 20"><path d="M10 3v9M6 8l4 4 4-4M3 16h14"/></svg>Liquidations</a>
+        <a href="#/contracts" data-route="contracts"><svg viewBox="0 0 20 20"><path d="M6 6l-4 4 4 4M14 6l4 4-4 4M11 4l-2 12"/></svg>Contracts</a>
+      </nav>
+      <div class="side-foot" id="sideFoot">
+        <div class="net"><span class="dot" id="liveDot"></span><span id="netName">Connecting</span></div>
+        <div class="block mono" id="headBlock">block —</div>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="top">
+        <div class="crumbs"><h1 id="title">Overview</h1><span class="sub" id="subtitle"></span></div>
+        <div class="top-actions">
+          <div id="marketPick"></div>
+          <button class="btn ghost" id="connect">Connect wallet</button>
+        </div>
+      </header>
+      <main id="view" class="view" aria-live="polite"></main>
+    </div>
+  </div>
+  <div class="tip" id="tip" hidden></div>
+  <script type="module" src="./js/main.mjs"></script>
+</body>
+</html>
