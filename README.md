@@ -184,9 +184,11 @@ cd engine
 npm run rehearse                        # free: constructor and catch windows against the live venue
 npm run fund -- 36 20000                # Shannon: mint USDso, bridge 36 STT and 20,000 USDso to Hideki
 npm run deploy                          # CatchVault(marginBank, 25% market cap, 10% cluster cap, 0.3% unwind spread)
-npm run subscribe                       # reactivity: MarginBank PositionUpdated → CatchVault.onEvent (owner holds ≥ 32 STT)
+npm run subscribe                       # reactivity: waits for a successful receipt and records it (owner holds ≥ 32 STT)
 npm run keeper -- --deposit 10000 --once
 ```
+
+`npm run subscribe` can be rerun safely: it resumes a recorded pending transaction or recognizes an already confirmed registration instead of creating a duplicate. It records the subscription ID and confirms the owner, handler, emitter and event filter against the precompile. If the recorded registration reverted, fix the cause and run `npm run subscribe -- hideki --retry` to submit a new one.
 
 Deployment costs about 96M gas (`eth_estimateGas` on Hideki at 6 gwei, about 0.58 STT). Every transaction lands in `deployments/hideki.json`, which the engine and the dashboard read.
 
