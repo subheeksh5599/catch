@@ -45,13 +45,17 @@ async function deposit(amountText) {
   const asset = await rd("ASSET");
   const allowance = await client.readContract({ address: asset, abi: erc20Abi, functionName: "allowance", args: [account.address, vault] });
   if (allowance < amount) {
-    const h = await wallet.writeContract({ address: asset, abi: erc20Abi, functionName: "approve", args: [vault, amount], gas: 300_000n });
-    await client.waitForTransactionReceipt({ hash: h });
+    // Somnia storage writes cost far more than mainnet EVM; size gas from the node's estimate
+    const g = await client.estimateContractGas({ account, address: asset, abi: erc20Abi, functionName: "approve", args: [vault, amount] });
+    const h = await wallet.writeContract({ address: asset, abi: erc20Abi, functionName: "approve", args: [vault, amount], gas: (g * 15n) / 10n });
+    const ar = await client.waitForTransactionReceipt({ hash: h });
+    if (ar.status !== "success") throw new Error(`approve reverted ${h}`);
     rec.txs.push({ kind: "approve", tx: h });
     log("approve", h);
   }
   const { request } = await client.simulateContract({ account, address: vault, abi: vaultAbi, functionName: "deposit", args: [amount, account.address] });
-  const h = await wallet.writeContract({ ...request, gas: 2_000_000n });
+  const dg = await client.estimateContractGas({ account, address: vault, abi: vaultAbi, functionName: "deposit", args: [amount, account.address] });
+  const h = await wallet.writeContract({ ...request, gas: (dg * 15n) / 10n });
   const r = await client.waitForTransactionReceipt({ hash: h });
   rec.txs.push({ kind: "deposit", tx: h, block: Number(r.blockNumber), status: r.status, amount: amountText });
   save();
