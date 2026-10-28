@@ -4,7 +4,7 @@
 
 ### The liquidation backstop for dreamDEX perps. Resting liquidity where liquidations land, re-checked by the chain.
 
-[![Status](https://img.shields.io/badge/status-built%20%C2%B7%20vault%20deploy%20pending%20funding-f59e0b)](#live-status)
+[![Status](https://img.shields.io/badge/status-live%20on%20Hideki-16a34a)](#live-status)
 [![Network](https://img.shields.io/badge/network-Somnia%20Hideki%20testnet%2050383-4DA2FF)](#live-status)
 [![Contract tests](https://img.shields.io/badge/forge%20tests-55%20passing-16a34a)](#invariants)
 [![Engine tests](https://img.shields.io/badge/engine%20tests-12%20passing-16a34a)](#the-engine)
@@ -30,9 +30,12 @@ No admin can move depositor funds, no order rests where a liquidation cannot rea
 | Contract against the live venue | **Rehearsed** | constructor run against the Hideki MarginBank by `eth_call`; its catch windows for 16 real accounts are identical to the engine's, to the wei ([`deployments/rehearsal-hideki.txt`](deployments/rehearsal-hideki.txt)) |
 | Liquidation map engine | **Running on live data** | reads all 21 tradeable Hideki markets from head state, about 5,900 BTC positions in one block-pinned pass |
 | Dashboard | **Live** | [catch-backstop.vercel.app/app/](https://catch-backstop.vercel.app/app/), reading Hideki through Vercel functions in Tokyo, next to the Somnia RPC |
-| Vault page | **Simulated, labelled** | until deploy, `/app/#/vault` shows what a 100,000 USDso vault would rest now, sized by the contract caps from the live map; no order is on the book |
-| Vault deployed on Hideki | **Pending** | the operator address needs STT; [`engine/scripts/live/`](engine/scripts/live) runs fund → deploy → subscribe → keeper |
-| A liquidation filled into a Catch order | **Pending** | follows the deploy; every transaction is recorded in `deployments/hideki.json` |
+| `CatchVault` on Hideki | **Deployed** | [`0x4560f46a1287c46b089c244b821c895aa64b249c`](deployments/hideki.json), tx `0xffc4b681bec5aaf04687f79ea00f17352945750b51ffef230a11a56f79fcb1f9` |
+| Reactivity subscription | **Confirmed** | id 22695422: MarginBank `PositionUpdated` → `CatchVault.onEvent`, tx `0x087533c0d10df78df091d3d34f62c0795d0ec074622026a0637b69aa4e205a7b` |
+| Deposit | **Live** | 100 USDso, tx `0xefae19883f0ea1392c8e89770ed802a0e59fac79b2455ae0cbf45e558ee06f35` |
+| Cluster orders resting on the venue's book | **Live** | 3 post-only orders (ETH bid at 2,235.36, ETH ask at 2,415.43, WLD bid at 0.3809), each owned by the vault and backed by 8 accounts: `0x5edf0d60…`, `0x59976331…`, `0x9a2e2322…` |
+| Contract refusing an order on chain | **Observed** | the keeper's fourth order reverted `OutsideBand`: a backer's position moved between the snapshot and the send |
+| A liquidation filled into a Catch order | **Pending** | the orders rest inside live catch windows; a fill needs one of their backers to be liquidated |
 
 ```mermaid
 flowchart TD
@@ -201,9 +204,9 @@ Deployment costs about 96M gas (`eth_estimateGas` on Hideki at 6 gwei, about 0.5
 | Every position and its liquidation price readable from head state | **Real** | the engine maps all 21 markets |
 | Contract windows match the engine on real accounts | **Rehearsed** | 16/16 identical, `deployments/rehearsal-hideki.txt` |
 | Vault rules | **Tested** | 55 Foundry tests against venue doubles that follow the published ABIs |
-| A contract-owned account resting orders on Hideki | **Pending** | `npm run keeper` after the deploy |
-| Same-block cancel from a reactivity callback on Hideki | **Pending** | `npm run subscribe` after the deploy |
-| A liquidation filled into a Catch order | **Pending** | needs a live cluster to trigger |
+| A contract-owned account resting orders on Hideki | **Real** | three orders, hashes in `deployments/hideki.json` |
+| Same-block cancel from a reactivity callback on Hideki | **Subscribed, awaiting a callback** | subscription 22695422 confirmed; the first backer position change will show as a `Released` event |
+| A liquidation filled into a Catch order | **Pending** | the three orders rest inside live catch windows; a fill needs a backer to be liquidated |
 
 A fork test was tried and dropped: neither Somnia RPC serves historical state, so neither Foundry nor anvil can fork it. The rehearsal script replaces it.
 
