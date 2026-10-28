@@ -10,6 +10,7 @@ import {
   SOMNIA_REACTIVITY_PRECOMPILE_ADDRESS,
   SomniaReactivityPrecompileABI,
 } from "@somnia-chain/markets-sdk/reactivity";
+import { SomniaMarkets } from "@somnia-chain/markets-sdk";
 import { NETWORKS, publicClient } from "../../src/chain.mjs";
 import { loadAccount, walletFor } from "../../src/signer.mjs";
 
@@ -19,6 +20,7 @@ const recPath = new URL(`../../../deployments/${netKey}.json`, import.meta.url);
 const rec = JSON.parse(readFileSync(recPath, "utf8"));
 const account = loadAccount();
 const client = publicClient(net), wallet = walletFor(net, account);
+const ex = new SomniaMarkets({ chain: net.chain, addresses: net.addresses, indexerUrl: net.indexerUrl });
 const topic = keccak256(toHex("PositionUpdated(address,address,int128,uint128,int256,int256)"));
 const save = () => writeFileSync(recPath, JSON.stringify(rec, null, 2) + "\n");
 const argv = process.argv.slice(3);
@@ -65,9 +67,10 @@ async function confirmRegistration(hash, receipt) {
 
   const subscriptionId = created.args.subscriptionId;
   const info = unwrap(await reactivity.getSubscriptionInfo(subscriptionId));
-  const data = info.subscriptionData;
+  // the SDK returns [subscriptionData, owner]
+  const [data, owner] = Array.isArray(info) ? info : [info.subscriptionData, info.owner];
   if (
-    info.owner.toLowerCase() !== account.address.toLowerCase() ||
+    owner.toLowerCase() !== account.address.toLowerCase() ||
     data.handlerContractAddress.toLowerCase() !== rec.vault.toLowerCase() ||
     data.emitter.toLowerCase() !== net.addresses.marginBank.toLowerCase() ||
     data.eventTopics[0].toLowerCase() !== topic.toLowerCase()
@@ -77,7 +80,7 @@ async function confirmRegistration(hash, receipt) {
   return recordReceipt(hash, receipt, subscriptionId);
 }
 
-const reactivity = createReactivity(client, { wallet });
+const reactivity = createReactivity(ex.client, { wallet });
 let hash = rec.subscription?.tx;
 
 if (hash) {

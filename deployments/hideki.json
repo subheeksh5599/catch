@@ -1,0 +1,35 @@
+{
+  "network": "hideki",
+  "chainId": 50383,
+  "vault": "0x4560f46a1287c46b089c244b821c895aa64b249c",
+  "deployTx": "0xffc4b681bec5aaf04687f79ea00f17352945750b51ffef230a11a56f79fcb1f9",
+  "deployBlock": 35444452,
+  "operator": "0x68A7Be0E0402dd17EA3CDFfA9Bff84b266F3eE9e",
+  "args": {
+    "marginBank": "0x478769E1177C0773c43A593DCCc4Ad15F15F1394",
+    "marketCapBps": 2500,
+    "clusterCapBps": 1000,
+    "unwindSpreadBps": 30
+  },
+  "readBack": {
+    "bank": "0x478769E1177C0773c43A593DCCc4Ad15F15F1394",
+    "asset": "0xed7993A74dAe1e6656B704A424DcD8711aAf4F72"
+  },
+  "txs": [
+    {
+      "kind": "subscribe",
+      "tx": "0x087533c0d10df78df091d3d34f62c0795d0ec074622026a0637b69aa4e205a7b",
+      "status": "success",
+      "block": 35444711
+    }
+  ],
+  "subscription": {
+    "tx": "0x087533c0d10df78df091d3d34f62c0795d0ec074622026a0637b69aa4e205a7b",
+    "handler": "0x4560f46a1287c46b089c244b821c895aa64b249c",
+    "emitter": "0x478769E1177C0773c43A593DCCc4Ad15F15F1394",
+    "topic0": "0xf7816a375f0ca01053ed213b57908bff79f578810301d50971a5f685529b82de",
+    "status": "confirmed",
+    "block": 35444711,
+    "subscriptionId": "22695422"
+  }
+}
