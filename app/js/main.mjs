@@ -19,10 +19,23 @@ async function get(path) {
 
 // ------------------------------------------------------------------ data
 
+let marketsInFlight = null;
 async function loadCore() {
-  const [status, markets, liq, vault] = await Promise.all([get("/api/status"), get("/api/markets"), get("/api/liquidations"), get("/api/vault")]);
-  Object.assign(state, { status, markets, liq, vault });
+  // markets is the slow read (every position on every market); never block the shell on it
+  if (!marketsInFlight) {
+    marketsInFlight = get("/api/markets").then((markets) => {
+      const first = !state.markets?.length;
+      state.markets = markets;
+      if (!state.pool && markets.length) state.pool = markets[0].pool;
+      if (first) render();
+      return markets;
+    }).finally(() => { marketsInFlight = null; });
+  }
+  const [status, liq, vault] = await Promise.all([get("/api/status"), get("/api/liquidations"), get("/api/vault")]);
+  Object.assign(state, { status, liq, vault });
+  const markets = state.markets || [];
   if (!state.pool && markets.length) state.pool = (new URLSearchParams(location.hash.split("?")[1]).get("m")) || markets[0].pool;
+  if (!state.pool) state.pool = new URLSearchParams(location.hash.split("?")[1]).get("m");
   if (!state.wallet && status?.network) {
     state.wallet = new Wallet({ id: status.network.chainId, name: status.network.label, rpc: status.network.rpc });
     state.wallet.on(() => { renderConnect(); if (state.route === "vault") render(); });
@@ -123,9 +136,9 @@ async function overview() {
   const top = state.markets?.[0];
   view.innerHTML = `
     <section class="grid kpis">
-      ${kpi("Liquidations within 5% of mark", usd(t.r5), `${int(t.a5)} accounts across ${t.mapped} markets`)}
-      ${kpi("Within 1% of mark", usd(t.r1), "Would trigger on a 1% move")}
-      ${kpi("Book inside catch windows", t.coverage == null ? "—" : pct(t.coverage), "Resting liquidity vs. largest clusters")}
+      ${state.markets ? kpi("Liquidations within 5% of mark", usd(t.r5), `${int(t.a5)} accounts across ${t.mapped} markets`) : kpi("Liquidations within 5% of mark", "…", "Reading every open position")}
+      ${state.markets ? kpi("Within 1% of mark", usd(t.r1), "Would trigger on a 1% move") : kpi("Within 1% of mark", "…", "Reading every open position")}
+      ${kpi("Book inside catch windows", t.coverage == null ? "…" : pct(t.coverage), "Resting liquidity vs. largest clusters")}
       ${kpi("Liquidations into an empty book", st ? pct(st.emptyBookShare) : "—", st ? `${int(st.emptyBook)} of the last ${int(st.accounts)}` : "Venue history")}
       ${v ? kpi("Vault assets", usd(v.totalAssets), `${v.markets.reduce((n, m) => n + m.slots.length, 0)} resting orders`) : kpi("Vault", "Not deployed", "On this network", "muted")}
     </section>
@@ -186,6 +199,7 @@ function liqTable(limit = 100) {
 }
 
 async function mapView() {
+  if (!state.markets) { setHead("Liquidation map", "Reading every open position"); view.innerHTML = `<div class="skel" style="height:460px"></div>`; return; }
   const m0 = market(state.pool) || state.markets?.[0];
   if (!m0) { view.innerHTML = `<div class="empty">No markets.</div>`; return; }
   state.pool = m0.pool;
