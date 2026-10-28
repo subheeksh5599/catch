@@ -288,7 +288,7 @@ export class CatchService {
       const slots = [];
       for (const id of ids) {
         const s = await rd("getSlot", [id]);
-        slots.push({ id: Number(id), side: s.isBid ? "bid" : "ask", unwind: s.unwind, price: num(s.price), quantity: Number(s.quantity), orderId: s.orderId.toString(), backers: s.backers });
+        slots.push({ id: Number(id), side: s.isBid ? "bid" : "ask", unwind: s.unwind, price: num(s.price), quantity: num(s.quantity), notional: num((s.price * s.quantity) / 10n ** 18n), orderId: s.orderId.toString(), backers: s.backers });
       }
       const m = this.markets.get(pool.toLowerCase());
       markets.push({ pool, symbol: m?.symbol ?? pool, exposure: num(exposure), position: { size: Number(pos.size), entry: num(pos.avgEntryPrice) }, slots });
@@ -300,7 +300,8 @@ export class CatchService {
       asset,
       totalAssets: num(totalAssets),
       totalSupply: num(totalSupply),
-      sharePrice: totalSupply > 0n ? Number(totalAssets) / Number(totalSupply) : 1,
+      // the contract offsets shares by 1e3 (virtual shares); quote assets per 1,000 shares
+      sharePrice: totalSupply > 0n ? (Number(totalAssets) * 1000) / Number(totalSupply) : 1,
       marketCapBps: Number(marketCap),
       clusterCapBps: Number(clusterCap),
       unwindSpreadBps: Number(spread),

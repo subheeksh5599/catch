@@ -316,7 +316,7 @@ async function vaultView() {
     ${sim ? `<div class="notice fade"><span class="dot stale" style="margin-top:6px"></span><div><b>Simulated vault.</b> CatchVault is not deployed on ${esc(state.status?.network?.label ?? "this network")} yet. This page shows what a ${usd(v.totalAssets, { compact: false })} USDso vault would rest right now, sized by the contract's caps from the live liquidation map. No order below is on the book, and deposits open at deploy.</div></div>` : ""}
     <section class="grid kpis">
       ${kpi("Vault assets", usd(v.totalAssets, { compact: false, digits: 2 }), sim ? "Simulated deposit" : "Idle + bank equity + locked")}
-      ${kpi("Share price", v.sharePrice.toFixed(6), `${qty(v.totalSupply)} shares`)}
+      ${kpi("Share price", v.sharePrice.toFixed(6), sim ? "USDso per share" : `USDso per 1,000 shares · ${qty(v.totalSupply)} shares`)}
       ${kpi("Free collateral", usd(v.free), sim ? "After initial margin" : "Withdrawable now")}
       ${kpi("Locked in orders", usd(v.locked), sim ? `${orders.length} orders, venue initial margin` : `${orders.length} resting`)}
       ${kpi("Caps", `${v.marketCapBps / 100}% / ${v.clusterCapBps / 100}%`, "Per market / per cluster")}
@@ -347,8 +347,8 @@ async function vaultView() {
   const preview = () => {
     const x = parseFloat($("#amt").value);
     $("#preview").textContent = !(x > 0) ? `At share price ${v.sharePrice.toFixed(6)}`
-      : mode === "deposit" ? `You deposit ${usd(x, { compact: false, digits: 2 })} USDso → about ${qty(x / v.sharePrice)} shares`
-      : `You redeem ${qty(x)} shares → about ${usd(x * v.sharePrice, { compact: false, digits: 2 })} USDso`;
+      : mode === "deposit" ? `You deposit ${usd(x, { compact: false, digits: 2 })} USDso → about ${qty((x / v.sharePrice) * (sim ? 1 : 1000))} shares`
+      : `You redeem ${qty(x)} shares → about ${usd((x * v.sharePrice) / (sim ? 1 : 1000), { compact: false, digits: 2 })} USDso`;
   };
   $("#amt").addEventListener("input", preview);
   $("#dwSeg").addEventListener("click", (e) => {
