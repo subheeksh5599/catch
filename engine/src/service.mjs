@@ -2,6 +2,7 @@
 // history, and (once deployed) the vault. Everything here is read from the chain or the venue's
 // indexer; nothing is invented. Values leave this module as plain JSON numbers/strings.
 import { readFileSync, existsSync } from "node:fs";
+import { parseEventLogs } from "viem";
 import { SomniaMarkets } from "@somnia-chain/markets-sdk";
 import { NETWORKS, publicClient, vaultAbi, erc20Abi, bankAbi } from "./chain.mjs";
 import { snapshotPool } from "./reader.mjs";
@@ -314,18 +315,45 @@ export class CatchService {
   async refreshVaultEvents() {
     const v = this.deployment.vault;
     const head = await this.client.getBlockNumber();
-    const from = BigInt(this.eventsFrom ?? this.deployment.deployBlock ?? Number(head) - 100_000);
+    const seen = this.vaultEventKeys ?? new Set();
     const rows = this.vaultEvents ?? [];
-    const STEP = 10_000n;
-    for (let a = from; a <= head; a += STEP) {
-      const b = a + STEP - 1n > head ? head : a + STEP - 1n;
-      const logs = await this.client.getContractEvents({ address: v, abi: vaultAbi, fromBlock: a, toBlock: b });
+    const add = (logs) => {
       for (const l of logs) {
+        const key = `${l.transactionHash}:${l.logIndex}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
         const args = Object.fromEntries(Object.entries(l.args).map(([k, x]) => [k, typeof x === "bigint" ? x.toString() : x]));
-        rows.unshift({ event: l.eventName, args, block: Number(l.blockNumber), tx: l.transactionHash });
+        rows.push({ event: l.eventName, args, block: Number(l.blockNumber), tx: l.transactionHash });
       }
+    };
+    // 1. every transaction the operator recorded: one receipt each, no range scan
+    if (!this.vaultSeeded) {
+      const hashes = [...new Set((this.deployment.txs || []).map((t) => t.tx).filter(Boolean))];
+      const receipts = await Promise.all(hashes.map((hash) => this.client.getTransactionReceipt({ hash }).catch(() => null)));
+      for (const r of receipts) {
+        if (!r) continue;
+        const mine = r.logs.filter((l) => l.address.toLowerCase() === v.toLowerCase());
+        add(parseEventLogs({ abi: vaultAbi, logs: mine }));
+      }
+      this.vaultSeeded = true;
+    }
+    // 2. everything else (reactivity callbacks, third-party calls) in the recent window.
+    //    Hideki serves eth_getLogs over at most 1,000 blocks per request.
+    const STEP = 1000n;
+    const WINDOW = BigInt(process.env.EVENT_WINDOW || 30_000);
+    const floor = BigInt(this.deployment.deployBlock ?? 0);
+    let from = BigInt(this.eventsFrom ?? (head > WINDOW ? head - WINDOW : 0n));
+    if (from < floor) from = floor;
+    const spans = [];
+    for (let a = from; a <= head; a += STEP) spans.push([a, a + STEP - 1n > head ? head : a + STEP - 1n]);
+    for (let i = 0; i < spans.length; i += 8) {
+      const batch = await Promise.all(spans.slice(i, i + 8).map(([fromBlock, toBlock]) =>
+        this.client.getContractEvents({ address: v, abi: vaultAbi, fromBlock, toBlock })));
+      add(batch.flat());
     }
     this.eventsFrom = Number(head) + 1;
+    this.vaultEventKeys = seen;
+    rows.sort((x, y) => y.block - x.block);
     this.vaultEvents = rows.slice(0, 500);
   }
 
