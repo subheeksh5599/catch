@@ -212,7 +212,7 @@ async function mapView() {
   view.innerHTML = `
     <section class="grid kpis">
       ${kpi("Mark", price(m.markPrice), `Maintenance ${(m.maintenanceMarginBps / 100).toFixed(2)}%`)}
-      ${kpi("Open positions", int(m.positions), `${int(m.holders.long)} long · ${int(m.holders.short)} short`)}
+      ${kpi("Open positions", int(m.positions), `${int(m.holders.long)} long · ${int(m.holders.short)} short${m.pricedShare != null && m.pricedShare < 1 ? ` · liquidation price read for ${pct(m.pricedShare)} of size` : ""}`)}
       ${kpi("Within 1%", usd(r["1%"].long + r["1%"].short), `${int(r["1%"].accounts)} accounts`)}
       ${kpi("Within 5%", usd(r["5%"].long + r["5%"].short), `${usd(r["5%"].long)} long · ${usd(r["5%"].short)} short`)}
       ${kpi("Within 10%", usd(r["10%"].long + r["10%"].short), `${int(r["10%"].accounts)} accounts`)}
