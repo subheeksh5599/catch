@@ -101,16 +101,25 @@ async function pass(engineSpread, pools) {
       if (live.length && passNo % Number(opt("refresh-every", 90)) === 0) await send("refreshPool", "refreshPool", [pool], { pool });
       continue;
     }
+    const open = [true, false].filter((isBid) => !slots.some((x) => !x.unwind && x.isBid === isBid));
+    // a full snapshot reads every holder's health; skip it while both sides are quoted, and
+    // retry a market whose clusters were below the venue minimum only every `retry-every` passes
+    const skipKey = pool.toLowerCase();
+    if (!open.length || (belowMin.get(skipKey) ?? -1e9) > passNo - Number(opt("retry-every", 30))) {
+      if (live.length && passNo % Number(opt("refresh-every", 90)) === 0) await send("refreshPool", "refreshPool", [pool], { pool });
+      continue;
+    }
     const s = await snapshotPool(client, { bank: net.addresses.marginBank, pool });
-    for (const isBid of [true, false]) {
+    let idle = false;
+    for (const isBid of open) {
       // every cited backer needs its own reactivity subscription, so cite only the largest few
       const c = bestCluster(s.positions, { markPrice: s.markPrice, tickSize: s.tickSize, isBid, spreadBps: engineSpread, maxBackers: Number(opt("backers", 2)) });
-      if (!c) continue;
-      if (slots.some((x) => !x.unwind && x.isBid === isBid)) continue; // one cluster order per side per pool
+      if (!c) { idle = true; continue; } // nothing reachable on this side right now
       const q = sizeOrder({ size: c.size, price: c.price, oneBase: s.oneBase, lotSize: s.lotSize, minQuantity: s.minQuantity, capNotional });
-      if (q === 0n) { log(pool, isBid ? "bid" : "ask", "below venue minimum"); continue; }
+      if (q === 0n) { log(pool, isBid ? "bid" : "ask", "below venue minimum"); idle = true; continue; }
       await send("place", "place", [pool, isBid, c.price, q, c.backers], { pool, isBid, price: c.price.toString(), quantity: q.toString(), backers: c.backers.length });
     }
+    if (idle) belowMin.set(skipKey, passNo);
     if (live.length && passNo % Number(opt("refresh-every", 90)) === 0) await send("refreshPool", "refreshPool", [pool], { pool });
   }
   if (!argv.includes("--no-subs")) await reconcile({ net, client, wallet, rec, save, log });
@@ -168,6 +177,7 @@ async function recordEvidence() {
   save();
 }
 let passNo = 0;
+const belowMin = new Map();
 
 const cfg = await client.readContract({ address: net.addresses.marginBank, abi: systemAbi, functionName: "getSystemConfig" });
 const spread = await client.readContract({ address: cfg.liquidationEngine, abi: engineAbi, functionName: "getMaxLiquidationSpreadBps" });

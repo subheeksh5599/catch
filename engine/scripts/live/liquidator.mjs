@@ -27,6 +27,7 @@ log("liquidator on", net.chain.name, "engine", engine);
 
 let watch = [];
 let lastRefresh = 0;
+let tick = 0;
 for (;;) {
   try {
     if (Date.now() - lastRefresh > 60_000) {
@@ -35,8 +36,12 @@ for (;;) {
       watch = [...new Set([...fixed, ...(await wantedAccounts(client, vault))])].filter((a) => a !== vault);
       lastRefresh = Date.now();
     }
-    const flags = await Promise.all(watch.map((a) => client.readContract({ address: engine, abi: engineAbi, functionName: "isLiquidatable", args: [a] }).catch(() => false)));
-    for (const [i, a] of watch.entries()) {
+    // named accounts every tick; the rest of the backers every `others-every` ticks (each check
+    // is a full account-health read on the venue, so poll gently)
+    const fixed = (opt("accounts") || "").split(",").filter(Boolean).map((a) => a.toLowerCase());
+    const now = tick++ % Number(opt("others-every", 15)) === 0 ? watch : watch.filter((a) => fixed.includes(a));
+    const flags = await Promise.all(now.map((a) => client.readContract({ address: engine, abi: engineAbi, functionName: "isLiquidatable", args: [a] }).catch(() => false)));
+    for (const [i, a] of now.entries()) {
       if (!flags[i]) continue;
       try {
         const gas = await client.estimateContractGas({ account, address: engine, abi: engineAbi, functionName: "liquidate", args: [a] });
