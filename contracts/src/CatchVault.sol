@@ -481,9 +481,14 @@ contract CatchVault is ISomniaEventHandler {
         return true;
     }
 
+    /// The venue deletes an order once it is filled or cancelled, and reading a deleted order
+    /// reverts; that means "not resting", never a reason to block a re-check or a redemption.
     function _stillResting(Slot storage sl) internal view returns (bool) {
-        IPerpPool.Order memory o = IPerpPool(sl.pool).getOrder(sl.orderId);
-        return o.owner == address(this) && o.quantityRemaining > 0;
+        try IPerpPool(sl.pool).getOrder(sl.orderId) returns (IPerpPool.Order memory o) {
+            return o.owner == address(this) && o.quantityRemaining > 0;
+        } catch {
+            return false;
+        }
     }
 
     function _recheck(uint64 id) internal returns (bool) {
@@ -554,8 +559,9 @@ contract CatchVault is ISomniaEventHandler {
         IPerpPool(pool).placeOrder(isBid, slotId, price, quantity, NO_EXPIRY, POST_ONLY, 0, address(0), 0);
         uint128[] memory open = IPerpPool(pool).getOwnOpenOrders();
         for (uint256 i = open.length; i > 0; i--) {
-            IPerpPool.Order memory o = IPerpPool(pool).getOrder(open[i - 1]);
-            if (o.userData == slotId && o.owner == address(this)) return o.orderId;
+            try IPerpPool(pool).getOrder(open[i - 1]) returns (IPerpPool.Order memory o) {
+                if (o.userData == slotId && o.owner == address(this)) return o.orderId;
+            } catch {}
         }
         revert NotRested();
     }

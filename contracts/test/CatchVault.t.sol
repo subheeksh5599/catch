@@ -371,7 +371,9 @@ contract CatchVaultTest is Test {
         bank.setPosition(l2, address(pool), 0, 0);
         assertFalse(vault.refresh(id));
         assertFalse(vault.getSlot(id).live);
-        assertEq(pool.getOrder(vault.getSlot(id).orderId).quantityRemaining, 0, "order cancelled on the venue");
+        uint128 orderId = vault.getSlot(id).orderId;
+        vm.expectRevert(MockPool.IncorrectOrder.selector); // cancelled on the venue: the order is gone
+        pool.getOrder(orderId);
     }
 
     function test_invariant2_refreshReleasesWhenTheBandMoves() public {
@@ -384,6 +386,36 @@ contract CatchVaultTest is Test {
         uint64 id = vault.place(address(pool), true, 58_800e18, 0.1e18, _one(l1));
         pool.fill(vault.getSlot(id).orderId, 0.1e18);
         assertFalse(vault.refresh(id));
+    }
+
+    /// The venue deletes filled orders and reading one reverts; a filled slot must still release
+    /// on a refresh of its pool rather than revert the whole walk.
+    function test_refreshPool_skipsPastADeletedOrder() public {
+        uint64 filled = vault.place(address(pool), true, 58_800e18, 0.05e18, _one(l1));
+        vault.place(address(pool), true, 58_800e18, 0.05e18, _one(l2));
+        pool.fill(vault.getSlot(filled).orderId, 0.05e18);
+        vault.refreshPool(address(pool));
+        assertEq(vault.liveSlots(address(pool)).length, 1);
+    }
+
+    /// A backer's position update reaches a slot whose order is already gone: release, no revert.
+    function test_onEvent_releasesASlotWhoseOrderIsGone() public {
+        uint64 id = vault.place(address(pool), true, 58_800e18, 0.1e18, _one(l1));
+        pool.fill(vault.getSlot(id).orderId, 0.1e18);
+        _event(l1);
+        assertEq(vault.liveSlots(address(pool)).length, 0);
+    }
+
+    /// Invariant 4 holds even when a slot's order was deleted by the venue.
+    function test_invariant4_redeemPastADeletedOrder() public {
+        vm.prank(keeper);
+        uint64 id = vault.place(address(pool), true, 58_800e18, 0.1e18, _two());
+        pool.fill(vault.getSlot(id).orderId, 0.1e18);
+        uint256 shares = vault.balanceOf(alice);
+        vm.prank(address(pool));
+        bank.lock(address(vault), 90_000e18);
+        vm.prank(alice);
+        vault.redeem(shares / 10, alice);
     }
 
     function test_refresh_deadSlotReverts() public {

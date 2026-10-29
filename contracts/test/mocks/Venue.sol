@@ -231,7 +231,11 @@ contract MockPool {
         o.quantityRemaining = 0;
     }
 
+    error IncorrectOrder();
+
+    /// Like the venue: an order that is filled or cancelled no longer exists, and reading it reverts.
     function getOrder(uint128 id) external view returns (IPerpPool.Order memory) {
+        if (_orders[id].quantityRemaining == 0) revert IncorrectOrder();
         return _orders[id];
     }
 
