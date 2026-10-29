@@ -1,0 +1,96 @@
+{
+  "network": "hideki",
+  "chainId": 50383,
+  "vault": "0x4560f46a1287c46b089c244b821c895aa64b249c",
+  "deployTx": "0xffc4b681bec5aaf04687f79ea00f17352945750b51ffef230a11a56f79fcb1f9",
+  "deployBlock": 35444452,
+  "operator": "0x68A7Be0E0402dd17EA3CDFfA9Bff84b266F3eE9e",
+  "args": {
+    "marginBank": "0x478769E1177C0773c43A593DCCc4Ad15F15F1394",
+    "marketCapBps": 2500,
+    "clusterCapBps": 1000,
+    "unwindSpreadBps": 30
+  },
+  "readBack": {
+    "bank": "0x478769E1177C0773c43A593DCCc4Ad15F15F1394",
+    "asset": "0xed7993A74dAe1e6656B704A424DcD8711aAf4F72"
+  },
+  "txs": [
+    {
+      "kind": "subscribe",
+      "tx": "0x087533c0d10df78df091d3d34f62c0795d0ec074622026a0637b69aa4e205a7b",
+      "status": "success",
+      "block": 35444711
+    },
+    {
+      "kind": "approve",
+      "tx": "0x1850d2b629201b8f7180e7c69cac6ad666a12191c67d7d3e514574b7ddff6eb5"
+    },
+    {
+      "kind": "deposit",
+      "tx": "0xefae19883f0ea1392c8e89770ed802a0e59fac79b2455ae0cbf45e558ee06f35",
+      "block": 35445699,
+      "status": "success",
+      "amount": "100"
+    },
+    {
+      "kind": "place",
+      "tx": "0x5edf0d608a1d9aa4ea679b5efea1a14fbb0af20a04d8208f1ad3df2dfccd018d",
+      "block": 35446285,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf",
+      "isBid": true,
+      "price": "2235360000000000000000",
+      "quantity": "4400000000000000",
+      "backers": 8
+    },
+    {
+      "kind": "place",
+      "tx": "0x59976331b815ecb3f98af8f792f63aeec2bc34e61a6317697c2d64827f80a25d",
+      "block": 35446299,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf",
+      "isBid": false,
+      "price": "2415430000000000000000",
+      "quantity": "4100000000000000",
+      "backers": 8
+    },
+    {
+      "kind": "place",
+      "tx": "0x9a2e2322cfcf977b7cbd7131fcac42984aad84b7e3e29c2a24da2911d05dd7cb",
+      "block": 35446752,
+      "status": "success",
+      "pool": "0x0f464d57c1fd839e4d87a408bbccdab8f77e6394",
+      "isBid": true,
+      "price": "380900000000000000",
+      "quantity": "26000000000000000000",
+      "backers": 8
+    },
+    {
+      "kind": "redeem",
+      "tx": "0xb176c48a98675142120dc2b81a6253a89cbb35f3eb7928b401f5085f092eee6b",
+      "block": 35460175,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "tx": "0x6133bb9c10a41513a8d5f5df0bff40527b2cc268bbb777b67b805180b5aa17c8",
+      "block": 35460191,
+      "status": "success"
+    }
+  ],
+  "subscription": {
+    "tx": "0x087533c0d10df78df091d3d34f62c0795d0ec074622026a0637b69aa4e205a7b",
+    "handler": "0x4560f46a1287c46b089c244b821c895aa64b249c",
+    "emitter": "0x478769E1177C0773c43A593DCCc4Ad15F15F1394",
+    "topic0": "0xf7816a375f0ca01053ed213b57908bff79f578810301d50971a5f685529b82de",
+    "status": "removed",
+    "block": 35444711,
+    "subscriptionId": "22695422",
+    "unsubscribeTx": "0x6133bb9c10a41513a8d5f5df0bff40527b2cc268bbb777b67b805180b5aa17c8"
+  },
+  "retired": {
+    "reason": "superseded by a redeploy with caps sized to the deposit",
+    "at": "2026-10-28T14:53:18.001Z"
+  }
+}

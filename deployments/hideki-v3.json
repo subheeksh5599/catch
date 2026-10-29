@@ -1,0 +1,202 @@
+{
+  "network": "hideki",
+  "chainId": 50383,
+  "vault": "0xb24d0186aef700c97b266450664c6dd1196e4c8f",
+  "deployTx": "0xc71668491a1a9476963436b3458b4ef60aef5f94305627608ce82fa4191f41e6",
+  "deployBlock": 36042605,
+  "operator": "0x68A7Be0E0402dd17EA3CDFfA9Bff84b266F3eE9e",
+  "args": {
+    "marginBank": "0x478769E1177C0773c43A593DCCc4Ad15F15F1394",
+    "marketCapBps": 3000,
+    "clusterCapBps": 1500,
+    "unwindSpreadBps": 30
+  },
+  "readBack": {
+    "bank": "0x478769E1177C0773c43A593DCCc4Ad15F15F1394",
+    "asset": "0xed7993A74dAe1e6656B704A424DcD8711aAf4F72"
+  },
+  "txs": [
+    {
+      "kind": "approve",
+      "tx": "0x30d2219371166114ae9c6e56dd16fc95c2bea3f42e0f19ad31471505920c3a2d"
+    },
+    {
+      "kind": "deposit",
+      "tx": "0x5b77a34f8c3f70e04b0a7299387b7e1d97567fc569a88161adc60f7223097152",
+      "block": 36042917,
+      "status": "success",
+      "amount": "46"
+    },
+    {
+      "kind": "redeem",
+      "tx": "0xd6e037d2a83bdd8a8e9e659c81af7b77e90709cfffdb96094213fee7a455a894",
+      "block": 36045458,
+      "status": "success"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled in the same block its backer closed",
+      "status": "proven",
+      "block": 35466495,
+      "detail": "The test trader closed its 3.57 HYPE long (tx index 2). The vault's reactivity callback, a validator-issued onEvent call, cancelled the bid that position backed at 76.98 in the same block (tx index 16).",
+      "txs": [
+        {
+          "label": "Order placed",
+          "tx": "0x7778631b2fdc0c7a1f33c16474865dde4cbb76865b926c2cbdf14ff2b11ee020"
+        },
+        {
+          "label": "Backer closes (block 35,466,495)",
+          "tx": "0x24e2230da523c260f273e57385ff2dc10dda881c063d35fc02afcf41e349d441"
+        },
+        {
+          "label": "Callback cancels (block 35,466,495)",
+          "tx": "0x51109d893b6e60685a73039a5fbd85ac36ab9a951c355ec98478a5503323bb38"
+        }
+      ],
+      "vault": "v2"
+    },
+    {
+      "kind": "redeem",
+      "title": "A redemption cancels resting orders to free collateral",
+      "status": "proven",
+      "block": null,
+      "detail": "Redeeming every share of the first vault cancelled its three resting orders and returned exactly 100 USDso.",
+      "txs": [
+        {
+          "label": "Redeem",
+          "tx": "0xb176c48a98675142120dc2b81a6253a89cbb35f3eb7928b401f5085f092eee6b"
+        }
+      ],
+      "vault": "v2"
+    },
+    {
+      "kind": "refusal",
+      "title": "The contract refuses an order outside a backer's catch window",
+      "status": "proven",
+      "block": null,
+      "detail": "Keeper proposals whose backers moved before the send were rejected with OutsideBand(account, lo, hi, price); five in one pass on this vault, one on the first.",
+      "txs": [],
+      "vault": "v2"
+    },
+    {
+      "kind": "fill",
+      "vault": "v2",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 35521738,
+      "detail": "ETH ask at 2,415.43 filled; the callback posted a buy-back bid at 2,324.28, beyond entry. The filler was an ordinary placeOrder, not a liquidation; the reactivity callback recorded the position and offered it back in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0xab049160f1f5794a79314b1ae4b4b7ce555563b4a197ffb0ccfc7d87d7c63abc"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x91db9c262b1c39e7966c8da9fb56c68ef29e99459c850a24800a69fe5b0b53be"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "vault": "v2",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 35527908,
+      "detail": "SOL ask at 106.14 filled; the callback posted a buy-back bid at 100.39. The filler was an ordinary placeOrder, not a liquidation; the reactivity callback recorded the position and offered it back in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0xaf8fcd5e3c7e77c97e9ec5a9516b2f127494471b276f5aae6e1e1e7614612cb6"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xb6bbec50872578f5ee3a01b4faf1528deb6eda82369cf4f376aa9998c4830731"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "vault": "v2",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 35530348,
+      "detail": "HYPE bid at 76.80 (the test trader's window edge) filled by a taker; the callback posted a sell-back ask at 79.98. The filler was an ordinary placeOrder, not a liquidation; the reactivity callback recorded the position and offered it back in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x6e990a3dba6521c77d6db8edf3e8ea76ef007803ab8d0f568960f3a4545a8a52"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x29b8d1fb3ca3413c7938c26f72df2e060368231ecc503c17e304546bd78b4c64"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "vault": "v2",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36035348,
+      "detail": "AVAX bid at 8.203 filled; the callback posted a sell-back ask at 8.712. The filler was an ordinary placeOrder, not a liquidation; the reactivity callback recorded the position and offered it back in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x1256ff4b45a6482f6c75a42bb8b3e3f5fdad3135b6512829235359aed78d6b0d"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xe380254a89de4e59b26fec99db3b71f656b6eb01db3491000d0ef614a2102721"
+        }
+      ]
+    },
+    {
+      "kind": "auto-cancel",
+      "vault": "v2",
+      "title": "Six more orders cancelled by callbacks when backers moved",
+      "status": "proven",
+      "block": 35856011,
+      "detail": "Overnight on vault v2, validator-issued onEvent calls released six orders whose backers' windows no longer contained the price.",
+      "txs": [
+        {
+          "label": "Callback cancel",
+          "tx": "0xb06eabd205f50e0d20d6ec968785afda0fba4a0481eaf09d977f084ae401f3d4"
+        },
+        {
+          "label": "Callback cancel",
+          "tx": "0x972e6c462235092ed4487517ca67e5d3a894dca7dd58a517b034298e2676ee66"
+        },
+        {
+          "label": "Callback cancel",
+          "tx": "0x69a3b18445974e1b75753f8daa4a673843687475b86a8a0b2a2994aeb7d88833"
+        }
+      ]
+    },
+    {
+      "kind": "catch",
+      "title": "A liquidation filled into a vault order",
+      "status": "waiting",
+      "block": null,
+      "detail": "Two test accounts hold 20x HYPE positions, a long liquidating near 76.77 and a short near 81.60. The vault rests a bid and an ask at the edges of their catch windows, and a watcher calls the permissionless liquidate() the moment either account is under maintenance.",
+      "txs": []
+    }
+  ],
+  "previous": [
+    {
+      "vault": "0x58a414d468bfbb72860e6ab508a3933445268d18",
+      "record": "deployments/hideki-v2.json",
+      "retired": "getOrder on a venue-deleted order reverted inside re-checks; fixed in v3 (try/catch, 3 regression tests)"
+    },
+    {
+      "vault": "0x4560f46a1287c46b089c244b821c895aa64b249c",
+      "record": "deployments/hideki-v1.json",
+      "retired": "superseded by caps sized to the deposit"
+    }
+  ],
+  "retired": {
+    "reason": "caps too small for the 46 USDso the operator holds; redeployed at 50% market / 25% cluster",
+    "at": "2026-10-29T07:09:03.318Z"
+  }
+}

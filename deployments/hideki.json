@@ -1,14 +1,14 @@
 {
   "network": "hideki",
   "chainId": 50383,
-  "vault": "0x4560f46a1287c46b089c244b821c895aa64b249c",
-  "deployTx": "0xffc4b681bec5aaf04687f79ea00f17352945750b51ffef230a11a56f79fcb1f9",
-  "deployBlock": 35444452,
+  "vault": "0x555fed929f625e356ef33ad37db526de20f25d54",
+  "deployTx": "0xba86a7b3b3c46952f22edc20b191f1d5d9144c793b0e160d86562f1d2539504b",
+  "deployBlock": 36045480,
   "operator": "0x68A7Be0E0402dd17EA3CDFfA9Bff84b266F3eE9e",
   "args": {
     "marginBank": "0x478769E1177C0773c43A593DCCc4Ad15F15F1394",
-    "marketCapBps": 2500,
-    "clusterCapBps": 1000,
+    "marketCapBps": 5000,
+    "clusterCapBps": 2500,
     "unwindSpreadBps": 30
   },
   "readBack": {
@@ -17,63 +17,885 @@
   },
   "txs": [
     {
-      "kind": "subscribe",
-      "tx": "0x087533c0d10df78df091d3d34f62c0795d0ec074622026a0637b69aa4e205a7b",
-      "status": "success",
-      "block": 35444711
-    },
-    {
       "kind": "approve",
-      "tx": "0x1850d2b629201b8f7180e7c69cac6ad666a12191c67d7d3e514574b7ddff6eb5"
+      "tx": "0x21377a4a606a0242af2d5eccbd0d8617445d3bd97da738958529b1573b2d8612"
     },
     {
       "kind": "deposit",
-      "tx": "0xefae19883f0ea1392c8e89770ed802a0e59fac79b2455ae0cbf45e558ee06f35",
-      "block": 35445699,
+      "tx": "0xdc079fad08ad86998e8e6024bb2ede5522fad633e2bd6c6e6289843e55d9f496",
+      "block": 36045597,
       "status": "success",
-      "amount": "100"
+      "amount": "45.9"
     },
     {
       "kind": "place",
-      "tx": "0x5edf0d608a1d9aa4ea679b5efea1a14fbb0af20a04d8208f1ad3df2dfccd018d",
-      "block": 35446285,
+      "tx": "0xaf64c0e499931b4a8e0883d4c588b1843f82c4ebf519394d3ce080d500f40987",
+      "block": 36046358,
       "status": "success",
       "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf",
       "isBid": true,
-      "price": "2235360000000000000000",
-      "quantity": "4400000000000000",
-      "backers": 8
+      "price": "2236830000000000000000",
+      "quantity": "5100000000000000",
+      "backers": 2
     },
     {
       "kind": "place",
-      "tx": "0x59976331b815ecb3f98af8f792f63aeec2bc34e61a6317697c2d64827f80a25d",
-      "block": 35446299,
+      "tx": "0x49a6fe54801245dbbb44815b54a3141fb70ade81d6b3665811f5d35557431da9",
+      "block": 36046375,
       "status": "success",
       "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf",
       "isBid": false,
-      "price": "2415430000000000000000",
-      "quantity": "4100000000000000",
-      "backers": 8
+      "price": "2439620000000000000000",
+      "quantity": "4700000000000000",
+      "backers": 2
     },
     {
       "kind": "place",
-      "tx": "0x9a2e2322cfcf977b7cbd7131fcac42984aad84b7e3e29c2a24da2911d05dd7cb",
-      "block": 35446752,
+      "tx": "0xd22fd593033dd8e2862d77bcff52101e1ccdad83443b76f3ce76d981aef4b22e",
+      "block": 36046684,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad",
+      "isBid": true,
+      "price": "663845000000000000000",
+      "quantity": "17000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x06fe22dec8a6af07e618f8fda0d48ceb7f37d49e6fbb5e4d540ebcab524ea2fa",
+      "block": 36046700,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad",
+      "isBid": false,
+      "price": "787600000000000000000",
+      "quantity": "14000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "place",
+      "tx": "0x7b868ac3301292da48a8f7936e398b0096c96c6d5e17bbbdb853f40e45e36e26",
+      "block": 36047085,
       "status": "success",
       "pool": "0x0f464d57c1fd839e4d87a408bbccdab8f77e6394",
       "isBid": true,
-      "price": "380900000000000000",
-      "quantity": "26000000000000000000",
-      "backers": 8
+      "price": "381000000000000000",
+      "quantity": "30000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x6fc07281c493adf1d48801dd740862f84fcb42ea7971f2fcdc224070cfeeaa23",
+      "block": 36049832,
+      "status": "success",
+      "pool": "0xb483ec1fb34996638677c20ab087b16f1896fa53",
+      "isBid": true,
+      "price": "96660000000000000000",
+      "quantity": "110000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x95fe6bec1a3ca863faa6e978df4862cb81a8244150d8b3cbfdc807f16f0c4233",
+      "block": 36049849,
+      "status": "success",
+      "pool": "0xb483ec1fb34996638677c20ab087b16f1896fa53",
+      "isBid": false,
+      "price": "105730000000000000000",
+      "quantity": "100000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x27cc70c4909da39522a6b798e75a6ef6aecd52a6962fb98b2b639f4583468320",
+      "block": 36050330,
+      "status": "success",
+      "pool": "0x4181dd08e73bbcdd1ba3e615a18f6abd941b94c0",
+      "isBid": true,
+      "price": "76963300000000000000000",
+      "quantity": "14000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0xfe3ac76c93ed207b8e3f337316366ea7966f7519a08ed88113bff4ae8836dd7b",
+      "block": 36050343,
+      "status": "success",
+      "pool": "0x4181dd08e73bbcdd1ba3e615a18f6abd941b94c0",
+      "isBid": false,
+      "price": "85231300000000000000000",
+      "quantity": "13000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x065ad142ce0890a087f02a84b10855ac94e8feef7ddbbd89ed51bdd50781ab7d",
+      "block": 36050731,
+      "status": "success",
+      "pool": "0x1be21287cfb865a7c462ff3c4f275e70bcccefe4",
+      "isBid": true,
+      "price": "873500000000000000",
+      "quantity": "13000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0xb869ff8523b36756d71d9a78a8ae21b2934884255370190d8c3187a0e375b7a5",
+      "block": 36051150,
+      "status": "success",
+      "pool": "0xd9b6a347a3ae9fd6ba21179d3343f2c8a922f697",
+      "isBid": true,
+      "price": "231271000000000000000",
+      "quantity": "49000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x825a50a3ad02005b18c4128fbc602a48666b3f3b06a4c1280913572e88bb9f4c",
+      "block": 36051630,
+      "status": "success",
+      "pool": "0xc410012e39765cd5f772e84bacb19554aec040df",
+      "isBid": true,
+      "price": "68850000000000000",
+      "quantity": "16000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x5dbdc1f3ebf92b0810ae569bf6af683558543722727b4876a90ee031885e41a3",
+      "block": 36052103,
+      "status": "success",
+      "pool": "0x63b47ed4a7de0fde659b0d82441dd74828b7297a",
+      "isBid": true,
+      "price": "76770000000000000000",
+      "quantity": "140000",
+      "backers": 1,
+      "followed": "0x176899771D7187448b8BE07Bc353dC1391cd4656"
+    },
+    {
+      "kind": "place",
+      "tx": "0xb0c482972168cae71efe5350d5373a2cac43fd23a052ddc7ceb3cc58f863482c",
+      "block": 36052122,
+      "status": "success",
+      "pool": "0x63b47ed4a7de0fde659b0d82441dd74828b7297a",
+      "isBid": false,
+      "price": "81610000000000000000",
+      "quantity": "140000",
+      "backers": 1,
+      "followed": "0x4C2acC009943cA88A78012cf2325e82857B9c4Fd"
+    },
+    {
+      "kind": "place",
+      "tx": "0x3a7c4a385712eb928dd1207d4278c4d10e3fdae073a35ac7aac8ce348c5b4b9e",
+      "block": 36052527,
+      "status": "success",
+      "pool": "0x7058579f3248559963f79adb937c6de9f953e060",
+      "isBid": true,
+      "price": "1229100000000000000",
+      "quantity": "9300000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0xe5c0e61b259fb7aafcdbee34ab397f0d3886c9880fbdb651410fa7de8f3c6f18",
+      "block": 36052545,
+      "status": "success",
+      "pool": "0x7058579f3248559963f79adb937c6de9f953e060",
+      "isBid": false,
+      "price": "1369500000000000000",
+      "quantity": "8300000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x7b725d0b482990b27b4c3e8d750889daf6ba43fd382741f47add71736f124ff8",
+      "block": 36052964,
+      "status": "success",
+      "pool": "0x74b05b9b8c8f180b53b7891018f3b254b3e658c9",
+      "isBid": true,
+      "price": "154800000000000000",
+      "quantity": "740000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x521d9c5397344250ded03c151651717af1fe38fd8bd46d3f5fcfdcb1767dd098",
+      "block": 36052979,
+      "status": "success",
+      "pool": "0x74b05b9b8c8f180b53b7891018f3b254b3e658c9",
+      "isBid": false,
+      "price": "185000000000000000",
+      "quantity": "620000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x6e1fa7f61cdbc2539d596e1ca3171cdb26223e00f3e67066bc90947061a256dd",
+      "block": 36053816,
+      "status": "success",
+      "pool": "0x76c981a52530cdf9497559140aafcd8cd16836e7",
+      "isBid": false,
+      "price": "4681000000000000",
+      "quantity": "2400000000",
+      "backers": 1
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x555fed929f625e356ef33ad37db526de20f25d54",
+      "tx": "0x500cca368b4afc607263efdc99b7b0c6a2cbd8b0c8785c4d789088826e10dd2c",
+      "block": 36053878,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x4fd9d3cb35219f82b9cf93b02420d14c95a379e1",
+      "tx": "0x8437e6016225c80452f914b7ec9ba8452eb5678d271058532f26017060326011",
+      "block": 36053887,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x891f00054fde10e9e834850068b0d9be213df3f1",
+      "tx": "0x3ce0e1549157cad99d2e3387257d80c83ef9e51813d18aac47b08bfa254cd346",
+      "block": 36053896,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x5bca575389dea29eba83c4c9dfa682ea0ec12955",
+      "tx": "0xe621fd2017538f4299024e234ead899bfc286002a9d41c873680213ae039cef3",
+      "block": 36053906,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x8345545ba80a5396e54787dbb90ded1e2f64e666",
+      "tx": "0x4f184471a8124516e99d164170aec9cfaf4656ea4ab3c7ac5ed13d471c834bc1",
+      "block": 36053916,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x5291c3229755e9dac3e1109275a15502239f0d4b",
+      "tx": "0x0cda15a68241beb59d42f8b0db6738d68d6a63096822fda46737383668b3e888",
+      "block": 36053925,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xfe0fd6ee75e37f00b9494a1d3f3f3fa512501d85",
+      "tx": "0x9f02d890e8ad02a1c178080c63e25fd630c3275cc412daadfa3a6536e2b15bcd",
+      "block": 36053935,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xf4a60b65ec6cc18aaa5958123b969a81f51d8525",
+      "tx": "0x8f1ffb72a6d5fb9e58a17492907b59c7be5632d297d2cdb0ad75ca32f8bc55b6",
+      "block": 36053944,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x319fca3d1fbcf4e7a30b32f9772ffbb01979d999",
+      "tx": "0xcc0d6d2e37c9b1042e9e349a7ff23acbceec2e2c5f0d828c873f795ace6cbce3",
+      "block": 36053956,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xcbf27dbc940b64e895ebaac015ab1b4c4563d968",
+      "tx": "0xa7cfee783fc6e2bc9c706296b846a2e00384fb0bd361a6e0e15a1342bab32728",
+      "block": 36053968,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x657a4803b3da3702b677ef45b5033d196125df6a",
+      "tx": "0x1cf014c06cd551d03659e2c22b9872e3bee1562c62db613e2b042a2163db7c5a",
+      "block": 36053979,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xdabe375f53d1cd106741ebea66bd17e9456fd1bc",
+      "tx": "0x8a1c99cc4642cead40109b837c255d76012014b61d92c15d66cd886922f54fe0",
+      "block": 36053990,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xb16d4e3737583b6cf4ee75320e5190d26d0543fa",
+      "tx": "0x8dcbbf67b1ac1d718a57b0b166bd794dd13ccac1286352f6fe2ca268fd70eea3",
+      "block": 36054001,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xcad53c2238229e27d36329d039b4f0601b644d28",
+      "tx": "0x9ef82bb2c2f1bf43537db7b7c2bf0eda5aee91d8e32af64b6d5f46b6ab9ffe86",
+      "block": 36054011,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x49a202234ddeafc70a1d781444262b7541092285",
+      "tx": "0x0a418c51dca34900441db288c549e07a531557628e434c321b1d2888216f230e",
+      "block": 36054020,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xfaabde609868c6ad4092cb2768f85cced0e811cd",
+      "tx": "0xeb34598d746e63397223bbf960a7565e5193c0d1a42aef1667f00cbae7d2a374",
+      "block": 36054033,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x435b8f475d822a4d20d34066cc694acf2f9b5def",
+      "tx": "0xc38c3cdb6464b7266c4838cc8c940efc853918e62714bbcbf5755a9041c099c0",
+      "block": 36054042,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x7864713c26432a533ee708dca6f33b5ec307c11a",
+      "tx": "0xa755ff347344154786dc4b1a74847dd7bc80d4da66f0579576f419dbc368f04c",
+      "block": 36054054,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xb4481d6451ac6f6cf8dd990d9ec645fcfba63e7b",
+      "tx": "0xc7694ed4ebff8de4507784ae32310f9757d29a9016a4a4bb5732e4ed87382d0c",
+      "block": 36054065,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xdceae8ab4e2ccd9ab8d95c14a3aa365b7d87a865",
+      "tx": "0x46895d92b95bfc8f93336bb5ffe8ee411055be1bb208f807373b9cf7a6921270",
+      "block": 36054077,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x49a86174c4eab59f9e48837ada26b20cf514cca0",
+      "tx": "0x49741dbd66670ad8baa2b408dcba79abf90b6cf42b16e7b28c808d1d19252564",
+      "block": 36054087,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xe524e03b3ae69c88e68a1442a4143c93ca21fdc6",
+      "tx": "0x2e03aa7843ba3fbf1c8555451ecd66033f22cdf55b39cc8cfb1f669f77c15d1a",
+      "block": 36054099,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x1f51bba155f9789201f2b0cb223cff1943ce09a4",
+      "tx": "0xcc7188c925b682dd3824d5c8be648387589ba14021674a9c0cb5da7e2e3d9c4b",
+      "block": 36054111,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x55d5501554cb3d535bd8edee0afed2747366dc2c",
+      "tx": "0x2d5677556435d23b2ebd5e004ddf97ca9760e2e401575d26d9d5857aa0b768b1",
+      "block": 36054122,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x176899771d7187448b8be07bc353dc1391cd4656",
+      "tx": "0x53ca89528ff627ed0964da5fd2d6438016cc851866b212e36e52018e7372f553",
+      "block": 36054132,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x4c2acc009943ca88a78012cf2325e82857b9c4fd",
+      "tx": "0xc7eb975018823a87a0afd5a5100b85a4ef604887cba225cdc6e7ed1d7075d7f3",
+      "block": 36054144,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x76cf1a725ef305f6978aa1cfa74b50c9b9029bce",
+      "tx": "0xcc196aec1a44573bd67c03e873b6cb3dc7041ccd93bcf3cb86a43f7ff5ff0889",
+      "block": 36054154,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x8f0b78b425a2169fb8f0c6c93a545e577dd9c2a6",
+      "tx": "0x16777342d88de31dd6f9fbac6aea926f8f980aca418a017ac323ea708381e18e",
+      "block": 36054164,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x48f3bf1d065b7be54c4cc4181809920ec85dd47d",
+      "tx": "0xb4b5a0842c28a51edcf646bd187a2c9234d8625c4a1572e51fc6deddb6cbb144",
+      "block": 36054175,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xe4cbfbab135df13a85064d16898f7e880cd54d55",
+      "tx": "0x64fbdc730a75a8e094d5ca5a12473333b84893385a10d5b57a4bd96e4c13b777",
+      "block": 36054184,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x9bbc32e09a8abf49e1cc74a16d298ac1a11517da",
+      "tx": "0x162943d6d2566e20b190b4b455537787630dff575f7f227eeb44c825848b7b16",
+      "block": 36054193,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xcc26c3ecae3708d3df0fa18eb7361a3cd40d4fca",
+      "tx": "0x4212298ba429d94b1dc95619cf90c2aa3cde46c1d7e3bee0147881411ca42028",
+      "block": 36054202,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x3243b771b56597de532c1794dd804ae48e6bfdde",
+      "tx": "0xb0ad05803b2cf4e680769f0988a103dbb3da9e5a74b4c258d886a8468a3fef36",
+      "block": 36054211,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x4c5a9593e215afda200cd4a0827a937d6a6dae9a",
+      "tx": "0xa0e1c65d578c41ffc68377a8fec5834390324b77d17b6c3713fadf7b85ffb2cb",
+      "block": 36054221,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xb08a554e59a8b60f19a1fcdd5db4367dbb77c397",
+      "tx": "0x264ab16769e6e7008bdc088f0aa554ab3c5811ce682a4fab4b0eb83913969c08",
+      "block": 36054231,
+      "status": "success"
     }
   ],
-  "subscription": {
-    "tx": "0x087533c0d10df78df091d3d34f62c0795d0ec074622026a0637b69aa4e205a7b",
-    "handler": "0x4560f46a1287c46b089c244b821c895aa64b249c",
-    "emitter": "0x478769E1177C0773c43A593DCCc4Ad15F15F1394",
-    "topic0": "0xf7816a375f0ca01053ed213b57908bff79f578810301d50971a5f685529b82de",
-    "status": "confirmed",
-    "block": 35444711,
-    "subscriptionId": "22695422"
-  }
+  "evidence": [
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled in the same block its backer closed",
+      "status": "proven",
+      "block": 35466495,
+      "detail": "The test trader closed its 3.57 HYPE long (tx index 2). The vault's reactivity callback, a validator-issued onEvent call, cancelled the bid that position backed at 76.98 in the same block (tx index 16).",
+      "txs": [
+        {
+          "label": "Order placed",
+          "tx": "0x7778631b2fdc0c7a1f33c16474865dde4cbb76865b926c2cbdf14ff2b11ee020"
+        },
+        {
+          "label": "Backer closes (block 35,466,495)",
+          "tx": "0x24e2230da523c260f273e57385ff2dc10dda881c063d35fc02afcf41e349d441"
+        },
+        {
+          "label": "Callback cancels (block 35,466,495)",
+          "tx": "0x51109d893b6e60685a73039a5fbd85ac36ab9a951c355ec98478a5503323bb38"
+        }
+      ],
+      "vault": "v2"
+    },
+    {
+      "kind": "redeem",
+      "title": "A redemption cancels resting orders to free collateral",
+      "status": "proven",
+      "block": null,
+      "detail": "Redeeming every share of the first vault cancelled its three resting orders and returned exactly 100 USDso.",
+      "txs": [
+        {
+          "label": "Redeem",
+          "tx": "0xb176c48a98675142120dc2b81a6253a89cbb35f3eb7928b401f5085f092eee6b"
+        }
+      ],
+      "vault": "v2"
+    },
+    {
+      "kind": "refusal",
+      "title": "The contract refuses an order outside a backer's catch window",
+      "status": "proven",
+      "block": null,
+      "detail": "Keeper proposals whose backers moved before the send were rejected with OutsideBand(account, lo, hi, price); five in one pass on this vault, one on the first.",
+      "txs": [],
+      "vault": "v2"
+    },
+    {
+      "kind": "fill",
+      "vault": "v2",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 35521738,
+      "detail": "ETH ask at 2,415.43 filled; the callback posted a buy-back bid at 2,324.28, beyond entry. The filler was an ordinary placeOrder, not a liquidation; the reactivity callback recorded the position and offered it back in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0xab049160f1f5794a79314b1ae4b4b7ce555563b4a197ffb0ccfc7d87d7c63abc"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x91db9c262b1c39e7966c8da9fb56c68ef29e99459c850a24800a69fe5b0b53be"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "vault": "v2",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 35527908,
+      "detail": "SOL ask at 106.14 filled; the callback posted a buy-back bid at 100.39. The filler was an ordinary placeOrder, not a liquidation; the reactivity callback recorded the position and offered it back in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0xaf8fcd5e3c7e77c97e9ec5a9516b2f127494471b276f5aae6e1e1e7614612cb6"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xb6bbec50872578f5ee3a01b4faf1528deb6eda82369cf4f376aa9998c4830731"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "vault": "v2",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 35530348,
+      "detail": "HYPE bid at 76.80 (the test trader's window edge) filled by a taker; the callback posted a sell-back ask at 79.98. The filler was an ordinary placeOrder, not a liquidation; the reactivity callback recorded the position and offered it back in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x6e990a3dba6521c77d6db8edf3e8ea76ef007803ab8d0f568960f3a4545a8a52"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x29b8d1fb3ca3413c7938c26f72df2e060368231ecc503c17e304546bd78b4c64"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "vault": "v2",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36035348,
+      "detail": "AVAX bid at 8.203 filled; the callback posted a sell-back ask at 8.712. The filler was an ordinary placeOrder, not a liquidation; the reactivity callback recorded the position and offered it back in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x1256ff4b45a6482f6c75a42bb8b3e3f5fdad3135b6512829235359aed78d6b0d"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xe380254a89de4e59b26fec99db3b71f656b6eb01db3491000d0ef614a2102721"
+        }
+      ]
+    },
+    {
+      "kind": "auto-cancel",
+      "vault": "v2",
+      "title": "Six more orders cancelled by callbacks when backers moved",
+      "status": "proven",
+      "block": 35856011,
+      "detail": "Overnight on vault v2, validator-issued onEvent calls released six orders whose backers' windows no longer contained the price.",
+      "txs": [
+        {
+          "label": "Callback cancel",
+          "tx": "0xb06eabd205f50e0d20d6ec968785afda0fba4a0481eaf09d977f084ae401f3d4"
+        },
+        {
+          "label": "Callback cancel",
+          "tx": "0x972e6c462235092ed4487517ca67e5d3a894dca7dd58a517b034298e2676ee66"
+        },
+        {
+          "label": "Callback cancel",
+          "tx": "0x69a3b18445974e1b75753f8daa4a673843687475b86a8a0b2a2994aeb7d88833"
+        }
+      ]
+    },
+    {
+      "kind": "catch",
+      "title": "A liquidation filled into a vault order",
+      "status": "waiting",
+      "block": null,
+      "detail": "Two test accounts hold 20x HYPE positions, a long liquidating near 76.77 and a short near 81.60. The vault rests a bid and an ask at the edges of their catch windows, and a watcher calls the permissionless liquidate() the moment either account is under maintenance.",
+      "txs": []
+    }
+  ],
+  "previous": [
+    {
+      "vault": "0xb24d0186aef700c97b266450664c6dd1196e4c8f",
+      "record": "deployments/hideki-v3.json",
+      "retired": "caps too small for a 46 USDso deposit"
+    },
+    {
+      "vault": "0x58a414d468bfbb72860e6ab508a3933445268d18",
+      "record": "deployments/hideki-v2.json",
+      "retired": "getOrder on a venue-deleted order reverted inside re-checks; fixed in v3 (try/catch, 3 regression tests)"
+    },
+    {
+      "vault": "0x4560f46a1287c46b089c244b821c895aa64b249c",
+      "record": "deployments/hideki-v1.json",
+      "retired": "superseded by caps sized to the deposit"
+    }
+  ],
+  "subscriptions": [
+    {
+      "account": "0x555fed929f625e356ef33ad37db526de20f25d54",
+      "subscriptionId": "23513020",
+      "tx": "0x500cca368b4afc607263efdc99b7b0c6a2cbd8b0c8785c4d789088826e10dd2c",
+      "block": 36053878,
+      "status": "active"
+    },
+    {
+      "account": "0x4fd9d3cb35219f82b9cf93b02420d14c95a379e1",
+      "subscriptionId": "23513036",
+      "tx": "0x8437e6016225c80452f914b7ec9ba8452eb5678d271058532f26017060326011",
+      "block": 36053887,
+      "status": "active"
+    },
+    {
+      "account": "0x891f00054fde10e9e834850068b0d9be213df3f1",
+      "subscriptionId": "23513042",
+      "tx": "0x3ce0e1549157cad99d2e3387257d80c83ef9e51813d18aac47b08bfa254cd346",
+      "block": 36053896,
+      "status": "active"
+    },
+    {
+      "account": "0x5bca575389dea29eba83c4c9dfa682ea0ec12955",
+      "subscriptionId": "23513048",
+      "tx": "0xe621fd2017538f4299024e234ead899bfc286002a9d41c873680213ae039cef3",
+      "block": 36053906,
+      "status": "active"
+    },
+    {
+      "account": "0x8345545ba80a5396e54787dbb90ded1e2f64e666",
+      "subscriptionId": "23513085",
+      "tx": "0x4f184471a8124516e99d164170aec9cfaf4656ea4ab3c7ac5ed13d471c834bc1",
+      "block": 36053916,
+      "status": "active"
+    },
+    {
+      "account": "0x5291c3229755e9dac3e1109275a15502239f0d4b",
+      "subscriptionId": "23513091",
+      "tx": "0x0cda15a68241beb59d42f8b0db6738d68d6a63096822fda46737383668b3e888",
+      "block": 36053925,
+      "status": "active"
+    },
+    {
+      "account": "0xfe0fd6ee75e37f00b9494a1d3f3f3fa512501d85",
+      "subscriptionId": "23513097",
+      "tx": "0x9f02d890e8ad02a1c178080c63e25fd630c3275cc412daadfa3a6536e2b15bcd",
+      "block": 36053935,
+      "status": "active"
+    },
+    {
+      "account": "0xf4a60b65ec6cc18aaa5958123b969a81f51d8525",
+      "subscriptionId": "23513113",
+      "tx": "0x8f1ffb72a6d5fb9e58a17492907b59c7be5632d297d2cdb0ad75ca32f8bc55b6",
+      "block": 36053944,
+      "status": "active"
+    },
+    {
+      "account": "0x319fca3d1fbcf4e7a30b32f9772ffbb01979d999",
+      "subscriptionId": "23513119",
+      "tx": "0xcc0d6d2e37c9b1042e9e349a7ff23acbceec2e2c5f0d828c873f795ace6cbce3",
+      "block": 36053956,
+      "status": "active"
+    },
+    {
+      "account": "0xcbf27dbc940b64e895ebaac015ab1b4c4563d968",
+      "subscriptionId": "23513146",
+      "tx": "0xa7cfee783fc6e2bc9c706296b846a2e00384fb0bd361a6e0e15a1342bab32728",
+      "block": 36053968,
+      "status": "active"
+    },
+    {
+      "account": "0x657a4803b3da3702b677ef45b5033d196125df6a",
+      "subscriptionId": "23513166",
+      "tx": "0x1cf014c06cd551d03659e2c22b9872e3bee1562c62db613e2b042a2163db7c5a",
+      "block": 36053979,
+      "status": "active"
+    },
+    {
+      "account": "0xdabe375f53d1cd106741ebea66bd17e9456fd1bc",
+      "subscriptionId": "23513172",
+      "tx": "0x8a1c99cc4642cead40109b837c255d76012014b61d92c15d66cd886922f54fe0",
+      "block": 36053990,
+      "status": "active"
+    },
+    {
+      "account": "0xb16d4e3737583b6cf4ee75320e5190d26d0543fa",
+      "subscriptionId": "23513188",
+      "tx": "0x8dcbbf67b1ac1d718a57b0b166bd794dd13ccac1286352f6fe2ca268fd70eea3",
+      "block": 36054001,
+      "status": "active"
+    },
+    {
+      "account": "0xcad53c2238229e27d36329d039b4f0601b644d28",
+      "subscriptionId": "23513215",
+      "tx": "0x9ef82bb2c2f1bf43537db7b7c2bf0eda5aee91d8e32af64b6d5f46b6ab9ffe86",
+      "block": 36054011,
+      "status": "active"
+    },
+    {
+      "account": "0x49a202234ddeafc70a1d781444262b7541092285",
+      "subscriptionId": "23513221",
+      "tx": "0x0a418c51dca34900441db288c549e07a531557628e434c321b1d2888216f230e",
+      "block": 36054020,
+      "status": "active"
+    },
+    {
+      "account": "0xfaabde609868c6ad4092cb2768f85cced0e811cd",
+      "subscriptionId": "23513237",
+      "tx": "0xeb34598d746e63397223bbf960a7565e5193c0d1a42aef1667f00cbae7d2a374",
+      "block": 36054033,
+      "status": "active"
+    },
+    {
+      "account": "0x435b8f475d822a4d20d34066cc694acf2f9b5def",
+      "subscriptionId": "23513243",
+      "tx": "0xc38c3cdb6464b7266c4838cc8c940efc853918e62714bbcbf5755a9041c099c0",
+      "block": 36054042,
+      "status": "active"
+    },
+    {
+      "account": "0x7864713c26432a533ee708dca6f33b5ec307c11a",
+      "subscriptionId": "23513250",
+      "tx": "0xa755ff347344154786dc4b1a74847dd7bc80d4da66f0579576f419dbc368f04c",
+      "block": 36054054,
+      "status": "active"
+    },
+    {
+      "account": "0xb4481d6451ac6f6cf8dd990d9ec645fcfba63e7b",
+      "subscriptionId": "23513287",
+      "tx": "0xc7694ed4ebff8de4507784ae32310f9757d29a9016a4a4bb5732e4ed87382d0c",
+      "block": 36054065,
+      "status": "active"
+    },
+    {
+      "account": "0xdceae8ab4e2ccd9ab8d95c14a3aa365b7d87a865",
+      "subscriptionId": "23513293",
+      "tx": "0x46895d92b95bfc8f93336bb5ffe8ee411055be1bb208f807373b9cf7a6921270",
+      "block": 36054077,
+      "status": "active"
+    },
+    {
+      "account": "0x49a86174c4eab59f9e48837ada26b20cf514cca0",
+      "subscriptionId": "23513299",
+      "tx": "0x49741dbd66670ad8baa2b408dcba79abf90b6cf42b16e7b28c808d1d19252564",
+      "block": 36054087,
+      "status": "active"
+    },
+    {
+      "account": "0xe524e03b3ae69c88e68a1442a4143c93ca21fdc6",
+      "subscriptionId": "23513319",
+      "tx": "0x2e03aa7843ba3fbf1c8555451ecd66033f22cdf55b39cc8cfb1f669f77c15d1a",
+      "block": 36054099,
+      "status": "active"
+    },
+    {
+      "account": "0x1f51bba155f9789201f2b0cb223cff1943ce09a4",
+      "subscriptionId": "23513346",
+      "tx": "0xcc7188c925b682dd3824d5c8be648387589ba14021674a9c0cb5da7e2e3d9c4b",
+      "block": 36054111,
+      "status": "active"
+    },
+    {
+      "account": "0x55d5501554cb3d535bd8edee0afed2747366dc2c",
+      "subscriptionId": "23513362",
+      "tx": "0x2d5677556435d23b2ebd5e004ddf97ca9760e2e401575d26d9d5857aa0b768b1",
+      "block": 36054122,
+      "status": "active"
+    },
+    {
+      "account": "0x176899771d7187448b8be07bc353dc1391cd4656",
+      "subscriptionId": "23513368",
+      "tx": "0x53ca89528ff627ed0964da5fd2d6438016cc851866b212e36e52018e7372f553",
+      "block": 36054132,
+      "status": "active"
+    },
+    {
+      "account": "0x4c2acc009943ca88a78012cf2325e82857b9c4fd",
+      "subscriptionId": "23513375",
+      "tx": "0xc7eb975018823a87a0afd5a5100b85a4ef604887cba225cdc6e7ed1d7075d7f3",
+      "block": 36054144,
+      "status": "active"
+    },
+    {
+      "account": "0x76cf1a725ef305f6978aa1cfa74b50c9b9029bce",
+      "subscriptionId": "23513391",
+      "tx": "0xcc196aec1a44573bd67c03e873b6cb3dc7041ccd93bcf3cb86a43f7ff5ff0889",
+      "block": 36054154,
+      "status": "active"
+    },
+    {
+      "account": "0x8f0b78b425a2169fb8f0c6c93a545e577dd9c2a6",
+      "subscriptionId": "23513418",
+      "tx": "0x16777342d88de31dd6f9fbac6aea926f8f980aca418a017ac323ea708381e18e",
+      "block": 36054164,
+      "status": "active"
+    },
+    {
+      "account": "0x48f3bf1d065b7be54c4cc4181809920ec85dd47d",
+      "subscriptionId": "23513424",
+      "tx": "0xb4b5a0842c28a51edcf646bd187a2c9234d8625c4a1572e51fc6deddb6cbb144",
+      "block": 36054175,
+      "status": "active"
+    },
+    {
+      "account": "0xe4cbfbab135df13a85064d16898f7e880cd54d55",
+      "subscriptionId": "23513440",
+      "tx": "0x64fbdc730a75a8e094d5ca5a12473333b84893385a10d5b57a4bd96e4c13b777",
+      "block": 36054184,
+      "status": "active"
+    },
+    {
+      "account": "0x9bbc32e09a8abf49e1cc74a16d298ac1a11517da",
+      "subscriptionId": "23513445",
+      "tx": "0x162943d6d2566e20b190b4b455537787630dff575f7f227eeb44c825848b7b16",
+      "block": 36054193,
+      "status": "active"
+    },
+    {
+      "account": "0xcc26c3ecae3708d3df0fa18eb7361a3cd40d4fca",
+      "subscriptionId": "23513451",
+      "tx": "0x4212298ba429d94b1dc95619cf90c2aa3cde46c1d7e3bee0147881411ca42028",
+      "block": 36054202,
+      "status": "active"
+    },
+    {
+      "account": "0x3243b771b56597de532c1794dd804ae48e6bfdde",
+      "subscriptionId": "23513488",
+      "tx": "0xb0ad05803b2cf4e680769f0988a103dbb3da9e5a74b4c258d886a8468a3fef36",
+      "block": 36054211,
+      "status": "active"
+    },
+    {
+      "account": "0x4c5a9593e215afda200cd4a0827a937d6a6dae9a",
+      "subscriptionId": "23513494",
+      "tx": "0xa0e1c65d578c41ffc68377a8fec5834390324b77d17b6c3713fadf7b85ffb2cb",
+      "block": 36054221,
+      "status": "active"
+    },
+    {
+      "account": "0xb08a554e59a8b60f19a1fcdd5db4367dbb77c397",
+      "subscriptionId": "23513500",
+      "tx": "0x264ab16769e6e7008bdc088f0aa554ab3c5811ce682a4fab4b0eb83913969c08",
+      "block": 36054231,
+      "status": "active"
+    }
+  ],
+  "evidenceCursor": 36054234
 }
