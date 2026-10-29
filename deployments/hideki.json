@@ -482,6 +482,166 @@
       "tx": "0x264ab16769e6e7008bdc088f0aa554ab3c5811ce682a4fab4b0eb83913969c08",
       "block": 36054231,
       "status": "success"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xdc390e64c243a6fee5ed769ac03de0fc712404ad34f811abf52fb53f4f8e1b74",
+      "block": 36055390,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x6ad169181f8b2a6e4edcf6fd744ea8a524f76d194ad121ac0e954531accf5244",
+      "block": 36055865,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xd83c70490830c51f9716013142068008d5f9247ee4090b7f5032afa795129c58",
+      "block": 36056323,
+      "status": "success",
+      "pool": "0x0f464d57c1fd839e4d87a408bbccdab8f77e6394"
+    },
+    {
+      "kind": "place",
+      "tx": "0xebad2781cc46cb97a5ab41a434f73421e4c268f5b9bde60e245b66aa321dd82e",
+      "block": 36057369,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5",
+      "isBid": true,
+      "price": "10431000000000000000",
+      "quantity": "1100000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x5a841a818ac512116e952729c5ecfa6c68418c50669cd295df21daeeb7f5b59c",
+      "block": 36057384,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5",
+      "isBid": false,
+      "price": "12625000000000000000",
+      "quantity": "900000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x53bada4f95dc55803af2874c5b9940f510d91801571f05c19b90a5eb3c9f22f7",
+      "block": 36060448,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad",
+      "isBid": false,
+      "price": "787608000000000000000",
+      "quantity": "14000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x59d33f43347443ff956f0f2c1c9f7e0ecd6060ac1ccd964376ae54094c9b498c",
+      "block": 36077685,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xae488be2bc512e9f72a5de7aa2935ef91de2c7be353eea56befa91afd8758e80",
+      "block": 36077899,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x254921f842923c2946bb8282a681588e6d40cdc3e69b39755d191b2b6cd5df78",
+      "block": 36078099,
+      "status": "success",
+      "pool": "0x0f464d57c1fd839e4d87a408bbccdab8f77e6394"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xfdb14630df7635821e9e420d4932443c386d2e282198769a631deedca846314d",
+      "block": 36078115,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5"
+    },
+    {
+      "kind": "place",
+      "tx": "0xde95857334778260edd485ac9b6e151c503091d634eaf084471ec2c49495a40c",
+      "block": 36078268,
+      "status": "success",
+      "pool": "0xdcb0ad226727b2ce92857f0af5751389d42b2a3f",
+      "isBid": true,
+      "price": "2732400000000000000",
+      "quantity": "4100000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x71eafdb4891be12da5f35c936d9e9fd464b5f23e9645240391f19d4d3e9638e3",
+      "block": 36078557,
+      "status": "success",
+      "pool": "0xb483ec1fb34996638677c20ab087b16f1896fa53"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x916b2c6c58a799df71152febfa8836e8e022f33d6100db692952c51a71de7114",
+      "block": 36078574,
+      "status": "success",
+      "pool": "0x4181dd08e73bbcdd1ba3e615a18f6abd941b94c0"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x7be1342d9cee6267bac6f12a3d7c3f08410a454190022b332c6907bd183e4062",
+      "block": 36078654,
+      "status": "success",
+      "pool": "0x1be21287cfb865a7c462ff3c4f275e70bcccefe4"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x9f4f5710132b9c872f7eb34435622ba4ca0f362cd892b9e55c21ed3e0b57bbdf",
+      "block": 36078707,
+      "status": "success",
+      "pool": "0xd9b6a347a3ae9fd6ba21179d3343f2c8a922f697"
+    },
+    {
+      "kind": "place",
+      "tx": "0xf36d905e888aea10cbab1afcd3c1ac269ea660c52a3d7e2388adbe44132777f5",
+      "block": 36078752,
+      "status": "success",
+      "pool": "0xc410012e39765cd5f772e84bacb19554aec040df",
+      "isBid": false,
+      "price": "87440000000000000",
+      "quantity": "13000000000",
+      "backers": 1
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xf84da127b7da5b5ff806a3554d2f27bd702ae5768c29c41312ca7b2608e7195b",
+      "block": 36078766,
+      "status": "success",
+      "pool": "0xc410012e39765cd5f772e84bacb19554aec040df"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x78dd924361a8674e4762889e9d6e71c51a240a6fb382b5464b56da5603c0f4f1",
+      "block": 36078817,
+      "status": "success",
+      "pool": "0x63b47ed4a7de0fde659b0d82441dd74828b7297a"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xb7841e7c2631ba4def59af4692d5b93e98304bcfda725f9deec581e29ad8cc1c",
+      "block": 36078833,
+      "status": "success",
+      "pool": "0x7058579f3248559963f79adb937c6de9f953e060"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x3fdf7f0f89b96a7a97d8c53502c81dee455bcb339d16c0af202b8487c22488fd",
+      "block": 36078849,
+      "status": "success",
+      "pool": "0x74b05b9b8c8f180b53b7891018f3b254b3e658c9"
     }
   ],
   "evidence": [
@@ -519,16 +679,16 @@
           "tx": "0xb176c48a98675142120dc2b81a6253a89cbb35f3eb7928b401f5085f092eee6b"
         }
       ],
-      "vault": "v2"
+      "vault": "v1"
     },
     {
       "kind": "refusal",
       "title": "The contract refuses an order outside a backer's catch window",
       "status": "proven",
       "block": null,
-      "detail": "Keeper proposals whose backers moved before the send were rejected with OutsideBand(account, lo, hi, price); five in one pass on this vault, one on the first.",
+      "detail": "Keeper proposals whose backers moved before the send were rejected with OutsideBand(account, lo, hi, price): one on v1, five in one pass on v2, seven in the first pass on v4.",
       "txs": [],
-      "vault": "v2"
+      "vault": "v1, v2, v4"
     },
     {
       "kind": "fill",
