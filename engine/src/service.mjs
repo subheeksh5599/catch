@@ -278,22 +278,19 @@ export class CatchService {
       rd("totalAssets"), rd("totalSupply"), rd("pools"), rd("MARKET_CAP_BPS"), rd("CLUSTER_CAP_BPS"), rd("UNWIND_SPREAD_BPS"), rd("ASSET"),
     ]);
     const state = await this.client.readContract({ address: this.net.addresses.marginBank, abi: bankAbi, functionName: "getAccountState", args: [v] });
-    const markets = [];
-    for (const pool of pools) {
-      const [ids, exposure, pos] = await Promise.all([
+    const markets = await Promise.all(pools.map(async (pool) => {
+      const [ids, exposure, pos, snap] = await Promise.all([
         rd("liveSlots", [pool]),
         rd("exposure", [pool]),
         this.client.readContract({ address: this.net.addresses.marginBank, abi: bankAbi, functionName: "getPosition", args: [v, pool] }),
+        this.client.readContract({ address: pool, abi: poolAbi, functionName: "getHealthSnapshot" }),
       ]);
-      const { oneBase } = await this.client.readContract({ address: pool, abi: poolAbi, functionName: "getHealthSnapshot" });
-      const slots = [];
-      for (const id of ids) {
-        const s = await rd("getSlot", [id]);
-        slots.push({ id: Number(id), side: s.isBid ? "bid" : "ask", unwind: s.unwind, price: num(s.price), quantity: num(s.quantity, Number(oneBase)), notional: num((s.price * s.quantity) / oneBase), orderId: s.orderId.toString(), backers: s.backers });
-      }
+      const oneBase = snap.oneBase;
+      const raw = await Promise.all(ids.map((id) => rd("getSlot", [id])));
+      const slots = raw.map((s, i) => ({ id: Number(ids[i]), side: s.isBid ? "bid" : "ask", unwind: s.unwind, price: num(s.price), quantity: num(s.quantity, Number(oneBase)), notional: num((s.price * s.quantity) / oneBase), orderId: s.orderId.toString(), backers: s.backers }));
       const m = this.markets.get(pool.toLowerCase());
-      markets.push({ pool, symbol: m?.symbol ?? pool, exposure: num(exposure), position: { size: num(pos.size < 0n ? -pos.size : pos.size, Number(oneBase)) * (pos.size < 0n ? -1 : 1), entry: num(pos.avgEntryPrice) }, slots });
-    }
+      return { pool, symbol: m?.symbol ?? pool, exposure: num(exposure), position: { size: num(pos.size < 0n ? -pos.size : pos.size, Number(oneBase)) * (pos.size < 0n ? -1 : 1), entry: num(pos.avgEntryPrice) }, slots };
+    }));
     this.vault = {
       address: v,
       deployBlock: d.deployBlock,
@@ -348,8 +345,8 @@ export class CatchService {
     if (from < floor) from = floor;
     const spans = [];
     for (let a = from; a <= head; a += STEP) spans.push([a, a + STEP - 1n > head ? head : a + STEP - 1n]);
-    for (let i = 0; i < spans.length; i += 8) {
-      const batch = await Promise.all(spans.slice(i, i + 8).map(([fromBlock, toBlock]) =>
+    for (let i = 0; i < spans.length; i += 16) {
+      const batch = await Promise.all(spans.slice(i, i + 16).map(([fromBlock, toBlock]) =>
         this.client.getContractEvents({ address: v, abi: vaultAbi, fromBlock, toBlock })));
       add(batch.flat());
     }
