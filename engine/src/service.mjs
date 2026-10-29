@@ -203,6 +203,7 @@ export class CatchService {
       holders: s.holders,
       positions: s.positions.length,
       unpriced: s.unpriced,
+      pricedShare: s.pricedShare,
       outsideRange: map.outside,
       alreadyLiquidatable: map.alreadyLiquidatable,
       binWidth: num(map.width),

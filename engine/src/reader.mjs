@@ -18,6 +18,10 @@ async function holders(client, bank, pool, isLong, blockNumber) {
 }
 
 const CONCURRENCY = Number(process.env.READ_CONCURRENCY || 10);
+const HEALTH_COVER = Number(process.env.HEALTH_COVER || 0.95);
+const HEALTH_MAX = Number(process.env.HEALTH_MAX || 4000);
+const HEALTH_TTL_MS = Number(process.env.HEALTH_TTL_MS || 120_000);
+const healthCache = new Map();
 
 async function multicall(client, contracts, blockNumber) {
   const chunks = [];
@@ -46,25 +50,44 @@ export async function snapshotPool(client, { bank, pool }) {
     holders(client, bank, pool, false, blockNumber),
   ]);
   const accounts = [...new Set([...longs, ...shorts])];
-  // pass 1: position + health for everyone
-  const calls = [];
-  for (const a of accounts) {
-    calls.push({ address: bank, abi: bankAbi, functionName: "getPosition", args: [a, pool] });
-    calls.push({ address: bank, abi: bankAbi, functionName: "getAccountHealth", args: [a] });
-  }
-  const res = await multicall(client, calls, blockNumber);
-  const positions = [];
-  let unpriced = 0;
+  // pass 1: every position (cheap)
+  const pres = await multicall(client, accounts.map((a) => ({ address: bank, abi: bankAbi, functionName: "getPosition", args: [a, pool] })), blockNumber);
+  const open = [];
   for (let i = 0; i < accounts.length; i++) {
-    const [pos, health] = res.slice(i * 2, i * 2 + 2);
-    if (pos.status !== "success" || pos.result.size === 0n) continue;
-    const size = pos.result.size;
-    let liq = null;
-    if (health.status === "success") {
-      const [equity, , mmReq] = health.result;
-      liq = liquidationPrice({ size, equity, mmReq, markPrice: snap.markPrice, oneBase: snap.oneBase, maintenanceMarginBps: snap.maintenanceMarginBps });
+    const r = pres[i];
+    if (r.status !== "success" || r.result.size === 0n) continue;
+    open.push({ account: accounts[i], size: r.result.size, entry: r.result.avgEntryPrice, abs: r.result.size < 0n ? -r.result.size : r.result.size });
+  }
+  // pass 1b: account health (a full margin walk per account, the expensive read) in size order
+  // until HEALTH_COVER of open size is priced, at most HEALTH_MAX accounts. Health is
+  // per account, so one read serves every market that account trades for HEALTH_TTL_MS.
+  open.sort((a, b) => (b.abs > a.abs ? 1 : b.abs < a.abs ? -1 : 0));
+  const total = open.reduce((n, p) => n + p.abs, 0n);
+  const cover = BigInt(Math.round(HEALTH_COVER * 10_000));
+  const pick = [];
+  let covered = 0n;
+  for (const p of open) {
+    if (pick.length >= HEALTH_MAX || (total > 0n && covered * 10_000n >= total * cover)) break;
+    pick.push(p);
+    covered += p.abs;
+  }
+  const now = Date.now();
+  const need = [...new Set(pick.map((p) => p.account))].filter((a) => !(healthCache.get(a)?.at > now - HEALTH_TTL_MS));
+  const hres = await multicall(client, need.map((a) => ({ address: bank, abi: bankAbi, functionName: "getAccountHealth", args: [a] })), blockNumber);
+  need.forEach((a, i) => { if (hres[i].status === "success") healthCache.set(a, { at: now, result: hres[i].result }); });
+  const positions = [];
+  let unpriced = 0, pricedSize = 0n;
+  const picked = new Set(pick.map((p) => p.account));
+  for (const p of open) {
+    const h = picked.has(p.account) ? healthCache.get(p.account) : null;
+    let liq = null, equity = null;
+    if (h) {
+      const [eq, , mmReq] = h.result;
+      equity = eq;
+      liq = liquidationPrice({ size: p.size, equity: eq, mmReq, markPrice: snap.markPrice, oneBase: snap.oneBase, maintenanceMarginBps: snap.maintenanceMarginBps });
+      pricedSize += p.abs;
     } else unpriced++;
-    positions.push({ account: accounts[i], size, entry: pos.result.avgEntryPrice, liq, bankruptcy: null, equity: health.status === "success" ? health.result[0] : null });
+    positions.push({ account: p.account, size: p.size, entry: p.entry, liq, bankruptcy: null, equity });
   }
   // pass 2: bankruptcy price only where a catch window can matter (liquidation within 20% of mark)
   const near = positions.filter((p) => p.liq != null && (p.liq > snap.markPrice ? p.liq - snap.markPrice : snap.markPrice - p.liq) * 5n <= snap.markPrice);
@@ -81,6 +104,8 @@ export async function snapshotPool(client, { bank, pool }) {
     minQuantity: book.minQuantity,
     holders: { long: longs.length, short: shorts.length },
     unpriced,
+    // share of open size whose liquidation price was read; the rest are the smallest positions
+    pricedShare: total > 0n ? Number((pricedSize * 10_000n) / total) / 10_000 : 1,
     positions,
   };
 }
