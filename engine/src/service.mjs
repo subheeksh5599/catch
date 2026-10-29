@@ -4,7 +4,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { parseEventLogs } from "viem";
 import { SomniaMarkets } from "@somnia-chain/markets-sdk";
-import { NETWORKS, publicClient, vaultAbi, erc20Abi, bankAbi } from "./chain.mjs";
+import { NETWORKS, publicClient, vaultAbi, erc20Abi, bankAbi, poolAbi } from "./chain.mjs";
 import { snapshotPool } from "./reader.mjs";
 import { binMap, atRisk, bestCluster, sizeOrder, catchWindow, depthBetween, BPS } from "./math.mjs";
 
@@ -285,13 +285,14 @@ export class CatchService {
         rd("exposure", [pool]),
         this.client.readContract({ address: this.net.addresses.marginBank, abi: bankAbi, functionName: "getPosition", args: [v, pool] }),
       ]);
+      const { oneBase } = await this.client.readContract({ address: pool, abi: poolAbi, functionName: "getHealthSnapshot" });
       const slots = [];
       for (const id of ids) {
         const s = await rd("getSlot", [id]);
-        slots.push({ id: Number(id), side: s.isBid ? "bid" : "ask", unwind: s.unwind, price: num(s.price), quantity: num(s.quantity), notional: num((s.price * s.quantity) / 10n ** 18n), orderId: s.orderId.toString(), backers: s.backers });
+        slots.push({ id: Number(id), side: s.isBid ? "bid" : "ask", unwind: s.unwind, price: num(s.price), quantity: num(s.quantity, Number(oneBase)), notional: num((s.price * s.quantity) / oneBase), orderId: s.orderId.toString(), backers: s.backers });
       }
       const m = this.markets.get(pool.toLowerCase());
-      markets.push({ pool, symbol: m?.symbol ?? pool, exposure: num(exposure), position: { size: Number(pos.size), entry: num(pos.avgEntryPrice) }, slots });
+      markets.push({ pool, symbol: m?.symbol ?? pool, exposure: num(exposure), position: { size: num(pos.size < 0n ? -pos.size : pos.size, Number(oneBase)) * (pos.size < 0n ? -1 : 1), entry: num(pos.avgEntryPrice) }, slots });
     }
     this.vault = {
       address: v,
