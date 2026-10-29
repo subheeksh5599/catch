@@ -339,6 +339,7 @@ async function vaultView() {
           <button class="btn wide" id="dwGo" ${sim ? "disabled" : ""}>${sim ? "Opens at deploy" : w?.account ? "Deposit USDso" : "Connect wallet"}</button>
           <p class="muted" style="font-size:12px;margin:10px 0 0">Deposits go straight into the vault's MarginBank account. Redemptions cancel resting orders if collateral is needed.</p>
         </div>
+        ${proofsCard(d)}
         <div class="card pad fade"><h2 style="margin:0 0 12px;font-size:14px;font-weight:670">Rules the contract enforces</h2>${rules}
           <p class="muted" style="font-size:12px;margin:14px 0 0">${sim ? "Contract: not deployed yet. Source in contracts/src/CatchVault.sol, 55 tests." : `Contract ${addrLink(v.address)}${d?.deployTx ? ` · deployed in ${txLink(d.deployTx)}` : ""}`}</p></div>
       </div>
@@ -402,6 +403,19 @@ function simulateVault(assets = 100_000, marketCapBps = 2500, clusterCapBps = 10
   }
   markets.sort((a, b) => b.exposure - a.exposure);
   return { address: null, asset: null, totalAssets: assets, totalSupply: assets, sharePrice: 1, marketCapBps, clusterCapBps, locked, free: assets - locked, markets };
+}
+
+/** On-chain proofs recorded in the deployment file, each with the transactions that show it. */
+function proofsCard(d) {
+  const proven = new Set((d?.evidence || []).filter((e) => e.status === "proven").map((e) => e.kind));
+  const ev = (d?.evidence || []).filter((e) => e.status === "proven" || !proven.has(e.kind));
+  if (!ev.length) return "";
+  return `<div class="card fade"><div class="card-h"><h2>Live proofs</h2><span class="hint">On Hideki, by transaction</span></div>
+    <div class="card-b" style="display:grid;gap:14px">${ev.map((e) => `<div>
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline"><b style="font-weight:670">${esc(e.title)}</b><span class="tag ${e.status === "proven" ? "short" : "amber"}">${e.status === "proven" ? "Proven" : "Waiting"}</span></div>
+      <div class="muted" style="font-size:12.5px;margin:4px 0 6px">${esc(e.detail)}</div>
+      ${(e.txs || []).map((t) => `<div style="display:flex;justify-content:space-between;font-size:12.5px"><span class="fog">${esc(t.label)}</span>${txLink(t.tx)}</div>`).join("")}
+    </div>`).join("")}</div></div>`;
 }
 
 function eventsTable() {
