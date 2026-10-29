@@ -63,6 +63,9 @@ export const vaultAbi = parseAbi([
   "function place(address pool, bool isBid, uint256 price, uint256 quantity, address[] backers) returns (uint64)",
   "function refreshPool(address pool)",
   "function deposit(uint256 assets, address receiver) returns (uint256)",
+  "function redeem(uint256 shares, address receiver) returns (uint256)",
+  "function catchWindow(address account, address pool) view returns (uint256 lo, uint256 hi)",
+  "function liquidationPrice(address account, address pool) view returns (uint256)",
   "event Placed(uint64 indexed slotId, address indexed pool, bool isBid, uint256 price, uint256 quantity, uint128 orderId, address[] backers)",
   "event Released(uint64 indexed slotId, address indexed pool, uint8 reason)",
   "event Caught(address indexed pool, int128 newSize, uint128 avgEntryPrice)",
@@ -82,6 +85,7 @@ export const engineAbi = parseAbi([
 
 export const erc20Abi = parseAbi([
   "function allowance(address owner, address spender) view returns (uint256)",
+  "function transfer(address to, uint256 amount) returns (bool)",
   "function approve(address spender, uint256 amount) returns (bool)",
   "function balanceOf(address) view returns (uint256)",
   "function mint(address to, uint256 amount)",

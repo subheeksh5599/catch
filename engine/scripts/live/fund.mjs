@@ -27,7 +27,7 @@ console.log("before", await bal());
 const usdAmount = parseEther(usd);
 const have = await sc.readContract({ address: USDSO_SHANNON, abi: erc20Abi, functionName: "balanceOf", args: [account.address] });
 if (have < usdAmount) {
-  const h = await sw.writeContract({ address: USDSO_SHANNON, abi: erc20Abi, functionName: "mint", args: [account.address, usdAmount - have], gas: 500_000n });
+  const h = await sw.writeContract({ address: USDSO_SHANNON, abi: erc20Abi, functionName: "mint", args: [account.address, usdAmount - have] });
   await sc.waitForTransactionReceipt({ hash: h });
   console.log("mint USDso on Shannon", h);
 }
