@@ -6,7 +6,7 @@
 
 [![Status](https://img.shields.io/badge/status-live%20on%20Hideki-16a34a)](#live-status)
 [![Network](https://img.shields.io/badge/network-Somnia%20Hideki%20testnet%2050383-4DA2FF)](#live-status)
-[![Contract tests](https://img.shields.io/badge/forge%20tests-55%20passing-16a34a)](#invariants)
+[![Contract tests](https://img.shields.io/badge/forge%20tests-58%20passing-16a34a)](#invariants)
 [![Engine tests](https://img.shields.io/badge/engine%20tests-12%20passing-16a34a)](#the-engine)
 ![Stack](https://img.shields.io/badge/Solidity%20%2B%20Somnia%20Reactivity%20%2B%20markets--sdk-1f1f23)
 
@@ -26,16 +26,19 @@ No admin can move depositor funds, no order rests where a liquidation cannot rea
 
 | Surface | Status | Evidence |
 |---|---|---|
-| `CatchVault` contract | **Built** | `contracts/src/CatchVault.sol`, 55 Foundry tests passing |
+| `CatchVault` contract | **Built** | `contracts/src/CatchVault.sol`, 58 Foundry tests passing |
 | Contract against the live venue | **Rehearsed** | constructor run against the Hideki MarginBank by `eth_call`; its catch windows for 16 real accounts are identical to the engine's, to the wei ([`deployments/rehearsal-hideki.txt`](deployments/rehearsal-hideki.txt)) |
 | Liquidation map engine | **Running on live data** | reads all 21 tradeable Hideki markets from head state, about 5,900 BTC positions in one block-pinned pass |
 | Dashboard | **Live** | [catch-backstop.vercel.app/app/](https://catch-backstop.vercel.app/app/), reading Hideki through Vercel functions in Tokyo, next to the Somnia RPC |
-| `CatchVault` on Hideki | **Deployed** | [`0x4560f46a1287c46b089c244b821c895aa64b249c`](deployments/hideki.json), tx `0xffc4b681bec5aaf04687f79ea00f17352945750b51ffef230a11a56f79fcb1f9` |
-| Reactivity subscription | **Confirmed** | id 22695422: MarginBank `PositionUpdated` → `CatchVault.onEvent`, tx `0x087533c0d10df78df091d3d34f62c0795d0ec074622026a0637b69aa4e205a7b` |
-| Deposit | **Live** | 100 USDso, tx `0xefae19883f0ea1392c8e89770ed802a0e59fac79b2455ae0cbf45e558ee06f35` |
-| Cluster orders resting on the venue's book | **Live** | 3 post-only orders (ETH bid at 2,235.36, ETH ask at 2,415.43, WLD bid at 0.3809), each owned by the vault and backed by 8 accounts: `0x5edf0d60…`, `0x59976331…`, `0x9a2e2322…` |
-| Contract refusing an order on chain | **Observed** | the keeper's fourth order reverted `OutsideBand`: a backer's position moved between the snapshot and the send |
-| A liquidation filled into a Catch order | **Pending** | the orders rest inside live catch windows; a fill needs one of their backers to be liquidated |
+| `CatchVault` v4 on Hideki | **Live** | [`0x555fed929f625e356ef33ad37db526de20f25d54`](deployments/hideki.json), tx `0xba86a7b3b3c46952f22edc20b191f1d5d9144c793b0e160d86562f1d2539504b`; 50% market cap, 25% cluster cap |
+| Cluster orders on the venue's book | **Live** | 19 post-only orders across 11 markets (BTC, ETH, BNB, SOL, HYPE, WLD and others), about $11 each, every one owned by the vault and inside its backers' catch windows |
+| Reactivity | **Live, per account** | one `PositionUpdated` subscription per backing account plus the vault itself (35 at start), reconciled by the keeper every pass |
+| Same-block auto-cancel | **Proven** | a test trader closed its HYPE long at tx index 2 of block 35,466,495 (`0x24e2230d…d441`); the validator-issued `onEvent` cancelled the bid it backed at tx index 16 of the same block (`0x51109d89…bb38`). Six more overnight on v2 |
+| Fill → position → unwind | **Proven** | four orders on v2 filled by takers (ETH, SOL, HYPE, AVAX); each time the callback recorded the position and rested an unwind at or beyond entry in the same block, e.g. ETH short at 2,415.43 offered back at 2,324.28 (`0x91db9c26…53be`) |
+| Contract refusing an order on chain | **Observed** | keeper proposals whose backers moved before the send reverted `OutsideBand(account, lo, hi, price)` |
+| A liquidation filled into a Catch order | **Armed** | two test accounts hold 20x HYPE positions (long, liquidation ≈ 76.77; short, ≈ 81.61). The vault's bid and ask sit at those prices, and `liquidator.mjs` calls the venue's permissionless `liquidate()` the moment either is under maintenance. The keeper writes the fill into `deployments/hideki.json` and the dashboard's Live proofs card |
+
+Earlier vaults stay on chain with their records: v1 (`deployments/hideki-v1.json`, venue-wide subscription, too costly), v2 (`hideki-v2.json`, found that the venue's `getOrder` reverts on a deleted order, which made re-checks revert; fixed in the contract with three regression tests), v3 (`hideki-v3.json`, caps too small for the deposit).
 
 ```mermaid
 flowchart TD
@@ -115,7 +118,7 @@ The short-side rule exists because the live venue reports a short's bankruptcy p
 | 4 | Redemption cancels resting orders to free collateral; no other outflow exists | `redeem`, `_releaseUntilFree` | `test_invariant4_restingOrdersAreCancelledToRedeem`, `testFuzz_roundTripNeverProfits`, `test_noAdminSurface` |
 | 5 | The vault never takes liquidity | post-only orders, `CrossesMark` | `test_invariant5_neverCrossesTheMark`, `test_invariant5_postOnlyThatWouldCrossDoesNotRest` |
 
-`cd contracts && forge test` → 55 passed.
+`cd contracts && forge test` → 58 passed.
 
 ## Attack → test
 
@@ -171,7 +174,7 @@ Every number is read from chain or from the venue's indexer by the engine. Where
 
 ```bash
 git clone --recurse-submodules <this repo> && cd catch
-cd contracts && forge test                      # 55 passed
+cd contracts && forge test                      # 58 passed
 cd ../engine && npm install && npm test          # 12 passed
 npm start                                        # http://127.0.0.1:8787 (site) and /app/ (dashboard), live Hideki data
 ```
@@ -186,9 +189,10 @@ The operator key lives in `~/.catch/deployer.key` (mode 0600, outside the repo; 
 cd engine
 npm run rehearse                        # free: constructor and catch windows against the live venue
 npm run fund -- 36 20000                # Shannon: mint USDso, bridge 36 STT and 20,000 USDso to Hideki
-npm run deploy                          # CatchVault(marginBank, 25% market cap, 10% cluster cap, 0.3% unwind spread)
-npm run subscribe                       # reactivity: waits for a successful receipt and records it (owner holds ≥ 32 STT)
-npm run keeper -- --deposit 10000 --once
+npm run deploy -- hideki 5000 2500 30   # CatchVault(marginBank, market cap, cluster cap, unwind spread), in bps
+npm run keeper -- --deposit 10000 --once # deposit, quote every market, subscribe per backing account
+node scripts/live/keeper.mjs hideki --every 60          # keep quoting, re-check, record evidence
+node scripts/live/liquidator.mjs hideki                 # liquidate() any backer the moment it is allowed
 ```
 
 `npm run subscribe` can be rerun safely: it resumes a recorded pending transaction or recognizes an already confirmed registration instead of creating a duplicate. It records the subscription ID and confirms the owner, handler, emitter and event filter against the precompile. If the recorded registration reverted, fix the cause and run `npm run subscribe -- hideki --retry` to submit a new one.
@@ -203,10 +207,12 @@ Deployment costs about 96M gas (`eth_estimateGas` on Hideki at 6 gwei, about 0.5
 | A large share of liquidations found an empty book | **Measured** | the table above, recomputed live |
 | Every position and its liquidation price readable from head state | **Real** | the engine maps all 21 markets |
 | Contract windows match the engine on real accounts | **Rehearsed** | 16/16 identical, `deployments/rehearsal-hideki.txt` |
-| Vault rules | **Tested** | 55 Foundry tests against venue doubles that follow the published ABIs |
-| A contract-owned account resting orders on Hideki | **Real** | three orders, hashes in `deployments/hideki.json` |
-| Same-block cancel from a reactivity callback on Hideki | **Subscribed, awaiting a callback** | subscription 22695422 confirmed; the first backer position change will show as a `Released` event |
-| A liquidation filled into a Catch order | **Pending** | the three orders rest inside live catch windows; a fill needs a backer to be liquidated |
+| Vault rules | **Tested** | 58 Foundry tests against venue doubles that follow the published ABIs, including a deleted order reverting on read |
+| A contract-owned account resting orders on Hideki | **Real** | 19 orders on v4; hashes in `deployments/hideki.json` |
+| Same-block cancel from a reactivity callback on Hideki | **Real** | block 35,466,495: backer closes at index 2, callback cancels at index 16 |
+| Fill handled by the callback, unwind at or beyond entry | **Real** | four fills on v2, each with its callback transaction |
+| A liquidation filled into a Catch order | **Armed** | orders at two test accounts' liquidation prices, permissionless `liquidate()` watcher running |
+| Shannon → Hideki USDso bridge | **Blocked upstream** | the warp route's hook `0xF11C364D…77De` reverts `postDispatch` with empty data at any value; Hideki capital stays at what is already there |
 
 A fork test was tried and dropped: neither Somnia RPC serves historical state, so neither Foundry nor anvil can fork it. The rehearsal script replaces it.
 
