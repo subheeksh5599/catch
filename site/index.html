@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Catch: a buyer waiting where dreamDEX liquidations land</title>
+  <meta name="description" content="Catch is a vault on Somnia that rests orders on the dreamDEX perps book at the prices open positions will be force-closed, and cancels each order in the same block the position behind it changes." />
+  <link rel="icon" href="/app/mark.svg" type="image/svg+xml" />
+  <link rel="preload" href="/app/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/app/app.css" />
+  <link rel="stylesheet" href="/site.css" />
+</head>
+<body>
+  <header class="lnav">
+    <a class="brand" href="/" aria-label="Catch">
+      <svg viewBox="0 0 32 32" width="24" height="24" aria-hidden="true"><path fill="#ededed" fill-rule="evenodd" d="M 21.76 0 C 25.344 0 27.137 0 28.506 0.697 C 29.71 1.311 30.689 2.29 31.303 3.494 C 32 4.863 32 6.656 32 10.24 L 32 21.76 C 32 25.344 32 27.137 31.303 28.506 C 30.689 29.71 29.71 30.689 28.506 31.303 C 27.137 32 25.344 32 21.76 32 L 10.24 32 C 6.656 32 4.863 32 3.494 31.303 C 2.29 30.689 1.311 29.71 0.697 28.506 C 0 27.137 0 25.344 0 21.76 L 0 10.24 C 0 6.656 0 4.863 0.697 3.494 C 1.311 2.29 2.29 1.311 3.494 0.697 C 4.863 0 6.656 0 10.24 0 Z M 8 14 L 8 19 C 8 23.4 11.6 26 16 26 C 20.4 26 24 23.4 24 19 L 24 14 L 20.8 14 L 20.8 19 C 20.8 21.6 18.6 22.8 16 22.8 C 13.4 22.8 11.2 21.6 11.2 19 L 11.2 14 Z M 18.5 9 A 2.5 2.5 0 0 0 13.5 9 A 2.5 2.5 0 0 0 18.5 9 Z"/></svg>
+      <span>Catch</span>
+    </a>
+    <nav class="lnav-links" aria-label="Sections">
+      <a href="#how">How it works</a>
+      <a href="#proof">Proof</a>
+      <a href="#rules">Rules</a>
+      <a href="https://github.com/subheeksh5599/catch" target="_blank" rel="noopener">Source</a>
+    </nav>
+    <a class="btn" href="/app/">Open the app</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">For dreamDEX perps on Somnia</p>
+        <h1>A buyer waiting where liquidations land</h1>
+        <p class="lede">When a dreamDEX position is liquidated, the engine sells it into the public order book first. Catch is a vault that rests orders at exactly those prices, and cancels each one in the same block the position behind it changes.</p>
+        <div class="actions">
+          <a class="btn lg" href="/app/#/vault">Deposit USDso</a>
+          <a class="btn quiet lg" href="/app/#/map">See the liquidation map</a>
+        </div>
+      </div>
+      <div id="receipt"><div class="card receipt"><div class="loading" style="min-height:240px"><b>Reading the last catch from the chain</b></div></div></div>
+    </section>
+
+    <section class="strip" aria-label="Live figures">
+      <div><span class="t3">Liquidations sent to an empty book</span><b id="fEmpty" class="figure">·</b><span class="t3" id="fEmptyFoot">reading the venue</span></div>
+      <div><span class="t3">Vault assets</span><b id="fAssets" class="figure">·</b><span class="t3" id="fAssetsFoot">reading the vault</span></div>
+      <div><span class="t3">Orders resting now</span><b id="fOrders" class="figure">·</b><span class="t3" id="fOrdersFoot">reading the vault</span></div>
+      <div><span class="t3">Somnia Hideki block</span><b id="fBlock" class="figure">·</b><span class="t3" id="fBlockFoot">reading the chain</span></div>
+    </section>
+
+    <section class="block" id="how">
+      <div class="block-head">
+        <h2>How a catch happens</h2>
+        <p>Every number is re-derived by the contract. The keeper only proposes, and anyone can run it.</p>
+      </div>
+      <ol class="flow">
+        <li><span class="mono t3">01</span><h3>Read</h3><p>Every open position on a market, its account health and its bankruptcy price, all pinned to one block.</p></li>
+        <li><span class="mono t3">02</span><h3>Map</h3><p>Each position's liquidation price, and the window the engine is allowed to close it in: <span class="bracket">liq − spread to liq</span></p></li>
+        <li><span class="mono t3">03</span><h3>Rest</h3><p>The vault places a post-only order inside the window where the most forced size sits. The contract refuses it if any number is off.</p></li>
+        <li><span class="mono t3">04</span><h3>Re-check</h3><p>A position behind the order changes. Somnia Reactivity calls the vault in that same block, and the order is cancelled if its window moved away.</p></li>
+        <li><span class="mono t3">05</span><h3>Catch</h3><p>The engine force-closes a position into the book and it fills the vault. The vault offers it back at or past its entry, never below.</p></li>
+      </ol>
+      <div class="card map-card">
+        <div class="card-h"><h2 id="mapTitle">Liquidations by price</h2><a class="link" href="/app/#/map">Full map</a></div>
+        <div class="card-b"><div class="chart" id="map"><div class="loading" style="min-height:280px"><b>Reading every open position on the busiest market</b><span>The first read walks every account and can take a few minutes</span></div></div>
+          <div class="legend" style="margin-top:12px"><span><i style="background:#e5484d"></i>Longs liquidated</span><span><i style="background:#4cc38a"></i>Shorts liquidated</span><span><i style="background:#85858b"></i>Book resting</span><span><i style="background:#e2a336"></i>Catch window</span></div></div>
+      </div>
+    </section>
+
+    <section class="block" id="proof">
+      <div class="block-head">
+        <h2>Proven on chain</h2>
+        <p>Each line is a transaction on Somnia Hideki, written to the deployment record by the keeper as it happened.</p>
+      </div>
+      <div class="card" id="proofs"><div class="loading" style="min-height:200px"><b>Reading the deployment record</b></div></div>
+    </section>
+
+    <section class="block" id="rules">
+      <div class="block-head">
+        <h2>What the contract refuses</h2>
+        <p>No owner, no admin key, no sweep. These rules are the whole permission model, each with tests in the repository.</p>
+      </div>
+      <div class="rule-grid">
+        <div class="card pad"><h3>An order outside a window</h3><p>Every account an order cites must still be closable at its price. Otherwise it reverts with the window it missed.</p></div>
+        <div class="card pad"><h3>Too much in one place</h3><p>One order stays under a share of the vault, one market under a larger share and under a slice of that market's own open interest.</p></div>
+        <div class="card pad"><h3>A pushed price</h3><p>No quote while the mark sits too far from the oracle index, or the index is stale. A resting order is pulled on its next re-check.</p></div>
+        <div class="card pad"><h3>A fire sale</h3><p>A caught position is offered back at or past its entry price. Anyone can improve the price; nobody can make it worse.</p></div>
+        <div class="card pad"><h3>Buying in to sell out</h3><p>New shares can't be redeemed or moved for an hour, so a deposit timed around a visible catch stays through the unwind.</p></div>
+        <div class="card pad"><h3>Taking liquidity</h3><p>Every order is post-only. The vault never crosses the book and has no way to liquidate anyone.</p></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="block-head">
+        <h2>Not done yet</h2>
+        <p>Said here so nobody has to find it.</p>
+      </div>
+      <ul class="todo">
+        <li><b>Testnet only.</b> dreamDEX perps are not on mainnet yet. Everything here runs on Somnia Hideki with test USDso.</li>
+        <li><b>A small vault.</b> The vault holds what the team could move onto Hideki, so its orders are tens of dollars, near the venue minimum.</li>
+        <li><b>The backstop-bidder stage.</b> After the book, the engine hands positions to registered bidders. No public way to register was found on the testnet engine, so Catch covers the book stage alone.</li>
+        <li><b>Loss is possible.</b> A vault that buys liquidations in a fast market can lose. The caps and the entry rule limit that loss; they do not remove it.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="lfoot">
+    <span>Catch</span>
+    <span class="t3" id="footVault"></span>
+    <a class="link" href="https://github.com/subheeksh5599/catch" target="_blank" rel="noopener">github.com/subheeksh5599/catch</a>
+  </footer>
+  <div class="tip" id="tip" hidden></div>
+  <script type="module" src="/site.mjs"></script>
+</body>
+</html>

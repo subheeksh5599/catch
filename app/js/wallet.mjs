@@ -1,4 +1,4 @@
-// Minimal EIP-1193 wallet: connect, switch chain, and the four vault calls the app makes.
+// Minimal EIP-1193 wallet: connect, switch chain, and the vault calls the app makes.
 // Calldata is encoded by hand (static types only); selectors were taken from `cast sig`.
 const SEL = {
   approve: "0x095ea7b3",
@@ -7,6 +7,7 @@ const SEL = {
   deposit: "0x6e553f65",
   redeem: "0x7bde82f2",
   convertToAssets: "0x07a2d13a",
+  unlockAt: "0x89b7e586",
 };
 
 const word = (v) => BigInt(v).toString(16).padStart(64, "0");
@@ -19,6 +20,7 @@ export const calldata = {
   deposit: (assets, receiver) => SEL.deposit + word(assets) + addr(receiver),
   redeem: (shares, receiver) => SEL.redeem + word(shares) + addr(receiver),
   convertToAssets: (shares) => SEL.convertToAssets + word(shares),
+  unlockAt: (owner) => SEL.unlockAt + addr(owner),
 };
 
 /** Parse a decimal string into 18-decimal base units without floating point. */
