@@ -23,6 +23,12 @@ import {IERC20, IMarginBank, IPerpPool, ILiquidationEngine, ISomniaEventHandler}
 ///  4. Shares redeem against free collateral; resting orders are cancelled to make room and no
 ///     address can move funds any other way.
 ///  5. The vault never takes liquidity (orders are PostOnly) and has no liquidation entry point.
+///  6. Per-market exposure never exceeds OI_CAP_BPS of that market's open interest, so a thin
+///     market gets a small order however large the vault is.
+///  7. No order is placed, and none is kept on a re-check, while the pool's mark sits more than
+///     MAX_INDEX_DEVIATION_BPS from its oracle index or the index is older than MAX_INDEX_AGE.
+///  8. Shares minted by a deposit can neither be redeemed nor transferred for REDEEM_DELAY
+///     seconds, so nobody can buy into a catch they can see coming and leave right after it.
 contract CatchVault is ISomniaEventHandler {
     // ---------------------------------------------------------------- constants
 
@@ -47,6 +53,10 @@ contract CatchVault is ISomniaEventHandler {
     uint256 public immutable MARKET_CAP_BPS;
     uint256 public immutable CLUSTER_CAP_BPS;
     uint256 public immutable UNWIND_SPREAD_BPS;
+    uint256 public immutable OI_CAP_BPS;
+    uint256 public immutable MAX_INDEX_DEVIATION_BPS;
+    uint256 public immutable MAX_INDEX_AGE;
+    uint256 public immutable REDEEM_DELAY;
 
     // ---------------------------------------------------------------- share token
 
@@ -56,6 +66,8 @@ contract CatchVault is ISomniaEventHandler {
     uint256 public totalSupply;
     mapping(address => uint256) public balanceOf;
     mapping(address => mapping(address => uint256)) public allowance;
+    /// @notice When an account's shares may next be redeemed or transferred (unix seconds).
+    mapping(address => uint256) public unlockAt;
 
     // ---------------------------------------------------------------- orders
 
@@ -104,6 +116,7 @@ contract CatchVault is ISomniaEventHandler {
     uint8 public constant RELEASE_EVICTED = 3; // replaced by a larger cluster
     uint8 public constant RELEASE_REDEMPTION = 4; // collateral freed for a redemption
     uint8 public constant RELEASE_REPRICE = 5; // unwind re-priced
+    uint8 public constant RELEASE_PRICE = 6; // mark dislocated from the index, or the index went stale
 
     // ---------------------------------------------------------------- errors
 
@@ -127,6 +140,11 @@ contract CatchVault is ISomniaEventHandler {
     error UnwindTooLarge(uint256 quantity, uint256 position);
     error OnlyReactivityPrecompile();
     error NotLive(uint64 slotId);
+    error OpenInterestCap(uint256 exposure, uint256 cap);
+    error PriceDislocated(uint256 mark, uint256 index);
+    error IndexStale(uint256 updatedAt, uint256 now_);
+    error Locked(uint256 unlockAt);
+    error DepositForOther();
 
     modifier nonReentrant() {
         if (_lock != 1) revert Reentrancy();
@@ -135,17 +153,27 @@ contract CatchVault is ISomniaEventHandler {
         _lock = 1;
     }
 
-    constructor(IMarginBank bank, uint256 marketCapBps, uint256 clusterCapBps, uint256 unwindSpreadBps) {
-        require(marketCapBps > 0 && marketCapBps <= BPS, "market cap");
-        require(clusterCapBps > 0 && clusterCapBps <= marketCapBps, "cluster cap");
-        require(unwindSpreadBps < 1_000, "spread");
+    /// @param limits [marketCapBps, clusterCapBps, unwindSpreadBps, oiCapBps,
+    ///               maxIndexDeviationBps, maxIndexAgeSeconds, redeemDelaySeconds]
+    constructor(IMarginBank bank, uint256[7] memory limits) {
+        require(limits[0] > 0 && limits[0] <= BPS, "market cap");
+        require(limits[1] > 0 && limits[1] <= limits[0], "cluster cap");
+        require(limits[2] < 1_000, "spread");
+        require(limits[3] > 0 && limits[3] <= BPS, "oi cap");
+        require(limits[4] > 0 && limits[4] < BPS, "index deviation");
+        require(limits[5] > 0, "index age");
+        require(limits[6] <= 7 days, "redeem delay");
         BANK = bank;
         IMarginBank.SystemConfig memory cfg = bank.getSystemConfig();
         ASSET = IERC20(cfg.collateralToken);
         ENGINE = ILiquidationEngine(cfg.liquidationEngine);
-        MARKET_CAP_BPS = marketCapBps;
-        CLUSTER_CAP_BPS = clusterCapBps;
-        UNWIND_SPREAD_BPS = unwindSpreadBps;
+        MARKET_CAP_BPS = limits[0];
+        CLUSTER_CAP_BPS = limits[1];
+        UNWIND_SPREAD_BPS = limits[2];
+        OI_CAP_BPS = limits[3];
+        MAX_INDEX_DEVIATION_BPS = limits[4];
+        MAX_INDEX_AGE = limits[5];
+        REDEEM_DELAY = limits[6];
         ASSET.approve(address(bank), type(uint256).max);
     }
 
@@ -173,6 +201,7 @@ contract CatchVault is ISomniaEventHandler {
     }
 
     function _move(address from, address to, uint256 value) internal {
+        if (block.timestamp < unlockAt[from]) revert Locked(unlockAt[from]);
         if (balanceOf[from] < value) revert InsufficientShares();
         balanceOf[from] -= value;
         balanceOf[to] += value;
@@ -199,7 +228,10 @@ contract CatchVault is ISomniaEventHandler {
         return shares * (totalAssets() + VIRTUAL_ASSETS) / (totalSupply + VIRTUAL_SHARES);
     }
 
+    /// @notice Deposit for yourself. Starts (or restarts) your REDEEM_DELAY; depositing into
+    /// someone else's account is refused so nobody can restart another holder's delay.
     function deposit(uint256 assets, address receiver) external nonReentrant returns (uint256 shares) {
+        if (receiver != msg.sender) revert DepositForOther();
         if (assets == 0) revert ZeroAmount();
         shares = convertToShares(assets);
         if (shares == 0) revert ZeroAmount();
@@ -207,6 +239,7 @@ contract CatchVault is ISomniaEventHandler {
         BANK.deposit(assets);
         totalSupply += shares;
         balanceOf[receiver] += shares;
+        unlockAt[receiver] = block.timestamp + REDEEM_DELAY;
         emit Transfer(address(0), receiver, shares);
         emit Deposited(receiver, assets, shares);
     }
@@ -216,6 +249,7 @@ contract CatchVault is ISomniaEventHandler {
     /// the way, and that is bounded by MARKET_CAP_BPS per market.
     function redeem(uint256 shares, address receiver) external nonReentrant returns (uint256 assets) {
         if (shares == 0) revert ZeroAmount();
+        if (block.timestamp < unlockAt[msg.sender]) revert Locked(unlockAt[msg.sender]);
         if (balanceOf[msg.sender] < shares) revert InsufficientShares();
         assets = convertToAssets(shares);
         uint256 free = BANK.getWithdrawableCollateral(address(this));
@@ -256,10 +290,8 @@ contract CatchVault is ISomniaEventHandler {
         returns (uint64 slotId)
     {
         _checkPool(pool);
-        uint256 oneBase;
-        uint256 notional;
-        (oneBase, notional) = _validateCluster(pool, isBid, price, quantity, backers);
-        _enforceCaps(pool, notional, oneBase);
+        uint256 notional = _validateCluster(pool, isBid, price, quantity, backers);
+        _enforceCaps(pool, notional);
 
         slotId = nextSlotId++;
         uint128 orderId = _rest(pool, isBid, price, quantity, slotId);
@@ -284,10 +316,11 @@ contract CatchVault is ISomniaEventHandler {
         uint256 price,
         uint256 quantity,
         address[] calldata backers
-    ) internal view returns (uint256 oneBase, uint256 notional) {
+    ) internal view returns (uint256 notional) {
         if (backers.length == 0 || backers.length > MAX_BACKERS) revert BadBackers();
         IPerpPool.HealthSnapshot memory s = IPerpPool(pool).getHealthSnapshot();
         if (isBid ? price >= s.markPrice : price <= s.markPrice) revert CrossesMark(price, s.markPrice);
+        _requireSanePrice(pool);
         uint256 clusterSize;
         address prev;
         for (uint256 i = 0; i < backers.length; i++) {
@@ -297,18 +330,49 @@ contract CatchVault is ISomniaEventHandler {
             clusterSize += _checkBacker(pool, a, isBid, price, s);
         }
         if (quantity > clusterSize) revert QuantityExceedsCluster(quantity, clusterSize);
-        oneBase = s.oneBase;
-        notional = price * quantity / oneBase;
+        notional = price * quantity / s.oneBase;
     }
 
-    function _enforceCaps(address pool, uint256 notional, uint256 oneBase) internal {
+    function _enforceCaps(address pool, uint256 notional) internal {
         uint256 assets = totalAssets();
         uint256 clusterCap = assets * CLUSTER_CAP_BPS / BPS;
         if (notional > clusterCap) revert ClusterCap(notional, clusterCap);
-        _makeRoom(pool, notional, oneBase);
-        uint256 marketCap = assets * MARKET_CAP_BPS / BPS;
+        IPerpPool.HealthSnapshot memory s = IPerpPool(pool).getHealthSnapshot();
+        _makeRoom(pool, notional, s.oneBase);
         uint256 exposureAfter = exposure(pool) + notional;
+        uint256 marketCap = assets * MARKET_CAP_BPS / BPS;
         if (exposureAfter > marketCap) revert MarketCap(exposureAfter, marketCap);
+        uint256 oiCap = openInterestCap(pool);
+        if (exposureAfter > oiCap) revert OpenInterestCap(exposureAfter, oiCap);
+    }
+
+    /// @notice The most notional the vault may hold or quote on `pool`, from its open interest.
+    function openInterestCap(address pool) public view returns (uint256) {
+        IPerpPool.HealthSnapshot memory s = IPerpPool(pool).getHealthSnapshot();
+        uint256 oi = IPerpPool(pool).getOpenInterest();
+        return oi * s.markPrice / s.oneBase * OI_CAP_BPS / BPS;
+    }
+
+    /// @notice 0 when the pool's mark may be quoted against; 1 when the index is stale or
+    /// unreadable; 2 when the mark sits too far from the index.
+    function priceStatus(address pool) public view returns (uint8 status, uint256 mark, uint256 index, uint256 updatedAt) {
+        mark = IPerpPool(pool).getHealthSnapshot().markPrice;
+        try IPerpPool(pool).getIndexPrice() returns (uint256 p, uint256 t) {
+            index = p;
+            updatedAt = t;
+        } catch {
+            return (1, mark, 0, 0);
+        }
+        if (index == 0 || updatedAt + MAX_INDEX_AGE < block.timestamp) return (1, mark, index, updatedAt);
+        uint256 gap = mark > index ? mark - index : index - mark;
+        if (gap * BPS > index * MAX_INDEX_DEVIATION_BPS) return (2, mark, index, updatedAt);
+        return (0, mark, index, updatedAt);
+    }
+
+    function _requireSanePrice(address pool) internal view {
+        (uint8 st, uint256 mark, uint256 index, uint256 updatedAt) = priceStatus(pool);
+        if (st == 1) revert IndexStale(updatedAt, block.timestamp);
+        if (st == 2) revert PriceDislocated(mark, index);
     }
 
     /// @notice Re-check one slot against the venue; releases it if it no longer stands.
@@ -497,9 +561,16 @@ contract CatchVault is ISomniaEventHandler {
             _release(id, RELEASE_FILLED);
             return false;
         }
-        if (!sl.unwind && !_bandHolds(sl)) {
-            _release(id, RELEASE_BAND);
-            return false;
+        if (!sl.unwind) {
+            (uint8 st,,,) = priceStatus(sl.pool);
+            if (st != 0) {
+                _release(id, RELEASE_PRICE);
+                return false;
+            }
+            if (!_bandHolds(sl)) {
+                _release(id, RELEASE_BAND);
+                return false;
+            }
         }
         if (!sl.unwind) {
             // keep the slot indexed under each backer (onEvent pops as it walks)

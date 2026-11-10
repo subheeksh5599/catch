@@ -101,6 +101,10 @@ interface IPerpPool {
     function getOrderBookParameters() external view returns (BookParameters memory);
     function getOrder(uint128 orderId) external view returns (Order memory);
     function getOwnOpenOrders() external view returns (uint128[] memory);
+    /// @notice The oracle index the pool tracks, with the time it was last written (seconds).
+    function getIndexPrice() external view returns (uint256 price, uint256 updatedAt);
+    /// @notice Open interest in base units, as the pool reports it.
+    function getOpenInterest() external view returns (uint256 openInterest);
 }
 
 interface ILiquidationEngine {

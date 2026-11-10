@@ -190,6 +190,38 @@ contract MockPool {
         restricted = r;
     }
 
+    // index price: follows the mark unless a test pins it; updatedAt follows the clock unless pinned
+    uint256 public indexOverride;
+    uint256 public indexTimeOverride;
+    bool public indexReverts;
+    uint256 public openInterest = 1_000_000e18;
+
+    function setIndex(uint256 p) external {
+        indexOverride = p;
+    }
+
+    function setIndexTime(uint256 t) external {
+        indexTimeOverride = t;
+    }
+
+    function setIndexReverts(bool r) external {
+        indexReverts = r;
+    }
+
+    function setOpenInterest(uint256 oi) external {
+        openInterest = oi;
+    }
+
+    function getIndexPrice() external view returns (uint256 price, uint256 updatedAt) {
+        require(!indexReverts, "OraclePriceStale");
+        price = indexOverride == 0 ? mark : indexOverride;
+        updatedAt = indexTimeOverride == 0 ? block.timestamp : indexTimeOverride;
+    }
+
+    function getOpenInterest() external view returns (uint256) {
+        return openInterest;
+    }
+
     function marginBank() external view returns (address) {
         return address(bank);
     }

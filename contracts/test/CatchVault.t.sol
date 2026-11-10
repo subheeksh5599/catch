@@ -27,12 +27,22 @@ contract CatchVaultTest is Test {
     bytes32 constant TOPIC = keccak256("PositionUpdated(address,address,int128,uint128,int256,int256)");
     address constant PRECOMPILE = address(0x0100);
 
+    uint256 constant DELAY = 3_600;
+    uint256 constant OI_CAP = 1_000; // 10% of open interest
+    uint256 constant DEV = 300; // 3% mark vs index
+    uint256 constant AGE = 120;
+
+    function _limits() internal pure returns (uint256[7] memory l) {
+        l = [uint256(2_500), 1_000, 30, OI_CAP, DEV, AGE, DELAY];
+    }
+
     function setUp() public {
+        vm.warp(1_700_000_000);
         token = new MockToken();
         bank = new MockBank(token);
         pool = new MockPool(bank, MARK);
         bank.setRegistered(address(pool), true);
-        vault = new CatchVault(IMarginBank(address(bank)), 2_500, 1_000, 30);
+        vault = new CatchVault(IMarginBank(address(bank)), _limits());
 
         token.mint(alice, 1_000_000e18);
         token.mint(bob, 1_000_000e18);
@@ -42,6 +52,7 @@ contract CatchVaultTest is Test {
         token.approve(address(vault), type(uint256).max);
         vm.prank(alice);
         vault.deposit(100_000e18, alice);
+        vm.warp(block.timestamp + DELAY); // alice's deposit is past its redeem delay
 
         // l1, l2: 1 BTC longs, liquidation at 59,000, bankruptcy at 58,500
         _long(l1, 1e18, 58_500e18);
@@ -550,6 +561,7 @@ contract CatchVaultTest is Test {
         uint256 before = token.balanceOf(bob);
         vm.startPrank(bob);
         uint256 shares = vault.deposit(a, bob);
+        vm.warp(block.timestamp + DELAY);
         vault.redeem(shares, bob);
         vm.stopPrank();
         assertLe(token.balanceOf(bob), before);
@@ -569,5 +581,177 @@ contract CatchVaultTest is Test {
         assertFalse(ok);
         (ok,) = address(vault).staticcall(abi.encodeWithSignature("sweep(address)", address(this)));
         assertFalse(ok);
+    }
+
+    // ------------------------------------------------------------ invariant 6: open-interest cap
+
+    function test_invariant6_openInterestCapRevertsWithNumbers() public {
+        pool.setOpenInterest(1e18); // 1 BTC open: cap = 60,000 x 10% = 6,000
+        assertEq(vault.openInterestCap(address(pool)), 6_000e18);
+        vm.expectRevert(abi.encodeWithSelector(CatchVault.OpenInterestCap.selector, 8_820e18, 6_000e18));
+        vault.place(address(pool), true, 58_800e18, 0.15e18, _two());
+        vault.place(address(pool), true, 58_800e18, 0.1e18, _two()); // 5,880 fits
+    }
+
+    function test_invariant6_capCountsTheVaultsOwnPosition() public {
+        pool.setOpenInterest(1e18);
+        bank.setPosition(address(vault), address(pool), 0.09e18, uint128(58_800e18)); // 5,400 at mark
+        vm.expectRevert(abi.encodeWithSelector(CatchVault.OpenInterestCap.selector, 7_164e18, 6_000e18));
+        vault.place(address(pool), true, 58_800e18, 0.03e18, _two());
+    }
+
+    /// Attack: a trader opens an outsized position on a thin market, backs a vault order with it,
+    /// gets liquidated into the vault on purpose and then moves the market. The vault's fill is
+    /// bounded by the market's own open interest, not by the vault's size.
+    function test_attack_selfLiquidationOnAThinMarketIsBoundedByOpenInterest() public {
+        address attacker = address(0x7001);
+        _long(attacker, 50e18, 58_500e18);
+        bank.setHealth(attacker, 48_750e18, 0); // liquidation stays at 59,000 for 50 BTC
+        pool.setOpenInterest(1.5e18); // the market is thin: 1.5 BTC open in total
+        uint256 cap = vault.openInterestCap(address(pool)); // 9,000
+        assertEq(cap, 9_000e18);
+        // under the cluster cap (10,000) and the market cap (25,000), but over the open-interest cap
+        vm.expectRevert(abi.encodeWithSelector(CatchVault.OpenInterestCap.selector, 9_408e18, 9_000e18));
+        vault.place(address(pool), true, 58_800e18, 0.16e18, _one(attacker));
+        // the largest order that fits is all the attacker can force on the vault
+        uint64 id = vault.place(address(pool), true, 58_800e18, 0.15e18, _one(attacker));
+        pool.fill(vault.getSlot(id).orderId, 0.15e18);
+        vault.refreshPool(address(pool)); // the filled order leaves the book; the position stays
+        assertEq(vault.exposure(address(pool)), 9_000e18, "0.15 BTC held at the 60,000 mark");
+        assertLe(vault.exposure(address(pool)), cap, "fill bounded by open interest");
+    }
+
+    function testFuzz_placementNeverExceedsOpenInterestCap(uint64 oiMilli, uint64 qtyMilli) public {
+        pool.setOpenInterest(bound(uint256(oiMilli), 1, 100_000) * 1e15);
+        uint256 qty = bound(uint256(qtyMilli), 1, 2_000) * 1e15;
+        try vault.place(address(pool), true, 58_800e18, qty, _two()) {
+            assertLe(vault.exposure(address(pool)), vault.openInterestCap(address(pool)));
+        } catch {}
+    }
+
+    // ------------------------------------------------------------ invariant 7: index guard
+
+    function test_invariant7_dislocatedMarkRefusesPlacement() public {
+        pool.setIndex(62_000e18); // mark 60,000 is 3.2% under the index
+        vm.expectRevert(abi.encodeWithSelector(CatchVault.PriceDislocated.selector, MARK, 62_000e18));
+        vault.place(address(pool), true, 58_800e18, 0.1e18, _two());
+    }
+
+    function test_invariant7_markWithinDeviationIsQuoted() public {
+        pool.setIndex(61_700e18); // 2.8%: inside the 3% band
+        vault.place(address(pool), true, 58_800e18, 0.1e18, _two());
+    }
+
+    function test_invariant7_staleIndexRefusesPlacement() public {
+        uint256 t = block.timestamp - AGE - 1;
+        pool.setIndexTime(t);
+        vm.expectRevert(abi.encodeWithSelector(CatchVault.IndexStale.selector, t, block.timestamp));
+        vault.place(address(pool), true, 58_800e18, 0.1e18, _two());
+    }
+
+    function test_invariant7_unreadableIndexRefusesPlacement() public {
+        pool.setIndexReverts(true);
+        vm.expectRevert(abi.encodeWithSelector(CatchVault.IndexStale.selector, 0, block.timestamp));
+        vault.place(address(pool), true, 58_800e18, 0.1e18, _two());
+    }
+
+    function test_invariant7_dislocationReleasesOnRefresh() public {
+        uint64 id = vault.place(address(pool), true, 58_800e18, 0.1e18, _two());
+        pool.setIndex(56_000e18);
+        vm.expectEmit(true, true, false, true, address(vault));
+        emit CatchVault.Released(id, address(pool), 6);
+        assertFalse(vault.refresh(id));
+    }
+
+    /// Attack: push the perp's mark through the vault's bid so a liquidation fills it at a
+    /// manufactured price. Moving the mark away from the index releases the order first.
+    function test_attack_markPushedAwayFromIndexReleasesInTheSameCallback() public {
+        uint64 id = vault.place(address(pool), true, 58_800e18, 0.1e18, _one(l1));
+        pool.setMark(58_900e18); // the book is pushed down toward our bid; the index stays at 60,000
+        pool.setIndex(MARK);
+        _event(l1); // any backer update re-checks
+        assertFalse(vault.getSlot(id).live, "released before it could be filled at a pushed price");
+    }
+
+    function test_priceStatus_reportsEachState() public {
+        (uint8 st,,,) = vault.priceStatus(address(pool));
+        assertEq(st, 0);
+        pool.setIndex(70_000e18);
+        (st,,,) = vault.priceStatus(address(pool));
+        assertEq(st, 2);
+        pool.setIndex(0);
+        pool.setIndexTime(1);
+        (st,,,) = vault.priceStatus(address(pool));
+        assertEq(st, 1);
+    }
+
+    // ------------------------------------------------------------ invariant 8: redeem delay
+
+    function test_invariant8_redeemLockedUntilTheDelayPasses() public {
+        vm.prank(bob);
+        uint256 shares = vault.deposit(10_000e18, bob);
+        uint256 until = block.timestamp + DELAY;
+        assertEq(vault.unlockAt(bob), until);
+        vm.expectRevert(abi.encodeWithSelector(CatchVault.Locked.selector, until));
+        vm.prank(bob);
+        vault.redeem(shares, bob);
+        vm.warp(until);
+        vm.prank(bob);
+        vault.redeem(shares, bob);
+    }
+
+    function test_invariant8_lockedSharesCannotBeMovedToAnUnlockedAddress() public {
+        vm.prank(bob);
+        vault.deposit(10_000e18, bob);
+        vm.expectRevert(abi.encodeWithSelector(CatchVault.Locked.selector, block.timestamp + DELAY));
+        vm.prank(bob);
+        vault.transfer(alice, 1e18);
+        vm.prank(bob);
+        vault.approve(keeper, type(uint256).max);
+        vm.expectRevert(abi.encodeWithSelector(CatchVault.Locked.selector, block.timestamp + DELAY));
+        vm.prank(keeper);
+        vault.transferFrom(bob, keeper, 1e18);
+    }
+
+    function test_invariant8_depositForSomeoneElseReverts() public {
+        vm.expectRevert(CatchVault.DepositForOther.selector);
+        vm.prank(bob);
+        vault.deposit(1e18, alice);
+    }
+
+    /// Receiving shares from an unlocked holder does not lock the receiver.
+    function test_invariant8_receivedSharesAreNotLocked() public {
+        vm.prank(alice);
+        vault.transfer(bob, 1_000e18);
+        assertEq(vault.unlockAt(bob), 0);
+        vm.prank(bob);
+        vault.redeem(1_000e18, bob);
+    }
+
+    /// Attack: buy shares just before a catch everyone can see coming, sell just after the
+    /// mark-to-market gain. The delay keeps the buyer exposed through the unwind.
+    function test_attack_depositAroundAVisibleCatchCannotLeaveAtOnce() public {
+        uint64 id = vault.place(address(pool), true, 58_800e18, 0.1e18, _one(l1));
+        vm.prank(bob);
+        uint256 shares = vault.deposit(50_000e18, bob);
+        pool.fill(vault.getSlot(id).orderId, 0.1e18); // the catch lands, below the mark
+        vm.expectRevert(abi.encodeWithSelector(CatchVault.Locked.selector, block.timestamp + DELAY));
+        vm.prank(bob);
+        vault.redeem(shares, bob);
+    }
+
+    function test_constructor_rejectsBadLimits() public {
+        uint256[7] memory l = _limits();
+        l[3] = 0;
+        vm.expectRevert(bytes("oi cap"));
+        new CatchVault(IMarginBank(address(bank)), l);
+        l = _limits();
+        l[4] = 10_000;
+        vm.expectRevert(bytes("index deviation"));
+        new CatchVault(IMarginBank(address(bank)), l);
+        l = _limits();
+        l[6] = 8 days;
+        vm.expectRevert(bytes("redeem delay"));
+        new CatchVault(IMarginBank(address(bank)), l);
     }
 }
