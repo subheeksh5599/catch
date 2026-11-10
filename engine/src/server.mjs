@@ -41,7 +41,16 @@ async function serveFile(res, base, rel) {
 }
 
 const routes = {
-  "/api/status": () => svc.status(),
+  "/api/status": async () => {
+    // the head moves without a market snapshot; refresh it at most every 5 seconds in the background
+    // so a slow RPC never holds up the response (the first call waits once so the head is set).
+    if (!svc.headAt || Date.now() - svc.headAt > 5_000) {
+      svc.headAt = Date.now();
+      const read = svc.client.getBlockNumber().then((h) => { svc.head = h; }).catch(() => {});
+      if (svc.head == null) await read;
+    }
+    return svc.status();
+  },
   "/api/markets": () => svc.marketsSummary(),
   "/api/liquidations": () => svc.liquidations,
   "/api/vault": () => ({ deployment: svc.deployment, state: svc.vault, events: svc.vaultEvents ?? [] }),
@@ -51,7 +60,7 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, "http://x");
   const p = url.pathname;
   try {
-    if (routes[p]) return send(res, 200, routes[p]());
+    if (routes[p]) return send(res, 200, await routes[p]());
     if (p.startsWith("/api/map/")) {
       const pool = p.slice("/api/map/".length).toLowerCase();
       const m = svc.maps.get(pool);

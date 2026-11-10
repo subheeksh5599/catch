@@ -15,7 +15,7 @@ const client = publicClient(net);
 const art = JSON.parse(readFileSync(new URL("../../../contracts/out/CatchVault.sol/CatchVault.json", import.meta.url), "utf8"));
 const FROM = "0x00000000000000000000000000000000000ca7c4";
 
-const data = encodeDeployData({ abi: art.abi, bytecode: art.bytecode.object, args: [net.addresses.marginBank, 2500n, 1000n, 30n] });
+const data = encodeDeployData({ abi: art.abi, bytecode: art.bytecode.object, args: [net.addresses.marginBank, [5000n, 2500n, 30n, 200n, 150n, 120n, 3600n]] });
 const { data: runtime } = await client.call({ account: FROM, data, gas: 200_000_000n });
 console.log("constructor ran against the live MarginBank; runtime bytes", (runtime.length - 2) / 2);
 
@@ -25,6 +25,8 @@ const abi = parseAbi([
   "function liquidationPrice(address account, address pool) view returns (uint256)",
   "function ASSET() view returns (address)",
   "function ENGINE() view returns (address)",
+  "function priceStatus(address pool) view returns (uint8 status, uint256 mark, uint256 index, uint256 updatedAt)",
+  "function openInterestCap(address pool) view returns (uint256)",
 ]);
 let pin; // block the comparison is pinned to, so chain and engine see the same state
 const call = async (functionName, args = []) => {
@@ -55,5 +57,7 @@ for (const c of picks) {
     console.log(c.isBid ? "bid" : "ask", a.slice(0, 10), "engine", mine.lo, mine.hi, "| contract", lo, hi, "liq", liq, ok ? "contains price" : "MISS");
   }
 }
+const [pst, pmark, pindex] = await call("priceStatus", [pool]);
+console.log("priceStatus", pst, "mark", pmark, "index", pindex, "| openInterestCap", await call("openInterestCap", [pool]));
 console.log(`${agree}/${checked} backers' on-chain windows contain the proposed price; ${same}/${checked} identical to the wei`);
 process.exit(agree === checked ? 0 : 1);

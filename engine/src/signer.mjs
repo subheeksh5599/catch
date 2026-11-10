@@ -10,7 +10,8 @@ export function loadAccount() {
   const file = process.env.CATCH_KEY_FILE || join(homedir(), ".catch", "deployer.key");
   const mode = statSync(file).mode & 0o077;
   if (mode) throw new Error(`${file} is readable by others; chmod 600 it`);
-  return privateKeyToAccount(readFileSync(file, "utf8").trim());
+  const raw = readFileSync(file, "utf8").trim();
+  return privateKeyToAccount(raw.startsWith("0x") ? raw : `0x${raw}`);
 }
 
 export function walletFor(net, account) {

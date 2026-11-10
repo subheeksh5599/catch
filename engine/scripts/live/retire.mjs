@@ -23,7 +23,8 @@ let shares = await rd("balanceOf", [account.address]);
   const st = await client.readContract({ address: net.addresses.marginBank, abi: bankAbi, functionName: "getAccountState", args: [vault] });
   const [assets, supply] = await Promise.all([rd("totalAssets"), rd("totalSupply")]);
   const freeShares = (st.unlockedCollateralBalance * 98n / 100n) * supply / assets;
-  if (freeShares < shares) shares = freeShares;
+  // REDEEM_ALL=1 when the vault holds no position: the redemption itself cancels resting orders
+  if (!process.env.REDEEM_ALL && freeShares < shares) shares = freeShares;
 }
 if (shares > 0n) {
   const gas = await client.estimateContractGas({ account, address: vault, abi: vaultAbi, functionName: "redeem", args: [shares, account.address] });

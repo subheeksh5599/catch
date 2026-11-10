@@ -1,16 +1,18 @@
 // Deploy CatchVault on a network and record it in deployments/<network>.json.
 //   node scripts/live/deploy.mjs [network] [marketCapBps] [clusterCapBps] [unwindSpreadBps]
+//        [oiCapBps] [maxIndexDeviationBps] [maxIndexAgeSeconds] [redeemDelaySeconds]
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { encodeDeployData } from "viem";
 import { NETWORKS, publicClient, vaultAbi } from "../../src/chain.mjs";
 import { loadAccount, walletFor } from "../../src/signer.mjs";
 
-const [netKey = "hideki", mcap = "2500", ccap = "1000", spread = "30"] = process.argv.slice(2);
+const [netKey = "hideki", mcap = "2500", ccap = "1000", spread = "30", oiCap = "200", dev = "150", age = "120", delay = "3600"] = process.argv.slice(2);
 const net = NETWORKS[netKey];
 const account = loadAccount();
 const client = publicClient(net), wallet = walletFor(net, account);
 const art = JSON.parse(readFileSync(new URL("../../../contracts/out/CatchVault.sol/CatchVault.json", import.meta.url), "utf8"));
-const args = [net.addresses.marginBank, BigInt(mcap), BigInt(ccap), BigInt(spread)];
+const limits = [mcap, ccap, spread, oiCap, dev, age, delay].map(BigInt);
+const args = [net.addresses.marginBank, limits];
 const data = encodeDeployData({ abi: art.abi, bytecode: art.bytecode.object, args });
 
 const gas = await client.estimateGas({ account: account.address, data });
@@ -30,7 +32,10 @@ const rec = {
   deployTx: hash,
   deployBlock: Number(r.blockNumber),
   operator: account.address,
-  args: { marginBank: args[0], marketCapBps: Number(mcap), clusterCapBps: Number(ccap), unwindSpreadBps: Number(spread) },
+  args: {
+    marginBank: args[0], marketCapBps: Number(mcap), clusterCapBps: Number(ccap), unwindSpreadBps: Number(spread),
+    oiCapBps: Number(oiCap), maxIndexDeviationBps: Number(dev), maxIndexAgeSeconds: Number(age), redeemDelaySeconds: Number(delay),
+  },
   readBack: { bank, asset },
   txs: [],
 };

@@ -1,7 +1,7 @@
 // The engine's live state: markets, per-market liquidation snapshots, the venue's liquidation
 // history, and (once deployed) the vault. Everything here is read from the chain or the venue's
 // indexer; nothing is invented. Values leave this module as plain JSON numbers/strings.
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { parseEventLogs } from "viem";
 import { SomniaMarkets } from "@somnia-chain/markets-sdk";
 import { NETWORKS, publicClient, vaultAbi, erc20Abi, bankAbi, poolAbi } from "./chain.mjs";
@@ -16,6 +16,18 @@ const STAGES = ["OrderCancellation", "CLOBPartial", "BidderTakeover", "Insurance
 export function loadDeployment(netKey) {
   const p = new URL(`../../deployments/${netKey}.json`, import.meta.url);
   return existsSync(p) ? JSON.parse(readFileSync(p, "utf8")) : null;
+}
+
+/** Retired vaults of a network (deployments/<net>-vN.json), oldest first, as the record states them. */
+export function loadRetired(netKey) {
+  const dir = new URL("../../deployments/", import.meta.url);
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .map((f) => f.match(new RegExp(`^${netKey}-(v\\d+)\\.json$`)))
+    .filter(Boolean)
+    .map((m) => ({ tag: m[1], rec: JSON.parse(readFileSync(new URL(m[0], dir), "utf8")) }))
+    .sort((a, b) => Number(a.tag.slice(1)) - Number(b.tag.slice(1)))
+    .map(({ tag, rec }) => ({ tag, vault: rec.vault, deployBlock: rec.deployBlock, deployTx: rec.deployTx, retired: rec.retired ?? null, performance: rec.performance ?? null }));
 }
 
 export class CatchService {
@@ -278,6 +290,9 @@ export class CatchService {
     const [totalAssets, totalSupply, pools, marketCap, clusterCap, spread, asset] = await Promise.all([
       rd("totalAssets"), rd("totalSupply"), rd("pools"), rd("MARKET_CAP_BPS"), rd("CLUSTER_CAP_BPS"), rd("UNWIND_SPREAD_BPS"), rd("ASSET"),
     ]);
+    // v5 limits; a vault deployed before them answers with no data, and the fields stay null
+    const opt = (fn) => rd(fn).then(Number).catch(() => null);
+    const [oiCapBps, maxDevBps, maxAge, redeemDelay] = await Promise.all([opt("OI_CAP_BPS"), opt("MAX_INDEX_DEVIATION_BPS"), opt("MAX_INDEX_AGE"), opt("REDEEM_DELAY")]);
     const state = await this.client.readContract({ address: this.net.addresses.marginBank, abi: bankAbi, functionName: "getAccountState", args: [v] });
     const markets = await Promise.all(pools.map(async (pool) => {
       const [ids, exposure, pos, snap] = await Promise.all([
@@ -290,7 +305,13 @@ export class CatchService {
       const raw = await Promise.all(ids.map((id) => rd("getSlot", [id])));
       const slots = raw.map((s, i) => ({ id: Number(ids[i]), side: s.isBid ? "bid" : "ask", unwind: s.unwind, price: num(s.price), quantity: num(s.quantity, Number(oneBase)), notional: num((s.price * s.quantity) / oneBase), orderId: s.orderId.toString(), backers: s.backers }));
       const m = this.markets.get(pool.toLowerCase());
-      return { pool, symbol: m?.symbol ?? pool, exposure: num(exposure), position: { size: num(pos.size < 0n ? -pos.size : pos.size, Number(oneBase)) * (pos.size < 0n ? -1 : 1), entry: num(pos.avgEntryPrice) }, slots };
+      let oiCap = null, price = null;
+      if (oiCapBps != null) {
+        const [cap, ps] = await Promise.all([rd("openInterestCap", [pool]).catch(() => null), rd("priceStatus", [pool]).catch(() => null)]);
+        oiCap = num(cap);
+        if (ps) price = { status: Number(ps[0]), mark: num(ps[1]), index: num(ps[2]), updatedAt: Number(ps[3]) };
+      }
+      return { pool, symbol: m?.symbol ?? pool, exposure: num(exposure), oiCap, price, position: { size: num(pos.size < 0n ? -pos.size : pos.size, Number(oneBase)) * (pos.size < 0n ? -1 : 1), entry: num(pos.avgEntryPrice) }, slots };
     }));
     this.vault = {
       address: v,
@@ -304,9 +325,12 @@ export class CatchService {
       marketCapBps: Number(marketCap),
       clusterCapBps: Number(clusterCap),
       unwindSpreadBps: Number(spread),
+      oiCapBps, maxIndexDeviationBps: maxDevBps, maxIndexAgeSeconds: maxAge, redeemDelaySeconds: redeemDelay,
       locked: num(state.lockedCollateral),
       free: num(state.unlockedCollateralBalance),
       markets,
+      history: (d.navHistory || []).slice(-500),
+      retired: loadRetired(this.net.key),
       updatedAt: Date.now(),
     };
     await this.refreshVaultEvents();

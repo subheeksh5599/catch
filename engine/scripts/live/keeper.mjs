@@ -38,6 +38,13 @@ async function send(kind, functionName, args, extra = {}) {
   } catch (e) {
     const rev = e instanceof BaseError ? e.walk((x) => x instanceof ContractFunctionRevertedError) : null;
     log(kind, "refused", rev?.data?.errorName ?? (e.shortMessage || e.message).slice(0, 200), rev?.data?.args?.map(String).join(",") ?? "");
+    // a refusal by the contract's own rule is evidence too: keep the error and its numbers
+    if (rev?.data?.errorName) {
+      rec.refusals ??= [];
+      rec.refusals.push({ at: new Date().toISOString(), kind, error: rev.data.errorName, args: rev.data.args?.map(String) ?? [], ...extra });
+      rec.refusals = rec.refusals.slice(-300);
+      save();
+    }
     return null;
   }
 }
@@ -110,6 +117,7 @@ async function pass(engineSpread, pools) {
       continue;
     }
     const s = await snapshotPool(client, { bank: net.addresses.marginBank, pool });
+    if (passNo === 0) log(pool, "snapshot", s.positions.length, "positions");
     let idle = false;
     for (const isBid of open) {
       // every cited backer needs its own reactivity subscription, so cite only the largest few
@@ -124,6 +132,21 @@ async function pass(engineSpread, pools) {
   }
   if (!argv.includes("--no-subs")) await reconcile({ net, client, wallet, rec, save, log });
   await recordEvidence();
+  await recordNav();
+}
+
+/** Append the vault's assets and supply to rec.navHistory (read at head), at most every
+ *  `nav-every` seconds or whenever either moved, so the dashboard's share-price line is a
+ *  series of real reads rather than a reconstruction. */
+async function recordNav() {
+  const [assets, supply, block] = await Promise.all([rd("totalAssets"), rd("totalSupply"), client.getBlockNumber()]);
+  rec.navHistory ??= [];
+  const last = rec.navHistory.at(-1);
+  const due = !last || Date.now() - Date.parse(last.at) > Number(opt("nav-every", 600)) * 1000;
+  if (!due && last.totalAssets === assets.toString() && last.totalSupply === supply.toString()) return;
+  rec.navHistory.push({ at: new Date().toISOString(), block: Number(block), totalAssets: assets.toString(), totalSupply: supply.toString() });
+  rec.navHistory = rec.navHistory.slice(-2000);
+  save();
 }
 
 /** Scan recent vault events and append on-chain proofs to rec.evidence: every Caught (a forced
@@ -145,6 +168,8 @@ async function recordEvidence() {
   const head = await client.getBlockNumber();
   const from = BigInt(rec.evidenceCursor ?? rec.deployBlock ?? Number(head) - 3000);
   rec.evidence ??= [];
+  // CatchVault release codes, as named in the contract
+const RELEASE_REASON = ["", "filled", "a backer moved out of the window", "replaced by a larger cluster", "freed for a redemption", "repriced", "mark off the index"];
   const known = new Set(rec.evidence.flatMap((e) => (e.txs || []).map((t) => t.tx)));
   for (let a = from; a <= head; a += 1000n) {
     const b = a + 999n > head ? head : a + 999n;
@@ -161,13 +186,13 @@ async function recordEvidence() {
           kind: forced ? "catch" : "fill",
           title: forced ? "A liquidation filled into a vault order" : "A resting order filled and the callback took the position",
           status: "proven", block: at,
-          detail: `${forced ? "The liquidation engine's forced close" : "An ordinary taker order"} filled the vault on ${l.args.pool}; the vault's position became ${l.args.newSize} at average entry ${l.args.avgEntryPrice}, recorded by the reactivity callback in the same block.`,
+          detail: `${forced ? "The liquidation engine's forced close" : "An ordinary taker order"} filled the vault on ${l.args.pool}; the vault's position became ${Number(l.args.newSize) / 1e18} at an average entry of ${Number(l.args.avgEntryPrice) / 1e18}, recorded by the reactivity callback in the same block.`,
           txs: [...(trigger ? [{ label: forced ? "Liquidation" : "Taker order", tx: trigger.tx }] : []), { label: byCallback ? "Reactivity callback (onEvent)" : "Transaction", tx: l.transactionHash }],
         });
       } else if (l.eventName === "Unwinding") {
         rec.evidence.push({ kind: "unwind", title: "Caught position offered back at or beyond entry", status: "proven", block: at, detail: `${l.args.isBid ? "Bid" : "Ask"} at ${l.args.price} for ${l.args.quantity}.`, txs: [{ label: byCallback ? "Reactivity callback (onEvent)" : "Transaction", tx: l.transactionHash }] });
       } else if (l.eventName === "Released" && byCallback) {
-        rec.evidence.push({ kind: "auto-cancel", title: "Order cancelled by the reactivity callback", status: "proven", block: at, detail: `Slot ${l.args.slotId} released (reason ${l.args.reason}) in a validator-issued onEvent call after a backer's position changed.`, txs: [{ label: "Reactivity callback (onEvent)", tx: l.transactionHash }] });
+        rec.evidence.push({ kind: "auto-cancel", title: "Order cancelled by the reactivity callback", status: "proven", block: at, detail: `Slot ${l.args.slotId} released (${RELEASE_REASON[Number(l.args.reason)] ?? `reason ${l.args.reason}`}) in a validator-issued onEvent call after a backer's position changed.`, txs: [{ label: "Reactivity callback (onEvent)", tx: l.transactionHash }] });
       } else continue;
       known.add(l.transactionHash);
       log("evidence", l.eventName, l.transactionHash);
