@@ -198,5 +198,6 @@
   "retired": {
     "reason": "caps too small for the 46 USDso the operator holds; redeployed at 50% market / 25% cluster",
     "at": "2026-10-29T07:09:03.318Z"
-  }
+  },
+  "trades": []
 }

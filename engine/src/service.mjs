@@ -27,7 +27,7 @@ export function loadRetired(netKey) {
     .filter(Boolean)
     .map((m) => ({ tag: m[1], rec: JSON.parse(readFileSync(new URL(m[0], dir), "utf8")) }))
     .sort((a, b) => Number(a.tag.slice(1)) - Number(b.tag.slice(1)))
-    .map(({ tag, rec }) => ({ tag, vault: rec.vault, deployBlock: rec.deployBlock, deployTx: rec.deployTx, retired: rec.retired ?? null, performance: rec.performance ?? null }));
+    .map(({ tag, rec }) => ({ tag, vault: rec.vault, deployBlock: rec.deployBlock, deployTx: rec.deployTx, retired: rec.retired ?? null, performance: rec.performance ?? null, trades: rec.trades ?? [] }));
 }
 
 export class CatchService {

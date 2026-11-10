@@ -1258,5 +1258,47 @@
   "retired": {
     "reason": "getOrder on a venue-deleted order reverted inside re-checks; fixed in v3 (try/catch, 3 regression tests)",
     "at": "2026-10-29T07:04:05.208Z"
-  }
+  },
+  "trades": [
+    {
+      "block": 35521738,
+      "tx": "0xab049160f1f5794a79314b1ae4b4b7ce555563b4a197ffb0ccfc7d87d7c63abc",
+      "kind": "taker",
+      "pool": "0xD6Cb1DD58580B84D76068aC21594219ce03aeddf",
+      "base": "ETH",
+      "newSize": -0.0049,
+      "avgEntry": 2415.43,
+      "realizedPnl": 0
+    },
+    {
+      "block": 35527908,
+      "tx": "0xaf8fcd5e3c7e77c97e9ec5a9516b2f127494471b276f5aae6e1e1e7614612cb6",
+      "kind": "taker",
+      "pool": "0xB483ec1fb34996638677c20ab087b16F1896FA53",
+      "base": "SOL",
+      "newSize": -0.11,
+      "avgEntry": 106.14,
+      "realizedPnl": 0
+    },
+    {
+      "block": 35530348,
+      "tx": "0x6e990a3dba6521c77d6db8edf3e8ea76ef007803ab8d0f568960f3a4545a8a52",
+      "kind": "taker",
+      "pool": "0x63B47eD4A7DE0FdE659b0d82441dD74828b7297A",
+      "base": "HYPE",
+      "newSize": 0.15,
+      "avgEntry": 76.8,
+      "realizedPnl": 0
+    },
+    {
+      "block": 36035348,
+      "tx": "0x1256ff4b45a6482f6c75a42bb8b3e3f5fdad3135b6512829235359aed78d6b0d",
+      "kind": "taker",
+      "pool": "0xde9762B6b441133D1314C68864ae4e63A6eE45C7",
+      "base": "AVAX",
+      "newSize": 1.4,
+      "avgEntry": 8.203,
+      "realizedPnl": 0
+    }
+  ]
 }

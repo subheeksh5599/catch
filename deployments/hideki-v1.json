@@ -92,5 +92,6 @@
   "retired": {
     "reason": "superseded by a redeploy with caps sized to the deposit",
     "at": "2026-10-28T14:53:18.001Z"
-  }
+  },
+  "trades": []
 }

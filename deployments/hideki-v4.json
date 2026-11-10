@@ -5021,5 +5021,177 @@
       }
     ],
     "readAt": "2026-11-10T18:18:51.157Z"
-  }
+  },
+  "trades": [
+    {
+      "block": 36101747,
+      "tx": "0x647265b3f0d931a699fa5d052f78c7a50ec4e1c9540091d0a71d9739e761d20b",
+      "kind": "taker",
+      "pool": "0x63B47eD4A7DE0FdE659b0d82441dD74828b7297A",
+      "base": "HYPE",
+      "newSize": -0.14,
+      "avgEntry": 81.61,
+      "realizedPnl": 0
+    },
+    {
+      "block": 36102157,
+      "tx": "0x308e59c9fcc21345ffd89ad62d32942b6bf1a0104226a00ec9f2c4d737dbc393",
+      "kind": "taker",
+      "pool": "0x63B47eD4A7DE0FdE659b0d82441dD74828b7297A",
+      "base": "HYPE",
+      "newSize": 0,
+      "avgEntry": 0,
+      "realizedPnl": 0.4004
+    },
+    {
+      "block": 36104299,
+      "tx": "0x8f6fd950c74e003fad8af14d970deda7416895a16908d385bbe9523bc70d2978",
+      "kind": "taker",
+      "pool": "0x63B47eD4A7DE0FdE659b0d82441dD74828b7297A",
+      "base": "HYPE",
+      "newSize": 0,
+      "avgEntry": 0,
+      "realizedPnl": 0.3416
+    },
+    {
+      "block": 36106561,
+      "tx": "0x75c930b7981ab78aaa9ff2cac0f810e46bc9b53c094263d0f59541bcf49c5e31",
+      "kind": "taker",
+      "pool": "0xD6Cb1DD58580B84D76068aC21594219ce03aeddf",
+      "base": "ETH",
+      "newSize": -0.0047,
+      "avgEntry": 2439.62,
+      "realizedPnl": 0
+    },
+    {
+      "block": 36106890,
+      "tx": "0xde48d9ef37118b61198f86dd9d484f0b476df374e82e0917a2a4dbb8074380e9",
+      "kind": "taker",
+      "pool": "0xD6Cb1DD58580B84D76068aC21594219ce03aeddf",
+      "base": "ETH",
+      "newSize": 0,
+      "avgEntry": 0,
+      "realizedPnl": 0.636521
+    },
+    {
+      "block": 36108127,
+      "tx": "0x97512493c513b993bcdb0260a2b7e644c744213b0a9409fbf309be4fbfe50993",
+      "kind": "taker",
+      "pool": "0xD6Cb1DD58580B84D76068aC21594219ce03aeddf",
+      "base": "ETH",
+      "newSize": -0.0048,
+      "avgEntry": 2439.67,
+      "realizedPnl": 0
+    },
+    {
+      "block": 36124406,
+      "tx": "0x40333cc20cbe6995773e3f4d8f717f1b8745872e073d9cba939719cc43aabbad",
+      "kind": "taker",
+      "pool": "0x2a73129F26917124bd2A47a9B355C395C537F050",
+      "base": "ZEC",
+      "newSize": 0.01,
+      "avgEntry": 1055.692,
+      "realizedPnl": 0
+    },
+    {
+      "block": 36124694,
+      "tx": "0x856bdfe7894bc03e8a7e71c7888a2d75592d13d74d88e2e2262de26b1183f04a",
+      "kind": "taker",
+      "pool": "0x2a73129F26917124bd2A47a9B355C395C537F050",
+      "base": "ZEC",
+      "newSize": 0,
+      "avgEntry": 0,
+      "realizedPnl": 1.98394
+    },
+    {
+      "block": 36167755,
+      "tx": "0x050f62c94f6fff02e4710d5bdb4ab1073bc1ea72104bfbd91bcbddfc827b371b",
+      "kind": "liquidation",
+      "pool": "0x63B47eD4A7DE0FdE659b0d82441dD74828b7297A",
+      "base": "HYPE",
+      "newSize": -0.15,
+      "avgEntry": 81.61,
+      "realizedPnl": 0
+    },
+    {
+      "block": 36167771,
+      "tx": "0xb83f067e9a78730dcb1c012a0aab97dec762caefdec3b55fe9b9dafd53789532",
+      "kind": "taker",
+      "pool": "0x63B47eD4A7DE0FdE659b0d82441dD74828b7297A",
+      "base": "HYPE",
+      "newSize": 0,
+      "avgEntry": 0,
+      "realizedPnl": 0.1035
+    },
+    {
+      "block": 36258444,
+      "tx": "0xc3ba1d0cd1310e9e5af8a1d289157f272cffc65035fa0f3667078c4b3c3442b3",
+      "kind": "taker",
+      "pool": "0xB483ec1fb34996638677c20ab087b16F1896FA53",
+      "base": "SOL",
+      "newSize": -0.11,
+      "avgEntry": 105.41,
+      "realizedPnl": 0
+    },
+    {
+      "block": 36316121,
+      "tx": "0xb1d43b41a66a33f1b5c06bd3d9f6f925a258ae02ff74f915d772a9cd8335103c",
+      "kind": "taker",
+      "pool": "0x7058579F3248559963f79AdB937c6De9f953E060",
+      "base": "XRP",
+      "newSize": -8.3,
+      "avgEntry": 1.3695,
+      "realizedPnl": 0
+    },
+    {
+      "block": 36334015,
+      "tx": "0xf4c5bc495a99286cf0bb3963a0865632c825e01cc72c0162fe5824b6930c56b5",
+      "kind": "taker",
+      "pool": "0xB483ec1fb34996638677c20ab087b16F1896FA53",
+      "base": "SOL",
+      "newSize": 0,
+      "avgEntry": 0,
+      "realizedPnl": 0.5544
+    },
+    {
+      "block": 36342129,
+      "tx": "0x4a2c7c1006ae423f32d6b459eeb7d368c56891056abbeb4469e7f991ee8c6023",
+      "kind": "taker",
+      "pool": "0x2a73129F26917124bd2A47a9B355C395C537F050",
+      "base": "ZEC",
+      "newSize": -0.009,
+      "avgEntry": 1322.924,
+      "realizedPnl": 0
+    },
+    {
+      "block": 36344332,
+      "tx": "0x85a2642326a83cfc54de378d4b20ef63139609862883723d7e34780e1eaaa3f6",
+      "kind": "taker",
+      "pool": "0x2a73129F26917124bd2A47a9B355C395C537F050",
+      "base": "ZEC",
+      "newSize": 0,
+      "avgEntry": 0,
+      "realizedPnl": 0.078003
+    },
+    {
+      "block": 36383498,
+      "tx": "0xe10a17ae1e010acf76423ad5784033180eadc757365dbb29d8c20ccc23dfd705",
+      "kind": "taker",
+      "pool": "0x7058579F3248559963f79AdB937c6De9f953E060",
+      "base": "XRP",
+      "newSize": 0,
+      "avgEntry": 0,
+      "realizedPnl": 0.56274
+    },
+    {
+      "block": 36384614,
+      "tx": "0x1c082c01d492b3caf84bc0dead63b9a3a2ac2203cf0f319a7a32af12fe2e981c",
+      "kind": "taker",
+      "pool": "0xDCb0Ad226727b2cE92857F0aF5751389d42B2A3f",
+      "base": "LIT",
+      "newSize": 4.7,
+      "avgEntry": 2.7011,
+      "realizedPnl": 0
+    }
+  ]
 }

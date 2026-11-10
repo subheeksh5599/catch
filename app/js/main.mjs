@@ -371,6 +371,7 @@ async function vaultView() {
     </section>
     <section class="grid main-side">
       <div class="grid" style="align-content:start">
+      ${tradesCard(v, d)}
       <div class="card enter"><div class="card-h" style="padding-bottom:8px"><h2>Exposure by market</h2><span class="hint">limit is the lower of ${v.marketCapBps / 100}% of assets and ${v.oiCapBps != null ? `${v.oiCapBps / 100}% of open interest` : "the market cap"}</span></div>
         <div class="list">${v.markets.length ? v.markets.slice().sort((a, b) => b.exposure - a.exposure).map((m) => {
           const cap = capOf(m);
@@ -451,6 +452,45 @@ function trackRecord(v) {
       ${r.retired?.reason ? `<div class="t3">Replaced: ${esc(r.retired.reason)}</div>` : ""}
     </div>`;
   }).join("")}</div>`;
+}
+
+/** Round trips across every vault: how each position was opened (a liquidation into the vault's
+ *  order, or an ordinary taker), and what the venue booked as realized PnL when it closed. */
+function roundTrips(v, d) {
+  const all = [
+    ...(v.retired || []).flatMap((r) => (r.trades || []).map((t) => ({ ...t, tag: r.tag }))),
+    ...((d?.trades) || []).map((t) => ({ ...t, tag: "current" })),
+  ];
+  const open = new Map(), rows = [];
+  for (const t of all) {
+    const k = `${t.tag}:${t.pool.toLowerCase()}`;
+    if (t.newSize !== 0 && !open.has(k)) { open.set(k, t); continue; }
+    if (t.newSize === 0) {
+      const o = open.get(k);
+      open.delete(k);
+      rows.push({ o, c: t });
+    }
+  }
+  for (const o of open.values()) rows.push({ o, c: null });
+  return rows.sort((a, b) => (b.c?.block ?? b.o?.block ?? 0) - (a.c?.block ?? a.o?.block ?? 0));
+}
+
+function tradesCard(v, d) {
+  const rows = roundTrips(v, d);
+  if (!rows.length) return `<div class="card enter"><div class="card-h"><h2>Trades</h2></div><div class="empty">No fills yet on any vault.</div></div>`;
+  const closed = rows.filter((r) => r.c);
+  const sum = closed.reduce((a, r) => a + r.c.realizedPnl, 0);
+  const won = closed.filter((r) => r.c.realizedPnl > 0).length;
+  return `<div class="card enter"><div class="card-h" style="padding-bottom:8px"><h2>Trades</h2><span class="hint">${closed.length} closed, ${won} in profit, ${sum >= 0 ? "+" : ""}${usd(sum, { compact: false, digits: 2 })} realized, as the venue booked it</span></div>
+    <div class="scroll"><table class="table"><thead><tr><th>Market</th><th>Opened by</th><th class="r">Size</th><th class="r">Entry</th><th class="r">Realized</th><th class="r">Close tx</th></tr></thead><tbody>
+    ${rows.map(({ o, c }) => `<tr>
+      <td>${o ? `<div class="sym"><b>${esc(o.base ?? "?")}</b><span>${o.newSize < 0 ? "short" : "long"}</span></div>` : '<span class="t3">—</span>'}</td>
+      <td>${o ? (o.kind === "liquidation" ? '<span class="badge wait">Liquidation</span>' : '<span class="t2">Taker order</span>') : '<span class="t3">before the record</span>'}</td>
+      <td class="r">${o ? qty(Math.abs(o.newSize)) : "—"}</td>
+      <td class="r">${o ? price(o.avgEntry) : "—"}</td>
+      <td class="r ${c ? (c.realizedPnl >= 0 ? "up" : "down") : "t3"}">${c ? `${c.realizedPnl >= 0 ? "+" : ""}${usd(c.realizedPnl, { compact: false, digits: 4 })}` : "no close recorded"}</td>
+      <td class="r">${c ? txLink(c.tx) : o ? txLink(o.tx) : ""}</td></tr>`).join("")}
+    </tbody></table></div></div>`;
 }
 
 /** On-chain proofs recorded in the deployment file, each with the transactions that show it. */
