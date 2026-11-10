@@ -6,7 +6,8 @@
 
 [![Status](https://img.shields.io/badge/status-live%20on%20Hideki-16a34a)](#live-status)
 [![Network](https://img.shields.io/badge/network-Somnia%20Hideki%20testnet%2050383-4DA2FF)](#live-status)
-[![Contract tests](https://img.shields.io/badge/forge%20tests-75%20passing-16a34a)](#invariants)
+[![Contract tests](https://img.shields.io/badge/forge%20tests-75%20%2B%2011%20invariants-16a34a)](#invariants)
+[![Fuzzing](https://img.shields.io/badge/fuzz-2%2C000%20runs%2C%20200k%20stateful%20calls-16a34a)](#invariants)
 [![Engine tests](https://img.shields.io/badge/engine%20tests-12%20passing-16a34a)](#the-engine)
 ![Stack](https://img.shields.io/badge/Solidity%20%2B%20Somnia%20Reactivity%20%2B%20markets--sdk-1f1f23)
 
@@ -40,6 +41,7 @@ _Recording in progress._
 | Same-block auto-cancel | **Proven, 17 times** | e.g. a test trader closed its HYPE long at tx index 2 of block 35,466,495 (`0x24e2230d…d441`); the validator-issued `onEvent` cancelled the bid it backed at index 16 of the same block (`0x51109d89…bb38`) |
 | Fill → position → unwind | **Proven, 21 times** | every fill was recorded by the callback in its own block, with an unwind rested at or beyond entry, e.g. ETH short at 2,415.43 offered back at 2,324.28 (`0x91db9c26…53be`) |
 | Contract refusing an order on chain | **Observed** | keeper proposals whose backers moved before the send reverted `OutsideBand(account, lo, hi, price)` |
+| Every trade, priced by the venue | **17 fills on v4, every close in profit** | the vault's own MarginBank `PositionUpdated` logs: 8 closes, all positive, +4.66 USDso realized in total; the caught liquidation itself closed for +0.10 (`scripts/live/trades.mjs`, the Trades card on the Vault page) |
 | v4's depositor result | **+21.4%** | 45.90 USDso in, 55.72 USDso back on full redemption (`0x14b6ac0a…8597`), computed from the vault's own `Deposited` and `Redeemed` events by `scripts/live/performance.mjs` |
 | Reactivity | **Live, per account** | one `PositionUpdated` subscription per backing account plus the vault itself, reconciled by the keeper every pass |
 | Dashboard and landing page | **Live** | [catch-backstop.vercel.app](https://catch-backstop.vercel.app), every figure read from Hideki by the engine |
@@ -74,6 +76,7 @@ flowchart TD
 - [Run it](#run-it)
 - [Going live on Hideki](#going-live-on-hideki)
 - [What's real vs pending](#whats-real-vs-pending)
+- [Feedback to the venue](#feedback-to-the-venue)
 - [X posts](#x-posts)
 - [Repository layout](#repository-layout)
 - [How the numbers were measured](#how-the-numbers-were-measured)
@@ -129,7 +132,24 @@ The short-side rule exists because the live venue reports a short's bankruptcy p
 | 7 | No order is placed, and a resting one is released, while the mark is more than `MAX_INDEX_DEVIATION_BPS` from the oracle index or the index is older than `MAX_INDEX_AGE` | `_requireSanePrice`, `priceStatus`, re-check | `test_invariant7_*` (5), `test_priceStatus_reportsEachState` |
 | 8 | New shares cannot be redeemed or transferred for `REDEEM_DELAY`; nobody can deposit for, and so re-lock, someone else | `deposit`, `redeem`, `_move` | `test_invariant8_*` (4) |
 
-`cd contracts && forge test` → 75 passed.
+`cd contracts && forge test` → 75 unit tests plus a stateful suite of 11 invariants, all passing.
+
+Each fuzz test runs 2,000 random inputs. The stateful suite (`test/CatchVault.invariant.t.sol`) runs 2,000 random sequences of 100 calls (200,000 calls) through a handler that does what the real world does to the vault: depositors arrive and leave, shares move, keepers propose good and bad orders, the engine fills them, backers trade or close and Reactivity calls back, the mark drifts, the oracle separates or goes stale, open interest shrinks, time passes. After every call it checks:
+
+| Invariant | Checked after every call |
+|---|---|
+| Supply | total shares equal what depositors hold |
+| No leakage | vault assets equal deposits minus redemptions, to the wei |
+| Fairness | no action lowers the value of an existing share |
+| Lock | no redemption or transfer of locked shares, no deposit into someone else |
+| Caps | every accepted order fit the cluster, market and open-interest caps |
+| Windows | every accepted order sat inside each backer's catch window; after any re-check every resting order still does, unless the mark has reached it (the catch) |
+| Price check | nothing placed on a stale or dislocated price, nothing left resting on one |
+| Entry | an unwind is never priced past entry |
+| Maker only | every order was placed on its own side of the mark |
+| Bounds | at most six live slots per market, all live |
+
+The first run caught an over-strict check in the suite itself: an order whose price the mark has reached is kept on purpose, because that is when the liquidation fills it. The invariant now states the contract's actual rule.
 
 ## Attack → test
 
@@ -168,7 +188,7 @@ The short-side rule exists because the live venue reports a short's bankruptcy p
 | `src/math.mjs` | liquidation solve, bins, at-risk notional, catch window, cluster sweep, order sizing |
 | `src/service.mjs` | markets, maps, the venue's liquidation history, vault state, events, earlier vaults |
 | `src/server.mjs` | `/api/status`, `/api/markets`, `/api/map/:pool`, `/api/liquidations`, `/api/vault`; serves `site/` at `/` and `app/` at `/app/` |
-| `scripts/live/*` | rehearse, fund, deploy, deposit, keeper, liquidator, performance, retire |
+| `scripts/live/*` | rehearse, fund, deploy, deposit, keeper, liquidator, performance, trades, retire |
 
 `npm test` checks the liquidation solve against the SDK's own `perpLiquidationPrice` and every cluster rule (12 tests).
 
@@ -191,7 +211,7 @@ One accent colour marks the vault's own orders and the primary action; red and g
 
 ```bash
 git clone --recurse-submodules https://github.com/subheeksh5599/catch && cd catch
-cd contracts && forge test                      # 75 passed
+cd contracts && forge test                      # 75 unit + 11 invariants (2,000 runs, 200,000 calls), about a minute
 cd ../engine && npm install && npm test          # 12 passed
 npm start                                        # http://127.0.0.1:8787 (site) and /app/ (dashboard), live Hideki data
 ```
@@ -228,11 +248,18 @@ Deployment costs about 104M gas. Every transaction lands in `deployments/hideki.
 | Same-block cancel from a reactivity callback | **Real** | 17 recorded, e.g. block 35,466,495 |
 | Fill handled by the callback, unwind at or beyond entry | **Real** | 21 recorded |
 | A liquidation filled into a Catch order | **Real** | block 36,167,755, a trader outside Catch, liquidated by an address outside Catch |
+| Every closed trade's result | **Real** | 8 closes on v4, all in profit, +4.66 USDso realized as booked by MarginBank |
 | Depositors got more back than they put in | **Real, once** | v4: +21.4% on 45.90 USDso. One vault, small size, testnet; not a forecast |
 | Stage-4 bidder registration | **Not found** | no public registration function on the Hideki engine; one bidder registered |
 | Mainnet | **Pending** | dreamDEX perps are testnet-only today; the same scripts deploy to mainnet when the venue launches there |
 
 A fork test was tried and dropped: neither Somnia RPC serves historical state, so neither Foundry nor anvil can fork it. The rehearsal script replaces it.
+
+## Feedback to the venue
+
+Found while building Catch, in the bounty's format, in [`feedback/`](feedback/):
+
+- [`getBankruptcyPrice` returns the entry price (or less) for every short that is in profit](feedback/bankruptcy-price-shorts-in-profit.md): reproduced on HYPE and BTC with a read-only script, with longs and losing shorts as the control.
 
 ## X posts
 
@@ -249,7 +276,8 @@ engine/       reader, map math, API server, live scripts (Node)
 app/          dashboard (HTML, CSS, ES modules, no build step)
 site/         landing page, reads the same API
 api/          the same API as serverless functions
-deployments/  per-network deployment records, retired vaults, rehearsal output
+deployments/  per-network deployment records, retired vaults, trades, rehearsal output
+feedback/     reports to the venue, each with a read-only reproduction
 ```
 
 ## How the numbers were measured
@@ -257,5 +285,6 @@ deployments/  per-network deployment records, retired vaults, rehearsal output
 - **27% (98 of 363):** `client.listLiquidations({ limit: 1000 })` on 2026-10-22 returned 1,000 rows from 2026-10-20 14:55 UTC to 2026-10-22 07:10 UTC, 363 of them `AccountLiquidated`; 98 had `stageReached 1` and `positionsProcessed 0`.
 - **33.6% (336 of 1,000):** `client.listLiquidations({ kind: "AccountLiquidated", limit: 1000 })` with the same rule, recomputed every 20 s by `engine/src/service.mjs`.
 - **+21.4%:** `scripts/live/performance.mjs hideki v4` sums the vault's `Deposited` and `Redeemed` events from its deploy block.
+- **Trades:** `scripts/live/trades.mjs hideki` reads the receipt of every recorded fill and takes the MarginBank `PositionUpdated` log for the vault: new size, average entry and `realizedPnl` as the venue booked them.
 - **The catch:** the liquidation receipt's LiquidationEngine logs name the liquidated account and the sender; the vault's `Caught` event and the callback transaction sit in the same block.
 - **Map figures:** `engine/scripts/snapshot.mjs` prints them for any market at the current block.
