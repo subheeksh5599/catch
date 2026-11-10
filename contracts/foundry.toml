@@ -12,4 +12,10 @@ shannon = "https://dream-rpc.somnia.network"
 hideki = "https://api.hideki2.infra.testnet.somnia.network"
 
 [fuzz]
-runs = 256
+runs = 2000
+
+# stateful: 2,000 random sequences of 100 calls, every invariant checked after every call
+[invariant]
+runs = 2000
+depth = 100
+fail_on_revert = false
