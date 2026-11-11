@@ -994,6 +994,20 @@
       "price": "7839000000000000000",
       "quantity": "6300000000000000000",
       "backers": 1
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x0a825462ca6a130feb472c48667622cee7cea430",
+      "tx": "0xdecf9900a18a1e3944a63bffa1ff7660d60362c254ef79554f694c780ac3bb10",
+      "block": 47770778,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xbc93e7e886120b11b5e66e7d8dc621ccb6304bed",
+      "tx": "0x805fe0f16188be15ff296595d00938c25e2d26559d3d2e9ab60603ced6813217",
+      "block": 47770827,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -1257,14 +1271,16 @@
       "subscriptionId": "39428439",
       "tx": "0xb98b52a9fc89e5e0428a58a1aa24278755fb68ec94525248492aca9aa3cc78f7",
       "block": 47603394,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0xdecf9900a18a1e3944a63bffa1ff7660d60362c254ef79554f694c780ac3bb10"
     },
     {
       "account": "0xbc93e7e886120b11b5e66e7d8dc621ccb6304bed",
       "subscriptionId": "39428578",
       "tx": "0x5c7631627bb1aa36068e62ffdcf98bd6effe36d4efef8daea0936924569bb72d",
       "block": 47603465,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x805fe0f16188be15ff296595d00938c25e2d26559d3d2e9ab60603ced6813217"
     },
     {
       "account": "0x2e79efc395a232d16c401e7ad6788004fa501772",
@@ -1444,9 +1460,22 @@
           "tx": "0xf79579b312a188ea65b517aa9c89469801506e48a33635f25fef1e9787acf1c9"
         }
       ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 47769120,
+      "detail": "Slot 18 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xa30dd244d7f4ebfab12508f430a496940b800cc877913d49a900e2bbea7e6afd"
+        }
+      ]
     }
   ],
-  "evidenceCursor": 47765965,
+  "evidenceCursor": 47784079,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -1685,6 +1714,24 @@
     {
       "at": "2026-11-11T20:53:41.793Z",
       "block": 47762463,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-11T21:05:00.392Z",
+      "block": 47769271,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-11T21:16:18.090Z",
+      "block": 47776042,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-11T21:26:58.689Z",
+      "block": 47782436,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
