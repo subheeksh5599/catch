@@ -1008,6 +1008,109 @@
       "tx": "0x805fe0f16188be15ff296595d00938c25e2d26559d3d2e9ab60603ced6813217",
       "block": 47770827,
       "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xe8395c0211d97a2f5ad76c57ba22cc43a928c3f1",
+      "tx": "0xac70b0ef7d58767b7b7a251b69e3e0075f188ae3c4c099499eb92caacfe29b53",
+      "block": 47822472,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xed8598f91fc8eca9cff6f0f40bac23cc1a83cbf8",
+      "tx": "0x9ec8b6076b0d7b739c59220e37e75304059635b3f662f96856c781b19cca198e",
+      "block": 47822503,
+      "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0x15ccea7c0dd4271955e56ac5c826c63eedeff543e58494925fb908b6b9c3f382",
+      "block": 47825353,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": false,
+      "price": "4004200000000000000",
+      "quantity": "14100000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x868ce1bf2841b2af90711d4a0950f0b44a80ce07",
+      "tx": "0xd20a842cbe847fa0cccdc66b9c336bd652ff0ed01216495e2e522a9554b856ff",
+      "block": 47825926,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xe8395c0211d97a2f5ad76c57ba22cc43a928c3f1",
+      "tx": "0x03967f765bee23897d9001c5e631f9013c7f876cee1c241657ce27326cd74e34",
+      "block": 47825986,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x27e5a7f56c7bc58e558d1953968f7cb13eb4a852",
+      "tx": "0x285f21cae50af909fb7362cbdae4f48b539945a78b07a7691e5d66ac262dd9d7",
+      "block": 47828400,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xdd2ff058d43a6fb0bc0bc2612d5d8a8652b236bc",
+      "tx": "0x614de45afd5558608eab0a1780bf2c1c19f20f9c5a23125a867d22cf8b34850c",
+      "block": 47828442,
+      "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0x4534c3816f3219b5d813510d1db355f1a401da8fb2906db0cad1c94cc6e52d0c",
+      "block": 47830285,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": true,
+      "price": "3372100000000000000",
+      "quantity": "16800000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x214373705e94b4d4a1096b9a1ff5eaeebe86d9cf",
+      "tx": "0x4dce943b23d9302d89f740b18dc59a1f9875064b08f3e58ae499dd00446f201f",
+      "block": 47830833,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xdd2ff058d43a6fb0bc0bc2612d5d8a8652b236bc",
+      "tx": "0x4c70fc32a8b6e25c3fafd214ff17092ea22f5a29c9bcb2ac7c5e2c50f83b00bf",
+      "block": 47830902,
+      "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0x13841c7cc8e84e4ef30c1761a54168385ceacd679f917b9af7598ddea47ccafd",
+      "block": 47833638,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": false,
+      "price": "3922400000000000000",
+      "quantity": "14400000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xe8395c0211d97a2f5ad76c57ba22cc43a928c3f1",
+      "tx": "0xf16fa07a186542fe251160a51b12853006636a958489b7d9ba154d573171e084",
+      "block": 47835106,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xa5a270d0ad550ac7432a3966765546c5e42b1682",
+      "tx": "0xa50e0c12b5c03dc89634bc4fa215f6b9698a6053e05fa69578cea6d50d538cd5",
+      "block": 47836234,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -1351,14 +1454,16 @@
       "subscriptionId": "39604672",
       "tx": "0x242b712dad1f10fab0b281bbcf960f8a7ed2bc18e1c775574fa386aa174e5955",
       "block": 47712285,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0xac70b0ef7d58767b7b7a251b69e3e0075f188ae3c4c099499eb92caacfe29b53"
     },
     {
       "account": "0xed8598f91fc8eca9cff6f0f40bac23cc1a83cbf8",
       "subscriptionId": "39604769",
       "tx": "0x90965481c8db3df05465b2e6e3d04696cc1b490f2bac99968684cce731b30787",
       "block": 47712344,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x9ec8b6076b0d7b739c59220e37e75304059635b3f662f96856c781b19cca198e"
     },
     {
       "account": "0x1efd0cae1463018c93a60d15c17d29898febe063",
@@ -1372,13 +1477,51 @@
       "subscriptionId": "39674153",
       "tx": "0x4ae28d3aff572b0db628ab7c6f3d36e3663bf5c9d30997150ea0dfcaf027b873",
       "block": 47755250,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x285f21cae50af909fb7362cbdae4f48b539945a78b07a7691e5d66ac262dd9d7"
     },
     {
       "account": "0xdd2ff058d43a6fb0bc0bc2612d5d8a8652b236bc",
       "subscriptionId": "39674221",
       "tx": "0x0bd8fea4a709979054b15102a2a252ae9d5e9b8e426f4cb3195f64a861c4dc3a",
       "block": 47755296,
+      "status": "removed",
+      "removedTx": "0x614de45afd5558608eab0a1780bf2c1c19f20f9c5a23125a867d22cf8b34850c"
+    },
+    {
+      "account": "0x868ce1bf2841b2af90711d4a0950f0b44a80ce07",
+      "subscriptionId": "39788432",
+      "tx": "0xd20a842cbe847fa0cccdc66b9c336bd652ff0ed01216495e2e522a9554b856ff",
+      "block": 47825926,
+      "status": "active"
+    },
+    {
+      "account": "0xe8395c0211d97a2f5ad76c57ba22cc43a928c3f1",
+      "subscriptionId": "39788526",
+      "tx": "0x03967f765bee23897d9001c5e631f9013c7f876cee1c241657ce27326cd74e34",
+      "block": 47825986,
+      "status": "removed",
+      "removedTx": "0xf16fa07a186542fe251160a51b12853006636a958489b7d9ba154d573171e084"
+    },
+    {
+      "account": "0x214373705e94b4d4a1096b9a1ff5eaeebe86d9cf",
+      "subscriptionId": "39796373",
+      "tx": "0x4dce943b23d9302d89f740b18dc59a1f9875064b08f3e58ae499dd00446f201f",
+      "block": 47830833,
+      "status": "active"
+    },
+    {
+      "account": "0xdd2ff058d43a6fb0bc0bc2612d5d8a8652b236bc",
+      "subscriptionId": "39796491",
+      "tx": "0x4c70fc32a8b6e25c3fafd214ff17092ea22f5a29c9bcb2ac7c5e2c50f83b00bf",
+      "block": 47830902,
+      "status": "active"
+    },
+    {
+      "account": "0xa5a270d0ad550ac7432a3966765546c5e42b1682",
+      "subscriptionId": "39805129",
+      "tx": "0xa50e0c12b5c03dc89634bc4fa215f6b9698a6053e05fa69578cea6d50d538cd5",
+      "block": 47836234,
       "status": "active"
     }
   ],
@@ -1473,9 +1616,48 @@
           "tx": "0xa30dd244d7f4ebfab12508f430a496940b800cc877913d49a900e2bbea7e6afd"
         }
       ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 47821606,
+      "detail": "Slot 29 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x9d2fb7343e2e70b7a6180a6c9cdcb1930cbffbd2617b3cee5fc13d678d0b37c4"
+        }
+      ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 47828250,
+      "detail": "Slot 30 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xc78116746ffe2af1a109b51a621c0c920b4ee6260e0731da2429c3822f8ee72a"
+        }
+      ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 47831363,
+      "detail": "Slot 33 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x599f2d17fdfea54e73c654a4b80b146a5fd72b5f7deae62ab5ff65c15f1ac9a9"
+        }
+      ]
     }
   ],
-  "evidenceCursor": 47820674,
+  "evidenceCursor": 47837356,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -1762,6 +1944,18 @@
     {
       "at": "2026-11-11T22:27:20.684Z",
       "block": 47818646,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-11T22:39:54.886Z",
+      "block": 47826128,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-11T22:56:58.883Z",
+      "block": 47836337,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
