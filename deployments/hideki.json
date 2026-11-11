@@ -842,6 +842,126 @@
       "tx": "0x90965481c8db3df05465b2e6e3d04696cc1b490f2bac99968684cce731b30787",
       "block": 47712344,
       "status": "success"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x8c1067eee8bde9af53262e1b6a98172cd62afbe4aba029a2e51050df49f6068e",
+      "block": 47736779,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xad6cf8fa70b75ac72eafcd717660159c3001ef14dd094c2536d5f3954f231285",
+      "block": 47737011,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x04f960cdf0d82507ea81ab5b534e4b3d6cf5b74bb9308045002faad6aa14c483",
+      "block": 47737163,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x0423323d35149bd829a0aaaa9733bfe0c8677350d75a7ec1d9800801da131ca8",
+      "block": 47739310,
+      "status": "success",
+      "pool": "0xfa9b9e50cc1745113d57893991af200a74c86b6f"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xbdcfed467b6b0d5fcf8a5caa573f09f6af6181a7e5a70118b6da53c02eadb67b",
+      "block": 47739544,
+      "status": "success",
+      "pool": "0xde9762b6b441133d1314c68864ae4e63a6ee45c7"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xab9f4e9228269ca3c98cf51bbc7e653591a9179df54537b60bedcb7e6f47c104",
+      "block": 47739644,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x40dc69ca209f0722eb3d39e3e56e8385a1bce9baa164dc46dd9c75601144fa2a",
+      "block": 47739811,
+      "status": "success",
+      "pool": "0xdcb0ad226727b2ce92857f0af5751389d42b2a3f"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xf06f901ac57b3410441397c11d7e74d1cf7b42922c8b21f6973cf4d5376d5b50",
+      "block": 47742128,
+      "status": "success",
+      "pool": "0x0f464d57c1fd839e4d87a408bbccdab8f77e6394"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x96a044010842ab2575fa074240df50cd17bbf57dee3d965dbaa91bb7118a2c95",
+      "block": 47742243,
+      "status": "success",
+      "pool": "0x2a1822b02039ddf0e293f3f7243673fc03eaf16c"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xc4a3e4abed748f97629fa059fa79a3045084aa71",
+      "tx": "0xdd37c0a08c33685dbb7e641a80a4c46713f0afb4590a812e3f462080c1053365",
+      "block": 47742607,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x1efd0cae1463018c93a60d15c17d29898febe063",
+      "tx": "0x35140ebd2e5e5e978d5fe38899e850b7016b912d729544bf8585d1ef19bf42c1",
+      "block": 47742651,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x6a1b0b3352b831dbc04e8bd90c5365b471cb332e",
+      "tx": "0xbc4a298e16d7a371d2f2a9b3616e461404c0d56589a444b7e3db5a82579bead2",
+      "block": 47742691,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x73063611b705e6e43a5c654e0522e7a5716aae8c",
+      "tx": "0x5ed5cc453895d8fc8a68f23bd1792032ac02245da924475d3b03c0dd007b780e",
+      "block": 47742747,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xdd2ff058d43a6fb0bc0bc2612d5d8a8652b236bc",
+      "tx": "0xd39ca5501803a1082a380e78d8beac3e56574f9972fc1dfff901f6c8097fff69",
+      "block": 47742843,
+      "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0x517dc34f5541f730ace176d90be722752947087330c33986a0bb477222f8c588",
+      "block": 47746380,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": true,
+      "price": "3427300000000000000",
+      "quantity": "16500000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x7fe4a5a25969cbbada981803370af7209e49c09be80a7035676bc4e085464513",
+      "block": 47748521,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad",
+      "isBid": false,
+      "price": "780281000000000000000",
+      "quantity": "72000000000000000",
+      "backers": 1
     }
   ],
   "subscriptions": [
@@ -979,7 +1099,8 @@
       "subscriptionId": "39288234",
       "tx": "0xb831d87b971ece100c55d3cf616cf49d7847822c69302dd093100727dda82730",
       "block": 47516828,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0xdd37c0a08c33685dbb7e641a80a4c46713f0afb4590a812e3f462080c1053365"
     },
     {
       "account": "0x1bfb8d7d946d1a741f2e8a25e0c20edc0c759873",
@@ -1014,14 +1135,16 @@
       "subscriptionId": "39391163",
       "tx": "0x0e3bc8dc2ec538ccb51fc565c29cb36e20ca973357081e4fe0af03146c5f1c1e",
       "block": 47580383,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x35140ebd2e5e5e978d5fe38899e850b7016b912d729544bf8585d1ef19bf42c1"
     },
     {
       "account": "0x6a1b0b3352b831dbc04e8bd90c5365b471cb332e",
       "subscriptionId": "39391288",
       "tx": "0x297597451a216bcd143fa4ddc518c5509bbfb4d654395049ef4f7b2c39a9b0d7",
       "block": 47580469,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0xbc4a298e16d7a371d2f2a9b3616e461404c0d56589a444b7e3db5a82579bead2"
     },
     {
       "account": "0x9bbc32e09a8abf49e1cc74a16d298ac1a11517da",
@@ -1042,14 +1165,16 @@
       "subscriptionId": "39391866",
       "tx": "0x2df3d45e3c20df1d76c9f658a7f44093049b7bd3b924e07efc383c1a3f2e3135",
       "block": 47580815,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x5ed5cc453895d8fc8a68f23bd1792032ac02245da924475d3b03c0dd007b780e"
     },
     {
       "account": "0xdd2ff058d43a6fb0bc0bc2612d5d8a8652b236bc",
       "subscriptionId": "39392260",
       "tx": "0x919280e758cd87d1f8d54f44dc9e475d953f01d1c13b5716352387916c6e83c3",
       "block": 47581051,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0xd39ca5501803a1082a380e78d8beac3e56574f9972fc1dfff901f6c8097fff69"
     },
     {
       "account": "0xa80e8d74b1d71d86756fc133d97e07feaf39b12b",
@@ -1268,7 +1393,7 @@
       ]
     }
   ],
-  "evidenceCursor": 47729990,
+  "evidenceCursor": 47742870,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -1483,6 +1608,18 @@
     {
       "at": "2026-11-11T19:58:05.698Z",
       "block": 47729113,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-11T20:09:52.398Z",
+      "block": 47736195,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-11T20:21:18.797Z",
+      "block": 47743061,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
