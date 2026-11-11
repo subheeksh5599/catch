@@ -232,20 +232,28 @@ export function lastCatch(d: Deployment | null | undefined) {
   return (d?.evidence || []).filter((e) => e.kind === "catch" && e.status === "proven").sort((a, b) => (b.block ?? 0) - (a.block ?? 0))[0] ?? null
 }
 
-/** Round trips across every vault: how each position opened, and what it realized on close. */
+/** Round trips across every vault: how each position opened, and what the venue booked when it
+ *  shrank. A fill that grows a position is not a close, whatever its realizedPnl field says
+ *  (that field can carry funding settled on the update), so only reductions count as results. */
 export function roundTrips(v: VaultState | null | undefined, d: Deployment | null | undefined) {
   const all = [...(v?.retired || []).flatMap((r) => (r.trades || []).map((t) => ({ ...t, tag: r.tag }))), ...(d?.trades || []).map((t) => ({ ...t, tag: "current" }))]
   const open = new Map<string, Trade & { tag: string }>()
+  const last = new Map<string, number>()
   const rows: { o: (Trade & { tag: string }) | null; c: (Trade & { tag: string }) | null }[] = []
   for (const t of all) {
     const k = `${t.tag}:${t.pool.toLowerCase()}`
+    const prev = last.get(k) ?? 0
+    last.set(k, t.newSize)
     if (t.newSize !== 0 && !open.has(k)) {
       open.set(k, t)
       continue
     }
+    const reduced = Math.abs(t.newSize) < Math.abs(prev) && Math.sign(t.newSize) !== -Math.sign(prev)
     if (t.newSize === 0) {
       rows.push({ o: open.get(k) ?? null, c: t })
       open.delete(k)
+    } else if (reduced) {
+      rows.push({ o: open.get(k) ?? null, c: t }) // a partial close; the rest stays open
     }
   }
   for (const o of open.values()) rows.push({ o, c: null })

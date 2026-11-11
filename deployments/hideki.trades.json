@@ -1,0 +1,36 @@
+{
+  "vault": "0x5e5e036370ad8615f4144f17ff6519d1f2db9f70",
+  "readAt": "2026-11-11T08:03:27.802Z",
+  "trades": [
+    {
+      "block": 47235319,
+      "tx": "0x45ddf618efe696b5e194e130bc7941bdf9877bc31546b9f7ddacedacd67bad90",
+      "kind": "taker",
+      "pool": "0x2a1822b02039DDf0e293F3F7243673fc03EAF16c",
+      "base": "ZRO",
+      "newSize": -5.1,
+      "avgEntry": 1.636,
+      "realizedPnl": 0
+    },
+    {
+      "block": 47235324,
+      "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970",
+      "kind": "taker",
+      "pool": "0x2a1822b02039DDf0e293F3F7243673fc03EAF16c",
+      "base": "ZRO",
+      "newSize": -10.2,
+      "avgEntry": 1.636,
+      "realizedPnl": 0.48297
+    },
+    {
+      "block": 47235325,
+      "tx": "0x2c83c389bd09aceb3952906ccbdfe1b86615ffe9f432f18d48fb55c857897f8e",
+      "kind": "taker",
+      "pool": "0x2a1822b02039DDf0e293F3F7243673fc03EAF16c",
+      "base": "ZRO",
+      "newSize": -3.4,
+      "avgEntry": 1.636,
+      "realizedPnl": 0.48297
+    }
+  ]
+}

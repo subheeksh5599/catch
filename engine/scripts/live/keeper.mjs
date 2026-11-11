@@ -100,6 +100,9 @@ async function pass(engineSpread, pools) {
   const ccap = await rd("CLUSTER_CAP_BPS");
   const capNotional = (assets * ccap) / 10_000n;
   for (const pool of pools) {
+    // one market that fails a read (a venue revert, an RPC timeout) is skipped for this pass;
+    // it must never stop the other markets, the subscriptions or the evidence from updating
+    try {
     const live = await rd("liveSlots", [pool]);
     const slots = await Promise.all(live.map((id) => rd("getSlot", [id])));
     const followed = follow.get(pool.toLowerCase());
@@ -129,6 +132,13 @@ async function pass(engineSpread, pools) {
     }
     if (idle) belowMin.set(skipKey, passNo);
     if (live.length && passNo % Number(opt("refresh-every", 90)) === 0) await send("refreshPool", "refreshPool", [pool], { pool });
+    } catch (e) {
+      const msg = (e.shortMessage || e.message || String(e)).split("\n")[0];
+      if (skipped.get(pool.toLowerCase()) !== msg) log(pool, "skipped this pass:", msg);
+      skipped.set(pool.toLowerCase(), msg);
+      continue;
+    }
+    skipped.delete(pool.toLowerCase());
   }
   if (!argv.includes("--no-subs")) await reconcile({ net, client, wallet, rec, save, log });
   await recordEvidence();
@@ -203,6 +213,7 @@ const RELEASE_REASON = ["", "filled", "a backer moved out of the window", "repla
 }
 let passNo = 0;
 const belowMin = new Map();
+const skipped = new Map(); // pool -> last read error, logged once per change
 
 const cfg = await client.readContract({ address: net.addresses.marginBank, abi: systemAbi, functionName: "getSystemConfig" });
 const spread = await client.readContract({ address: cfg.liquidationEngine, abi: engineAbi, functionName: "getMaxLiquidationSpreadBps" });

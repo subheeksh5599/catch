@@ -117,6 +117,163 @@
       "tx": "0xb740de196e1581d899163066c945d898db5aae0c5d10093c52f7428bdb0270ec",
       "block": 46833257,
       "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x27e5a7f56c7bc58e558d1953968f7cb13eb4a852",
+      "tx": "0xa2c161f21b953b29054ce9cf2f59a6cc9fa7722d1cc0b4fc1203d61d96538d38",
+      "block": 47296376,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x792c289c1f945d239d12db3dcfdd841b59e3ba99",
+      "tx": "0xd117feca036da9a96d2e2b06490c996a520be22409652b1bb403f9e4e39ce969",
+      "block": 47296388,
+      "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0x4cfd47ac0e53f03d4f6f5e43404cccbcaccf368df9627debf27a03b2c2a7f0fd",
+      "block": 47298343,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": true,
+      "price": "3348700000000000000",
+      "quantity": "11700000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0xfa7b264cd1299f569d1db1c4e5c808e7fcf309697e41cce51d15ba55495ee0d2",
+      "block": 47298362,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": false,
+      "price": "3877100000000000000",
+      "quantity": "10100000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x468901a0e2e8f492c9ec1eacd03e9026fbb2fe03357aa728df84473a741fe4e3",
+      "block": 47298453,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf",
+      "isBid": true,
+      "price": "1895090000000000000000",
+      "quantity": "20800000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x7bfa46e553c6721708accde56e6ee9d1698818b0d8b5c3ec159c70c87e56b023",
+      "block": 47298474,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf",
+      "isBid": false,
+      "price": "2208120000000000000000",
+      "quantity": "17800000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "place",
+      "tx": "0xbd2fbcc1fc9f0801c47a369f594f033b6c46393c7f1063906939cde26c232289",
+      "block": 47298853,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad",
+      "isBid": false,
+      "price": "771976000000000000000",
+      "quantity": "51000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "place",
+      "tx": "0xa64963fc677ce3a9ebe0ba42f07567c7970214c46cc13b3ec550dcaf00b24b95",
+      "block": 47299011,
+      "status": "success",
+      "pool": "0xfa9b9e50cc1745113d57893991af200a74c86b6f",
+      "isBid": true,
+      "price": "4672900000000000",
+      "quantity": "8400000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x27199f914dfa0c5fcd2249b3120bc5f1cc76338b761653f20ab554b00101fde6",
+      "block": 47299123,
+      "status": "success",
+      "pool": "0xde9762b6b441133d1314c68864ae4e63a6ee45c7",
+      "isBid": true,
+      "price": "7925000000000000000",
+      "quantity": "4900000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "place",
+      "tx": "0xfb92b249f34120ea9ca68b7d0e88e8d56762342a5765cb96a3a6262604693036",
+      "block": 47299141,
+      "status": "success",
+      "pool": "0xde9762b6b441133d1314c68864ae4e63a6ee45c7",
+      "isBid": false,
+      "price": "9196000000000000000",
+      "quantity": "4200000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x88a3bfd543777d66ef574460513d9d821e3857debe2e88116584761412893415",
+      "block": 47299210,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5",
+      "isBid": true,
+      "price": "9549000000000000000",
+      "quantity": "4100000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x83b91e664c5ac6028e91a7a84dfbde73719b866a97a41d2238365fbd23d4bf7f",
+      "block": 47299230,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5",
+      "isBid": false,
+      "price": "10934000000000000000",
+      "quantity": "3600000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "place",
+      "tx": "0xb3bfe1e890d0b4bc6363aa2bc7182fd6b75c85ad1bc2859e35ffa8e5884ebb72",
+      "block": 47299299,
+      "status": "success",
+      "pool": "0xdcb0ad226727b2ce92857f0af5751389d42b2a3f",
+      "isBid": true,
+      "price": "2998700000000000000",
+      "quantity": "13100000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x3f569f69fdafb94bed53d5f635692f3c01b7379056dee090ca83499e4d53448f",
+      "block": 47299360,
+      "status": "success",
+      "pool": "0x2a1822b02039ddf0e293f3f7243673fc03eaf16c",
+      "isBid": true,
+      "price": "1387100000000000000",
+      "quantity": "28400000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x2d44c79cad33fefb2b46f5757c67ad62f56927ff2c5e1b06edbc7dbbea0dc7fc",
+      "block": 47299507,
+      "status": "success",
+      "pool": "0x0f464d57c1fd839e4d87a408bbccdab8f77e6394",
+      "isBid": true,
+      "price": "273100000000000000",
+      "quantity": "144000000000000000000",
+      "backers": 2
     }
   ],
   "evidence": [
@@ -801,6 +958,359 @@
         }
       ],
       "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 47064825,
+      "detail": "Slot 1 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xde9e7191d05303a7a5a0b8dc81fe56d4b977566c3e41baeaaaa067dce3d096e6"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235319,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -5.1 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x45ddf618efe696b5e194e130bc7941bdf9877bc31546b9f7ddacedacd67bad90"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x65f6e6f69144dcafa6e5679209116b40698b2eed08d911068969a8b8e27a9812"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235319,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -5.1 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x45ddf618efe696b5e194e130bc7941bdf9877bc31546b9f7ddacedacd67bad90"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x52e891fdf52e7178f55984dd762922b6690235f248482f9bd8a3b47a617ae45a"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235319,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -10.2 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x45ddf618efe696b5e194e130bc7941bdf9877bc31546b9f7ddacedacd67bad90"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x6e801e2aa4615faeb05389eecdc030f409e6867d06fde519ae856018066f9522"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235319,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -10.2 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x45ddf618efe696b5e194e130bc7941bdf9877bc31546b9f7ddacedacd67bad90"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xead13f653378ec86b342723fce26380c841c0582aa048296a7a0de4fc9faf5f5"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235319,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -15.3 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x45ddf618efe696b5e194e130bc7941bdf9877bc31546b9f7ddacedacd67bad90"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xb285ee0b8e45fb823e2fa7d8cca205e237a20635b3e1a1e01e96127d04f83e34"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235319,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -15.3 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x45ddf618efe696b5e194e130bc7941bdf9877bc31546b9f7ddacedacd67bad90"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xf30f15029315d331b7cfab6aed822f6ce676461cfb409f7640d79da3f17cd534"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -10.2 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x34c96fa798b781e86e9cb1bda0704d45ccdb9d6cc73b17a0ee8a95e3aaca29d8"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -10.2 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x41feae57d1a8a8cb4a66441974d8321c7d24761a462e8d77dc5e1308957f456e"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -5.1 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xc6f8349b590e6c1e2b83e7339aaf9c8142faaa3098c463c1e0d4911a3a1bd0c7"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -5.1 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x2f776daf9cc687bf1f02705532b307b0f286d6dd312e2bfb9a4604c481b916b1"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -10.2 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x163c813d5d7f94960fbc952849b1c59ca3a6813ff5f8a67052c4c8ab672680bd"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -10.2 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x64e4cc7a6c458fcdb5a5eb434c5bc5f51c7d70caa423d37286215bf163fcdefc"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -13.6 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x8085b9046cb42ca5527b158aeecf2daec478f3e476ebf2f89ce654204cc19ac0"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -13.6 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xbff036398a94abe2ce4188821878236ef0dc5b0a4a93c49b0a32b0e5c123abd0"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -8.5 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xcfefd9677817afc60625befeb863ad5728c7106cc29c0784f1846de3d348b0fc"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -8.5 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xe2dc80f7f28d21d4ce7a318d6b495231663e071462225053407a22a065ed2503"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235325,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -3.4 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2c83c389bd09aceb3952906ccbdfe1b86615ffe9f432f18d48fb55c857897f8e"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xc917757ec5c2d445460736a8ed1cc35ba9623be408a852a9e84426b14e341d5e"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235325,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -3.4 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2c83c389bd09aceb3952906ccbdfe1b86615ffe9f432f18d48fb55c857897f8e"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x180a59297077b69e2d8e44a1293b56aac1d594fba137f5fcb82b197fa5f17645"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235325,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became 0 at an average entry of 0, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2c83c389bd09aceb3952906ccbdfe1b86615ffe9f432f18d48fb55c857897f8e"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xb4dc8d4358ecc286db12bf6ec76a76450bda921f2961ad21f73a48b033739483"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235325,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became 0 at an average entry of 0, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2c83c389bd09aceb3952906ccbdfe1b86615ffe9f432f18d48fb55c857897f8e"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xd929dee2d45069c448b0e4ea3691cb71e5ac79f196a12f9466f34fbaf6a2c887"
+        }
+      ]
     }
   ],
   "previous": [
@@ -831,14 +1341,16 @@
       "subscriptionId": "38181286",
       "tx": "0xe3d9920bd3513fdcbe0fb3c4eea24ef4ce999e3a1d5ff8e0449603dcb3ba6208",
       "block": 46833200,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0xa2c161f21b953b29054ce9cf2f59a6cc9fa7722d1cc0b4fc1203d61d96538d38"
     },
     {
       "account": "0x792c289c1f945d239d12db3dcfdd841b59e3ba99",
       "subscriptionId": "38181295",
       "tx": "0x1b7b34b8740b1a6aff029b402fcaf6e26580f16f382e19e862f1f82f50547702",
       "block": 46833218,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0xd117feca036da9a96d2e2b06490c996a520be22409652b1bb403f9e4e39ce969"
     },
     {
       "account": "0x5dc42a7d2e39e53acd0f4edee76bd0f45177ccdc",
@@ -855,12 +1367,18 @@
       "status": "active"
     }
   ],
-  "evidenceCursor": 46839187,
+  "evidenceCursor": 47296394,
   "navHistory": [
     {
       "at": "2026-11-10T19:03:34.685Z",
       "block": 46833367,
       "totalAssets": "155761600000000000000",
+      "totalSupply": "155761600000000000000000"
+    },
+    {
+      "at": "2026-11-11T07:58:21.213Z",
+      "block": 47297789,
+      "totalAssets": "158015460000000000000",
       "totalSupply": "155761600000000000000000"
     }
   ]

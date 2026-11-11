@@ -15,7 +15,15 @@ const STAGES = ["OrderCancellation", "CLOBPartial", "BidderTakeover", "Insurance
 
 export function loadDeployment(netKey) {
   const p = new URL(`../../deployments/${netKey}.json`, import.meta.url);
-  return existsSync(p) ? JSON.parse(readFileSync(p, "utf8")) : null;
+  if (!existsSync(p)) return null;
+  const rec = JSON.parse(readFileSync(p, "utf8"));
+  // the live vault's trades live in their own file: the keeper rewrites the record while it runs
+  const t = new URL(`../../deployments/${netKey}.trades.json`, import.meta.url);
+  if (existsSync(t)) {
+    const tr = JSON.parse(readFileSync(t, "utf8"));
+    if (tr.vault?.toLowerCase() === rec.vault?.toLowerCase()) rec.trades = tr.trades;
+  }
+  return rec;
 }
 
 /** Retired vaults of a network (deployments/<net>-vN.json), oldest first, as the record states them. */

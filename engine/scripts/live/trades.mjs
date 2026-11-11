@@ -1,7 +1,8 @@
 // Every trade each Catch vault made, with the venue's own realized PnL for it.
 // Reads the receipt of every taker and liquidation transaction the keeper recorded as a fill,
 // and takes the MarginBank PositionUpdated log for the vault from it: new size, average entry
-// and realizedPnl as the venue booked them. Writes `trades` into each deployment record.
+// and realizedPnl as the venue booked them. Writes `trades` into each retired record, and the
+// live vault's into <network>.trades.json (the keeper rewrites the live record while it runs).
 //   node scripts/live/trades.mjs [network]
 import { readFileSync, writeFileSync, readdirSync } from "node:fs";
 import { parseEventLogs, formatUnits } from "viem";
@@ -17,6 +18,7 @@ const files = readdirSync(dir).filter((f) => f === `${netKey}.json` || new RegEx
 const ex = new SomniaMarkets({ chain: net.chain, addresses: net.addresses, indexerUrl: net.indexerUrl });
 const markets = Object.values(await ex.loadMarkets());
 const symbolOf = new Map(markets.filter((m) => m.info?.poolAddress).map((m) => [m.info.poolAddress.toLowerCase(), m.base]));
+const decimalsOf = new Map(markets.filter((m) => m.info?.poolAddress).map((m) => [m.info.poolAddress.toLowerCase(), m.info.baseDecimals]));
 
 // Evidence is carried forward into later records (tagged with the vault that made it), so
 // gather every recorded fill once, attribute it to its own vault, then match logs to that vault.
@@ -37,8 +39,9 @@ const oneBase = new Map();
 async function baseUnit(pool) {
   const k = pool.toLowerCase();
   if (!oneBase.has(k)) {
-    const s = await client.readContract({ address: pool, abi: poolAbi, functionName: "getHealthSnapshot" });
-    oneBase.set(k, s.oneBase);
+    // the pool's own figure; if the pool reverts on reads, the indexer's base decimals
+    const s = await client.readContract({ address: pool, abi: poolAbi, functionName: "getHealthSnapshot" }).catch(() => null);
+    oneBase.set(k, s ? s.oneBase : 10n ** BigInt(decimalsOf.get(k) ?? 18));
   }
   return oneBase.get(k);
 }
@@ -67,8 +70,13 @@ for (const [tag, { f, path, rec }] of recs) {
     }
   }
   trades.sort((a, b) => a.block - b.block);
-  rec.trades = trades;
-  writeFileSync(path, JSON.stringify(rec, null, 2) + "\n");
+  if (tag === "current") {
+    // the keeper holds the live record in memory and rewrites it; keep trades beside it
+    writeFileSync(new URL(`${netKey}.trades.json`, dir), JSON.stringify({ vault: rec.vault, readAt: new Date().toISOString(), trades }, null, 2) + "\n");
+  } else {
+    rec.trades = trades;
+    writeFileSync(path, JSON.stringify(rec, null, 2) + "\n");
+  }
   const pnl = trades.reduce((s, t) => s + t.realizedPnl, 0);
   total += pnl;
   console.log(f, rec.vault, `${trades.length} trades`, `realized ${pnl.toFixed(4)} USDso`);
