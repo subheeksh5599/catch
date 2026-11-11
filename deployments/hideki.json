@@ -456,6 +456,165 @@
       "block": 47568586,
       "status": "success",
       "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5"
+    },
+    {
+      "kind": "place",
+      "tx": "0xda3d39a30010cd7921484081e8be5bb01a00c3f71c23a4c7d668b3dcbbebe7d2",
+      "block": 47574458,
+      "status": "success",
+      "pool": "0x0f464d57c1fd839e4d87a408bbccdab8f77e6394",
+      "isBid": true,
+      "price": "282300000000000000",
+      "quantity": "200000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0xd154a802294f35cfa46299202068d15f365e441d3e7611664eac66d147d334e5",
+      "block": 47578298,
+      "status": "success",
+      "pool": "0x2a1822b02039ddf0e293f3f7243673fc03eaf16c",
+      "isBid": true,
+      "price": "1394100000000000000",
+      "quantity": "40500000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x36ca78d22773bcb66833057d4fe5453420ca43bcd65f0d895c2ca25766ad571e",
+      "block": 47578519,
+      "status": "success",
+      "pool": "0x2a1822b02039ddf0e293f3f7243673fc03eaf16c",
+      "isBid": false,
+      "price": "1679000000000000000",
+      "quantity": "33600000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x06949e3db476d06a43fe964ee5a529eae329ce3e",
+      "tx": "0x47c21035fbf6c96e21cc92606c7c60a8b406888b0cc7d3462b012612ba3ca814",
+      "block": 47579252,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x27e5a7f56c7bc58e558d1953968f7cb13eb4a852",
+      "tx": "0xe8ff4677aae688565284055f4bdc40b4e16e36c05699dad46fa6e9c8f02650d6",
+      "block": 47579296,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xd9987fe7e9408767d7c96406c149761a4b74597a",
+      "tx": "0xb0936ba2f1ed93450f4bc19e63ae77347ec6bcf0c944f967d6a68db79925c32f",
+      "block": 47579387,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x7c8626cb1874b507e1192724ecee713e87ed985d",
+      "tx": "0x71c1b47be7ebb4a3db489768083cc74f2b05fc8b364146a24af7ccf2f16fd43d",
+      "block": 47579479,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xe762ec0885130f3ab5b684e5725c53a779ab4b6b",
+      "tx": "0x6c4c0f6c527961f81f2f2375472d93654321e5344302577baf364ed708b9ffd8",
+      "block": 47579525,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xe8395c0211d97a2f5ad76c57ba22cc43a928c3f1",
+      "tx": "0x6c9f51b206340d77bdfdfb2644c2dfd2e1745ceab782b40f451554cf33d84ef4",
+      "block": 47579769,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xf6c72d2cc20f749dc282e59b4f1b579292770278",
+      "tx": "0x71aeab26f4da7aea179861d852837b62412e8edd46790faa5452c9127815d4bf",
+      "block": 47579852,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xf19acf76c9886a38e271a758f558f9ad2e42c84f",
+      "tx": "0x500b8c7b45a4c3b6a9f5d99a44934292f7e9e1d7b9bb068af9191c3df9d42d94",
+      "block": 47579996,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xd9ec48dd31fcb115ff8b6160f07839e4cb7d9092",
+      "tx": "0xc338c87ae8f7451e4cf474a8ba07f2b0fb08b9a35b30f3928011cc7a95fae3a4",
+      "block": 47580145,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x1e2c6dabaabfcca54a2a470b16851e2c7bb5c8c4",
+      "tx": "0x870b7b7210804e5f66d11fc83372380b4172be10707b06c0622af7588e100c97",
+      "block": 47580227,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x214a4343a8faf94585141bbe3e606afa059e6e8d",
+      "tx": "0xce7225a92ae89602c7323b1bf3bdf9ad3c31ff7ce7e413a687fb860afb4b00c7",
+      "block": 47580319,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x1efd0cae1463018c93a60d15c17d29898febe063",
+      "tx": "0x0e3bc8dc2ec538ccb51fc565c29cb36e20ca973357081e4fe0af03146c5f1c1e",
+      "block": 47580383,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x6a1b0b3352b831dbc04e8bd90c5365b471cb332e",
+      "tx": "0x297597451a216bcd143fa4ddc518c5509bbfb4d654395049ef4f7b2c39a9b0d7",
+      "block": 47580469,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x9bbc32e09a8abf49e1cc74a16d298ac1a11517da",
+      "tx": "0x522acb2c28a9778b9b5c74dfb96239c233abc3a6bcdbc45e952d73c86436e2fb",
+      "block": 47580636,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x9720ce3069d0f2a0b593a22a37e9026465310a65",
+      "tx": "0xdeb77b5eab19d7e955de27a4ead3ed1d9203e1be9e0a2c84a142777c87263dee",
+      "block": 47580712,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x73063611b705e6e43a5c654e0522e7a5716aae8c",
+      "tx": "0x2df3d45e3c20df1d76c9f658a7f44093049b7bd3b924e07efc383c1a3f2e3135",
+      "block": 47580815,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xdd2ff058d43a6fb0bc0bc2612d5d8a8652b236bc",
+      "tx": "0x919280e758cd87d1f8d54f44dc9e475d953f01d1c13b5716352387916c6e83c3",
+      "block": 47581051,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xa80e8d74b1d71d86756fc133d97e07feaf39b12b",
+      "tx": "0x0f1a8af4f40a259f04dc26797b862bbc99a06d09046d5b77ac7ba78776f2951d",
+      "block": 47581106,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -471,7 +630,8 @@
       "subscriptionId": "39285894",
       "tx": "0xbe8d6f0d2228bafb73afccc6115ad1f4cd30a31004b81872de79f02399afe659",
       "block": 47515404,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x47c21035fbf6c96e21cc92606c7c60a8b406888b0cc7d3462b012612ba3ca814"
     },
     {
       "account": "0xc063eb1a8b3d8addced248bd6da9fdae09440cb1",
@@ -492,14 +652,16 @@
       "subscriptionId": "39286294",
       "tx": "0xd7e53ac829c88f61b1251d5529baa92fa4488d53b3ca61a393070bc6e9a43cf2",
       "block": 47515654,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0xe8ff4677aae688565284055f4bdc40b4e16e36c05699dad46fa6e9c8f02650d6"
     },
     {
       "account": "0xd9987fe7e9408767d7c96406c149761a4b74597a",
       "subscriptionId": "39286439",
       "tx": "0x9eadfc051232dfaa3f50b52dcafa961b290ad6314cdc81b8c43bc6ad7fecac17",
       "block": 47515735,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0xb0936ba2f1ed93450f4bc19e63ae77347ec6bcf0c944f967d6a68db79925c32f"
     },
     {
       "account": "0x83628022dc18561416f714ec2fcce60c24c1f0c1",
@@ -520,28 +682,32 @@
       "subscriptionId": "39287015",
       "tx": "0xe8cd3e6e44e26a73bd121a5835cefba28e3334a5403cd2923db23cf13daf2837",
       "block": 47516085,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x71c1b47be7ebb4a3db489768083cc74f2b05fc8b364146a24af7ccf2f16fd43d"
     },
     {
       "account": "0xe762ec0885130f3ab5b684e5725c53a779ab4b6b",
       "subscriptionId": "39287112",
       "tx": "0x9ea9ebd63a8f45b0e3e4236c23528fa76b9d26e9a888c2e437b4206eff2e9812",
       "block": 47516148,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x6c4c0f6c527961f81f2f2375472d93654321e5344302577baf364ed708b9ffd8"
     },
     {
       "account": "0xe8395c0211d97a2f5ad76c57ba22cc43a928c3f1",
       "subscriptionId": "39287268",
       "tx": "0x6456245c1681dee842be20c16866028caf0fd8da63b956e3f0d5e2f310cf04af",
       "block": 47516247,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x6c9f51b206340d77bdfdfb2644c2dfd2e1745ceab782b40f451554cf33d84ef4"
     },
     {
       "account": "0xf6c72d2cc20f749dc282e59b4f1b579292770278",
       "subscriptionId": "39287385",
       "tx": "0xe2634f8870cd2a44e5d033a159acf531f9606a3227c1c83f901d976c5ca0487f",
       "block": 47516312,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x71aeab26f4da7aea179861d852837b62412e8edd46790faa5452c9127815d4bf"
     },
     {
       "account": "0xfe0fd6ee75e37f00b9494a1d3f3f3fa512501d85",
@@ -555,7 +721,8 @@
       "subscriptionId": "39287564",
       "tx": "0x1f6a10637a564d9d4c68a3b85b1d9033df33d185cc5d6ab5f34462d51154b83d",
       "block": 47516419,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x500b8c7b45a4c3b6a9f5d99a44934292f7e9e1d7b9bb068af9191c3df9d42d94"
     },
     {
       "account": "0xb02140307dd5e7d15ec795318375d490b3d0d1cc",
@@ -590,6 +757,76 @@
       "subscriptionId": "39316676",
       "tx": "0x4715f422db8baaea017d018e449dc199ebde474fc892eed0227411713da50583",
       "block": 47534392,
+      "status": "active"
+    },
+    {
+      "account": "0xd9ec48dd31fcb115ff8b6160f07839e4cb7d9092",
+      "subscriptionId": "39390770",
+      "tx": "0xc338c87ae8f7451e4cf474a8ba07f2b0fb08b9a35b30f3928011cc7a95fae3a4",
+      "block": 47580145,
+      "status": "active"
+    },
+    {
+      "account": "0x1e2c6dabaabfcca54a2a470b16851e2c7bb5c8c4",
+      "subscriptionId": "39390895",
+      "tx": "0x870b7b7210804e5f66d11fc83372380b4172be10707b06c0622af7588e100c97",
+      "block": 47580227,
+      "status": "active"
+    },
+    {
+      "account": "0x214a4343a8faf94585141bbe3e606afa059e6e8d",
+      "subscriptionId": "39391044",
+      "tx": "0xce7225a92ae89602c7323b1bf3bdf9ad3c31ff7ce7e413a687fb860afb4b00c7",
+      "block": 47580319,
+      "status": "active"
+    },
+    {
+      "account": "0x1efd0cae1463018c93a60d15c17d29898febe063",
+      "subscriptionId": "39391163",
+      "tx": "0x0e3bc8dc2ec538ccb51fc565c29cb36e20ca973357081e4fe0af03146c5f1c1e",
+      "block": 47580383,
+      "status": "active"
+    },
+    {
+      "account": "0x6a1b0b3352b831dbc04e8bd90c5365b471cb332e",
+      "subscriptionId": "39391288",
+      "tx": "0x297597451a216bcd143fa4ddc518c5509bbfb4d654395049ef4f7b2c39a9b0d7",
+      "block": 47580469,
+      "status": "active"
+    },
+    {
+      "account": "0x9bbc32e09a8abf49e1cc74a16d298ac1a11517da",
+      "subscriptionId": "39391566",
+      "tx": "0x522acb2c28a9778b9b5c74dfb96239c233abc3a6bcdbc45e952d73c86436e2fb",
+      "block": 47580636,
+      "status": "active"
+    },
+    {
+      "account": "0x9720ce3069d0f2a0b593a22a37e9026465310a65",
+      "subscriptionId": "39391710",
+      "tx": "0xdeb77b5eab19d7e955de27a4ead3ed1d9203e1be9e0a2c84a142777c87263dee",
+      "block": 47580712,
+      "status": "active"
+    },
+    {
+      "account": "0x73063611b705e6e43a5c654e0522e7a5716aae8c",
+      "subscriptionId": "39391866",
+      "tx": "0x2df3d45e3c20df1d76c9f658a7f44093049b7bd3b924e07efc383c1a3f2e3135",
+      "block": 47580815,
+      "status": "active"
+    },
+    {
+      "account": "0xdd2ff058d43a6fb0bc0bc2612d5d8a8652b236bc",
+      "subscriptionId": "39392260",
+      "tx": "0x919280e758cd87d1f8d54f44dc9e475d953f01d1c13b5716352387916c6e83c3",
+      "block": 47581051,
+      "status": "active"
+    },
+    {
+      "account": "0xa80e8d74b1d71d86756fc133d97e07feaf39b12b",
+      "subscriptionId": "39392351",
+      "tx": "0x0f1a8af4f40a259f04dc26797b862bbc99a06d09046d5b77ac7ba78776f2951d",
+      "block": 47581106,
       "status": "active"
     }
   ],
