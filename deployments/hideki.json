@@ -274,6 +274,28 @@
       "price": "273100000000000000",
       "quantity": "144000000000000000000",
       "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x93405a58436c66d200b7981222379ec5d57fcf3d09f2d7ffe6e7d291f547b453",
+      "block": 47307016,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad",
+      "isBid": true,
+      "price": "630953000000000000000",
+      "quantity": "66000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "place",
+      "tx": "0x3651b15c99a7959d7c4974b9738679571004a017c12e008aafeef78fb9034a2a",
+      "block": 47308457,
+      "status": "success",
+      "pool": "0xde9762b6b441133d1314c68864ae4e63a6ee45c7",
+      "isBid": false,
+      "price": "8715000000000000000",
+      "quantity": "4200000000000000000",
+      "backers": 1
     }
   ],
   "evidence": [
