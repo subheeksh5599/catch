@@ -27,7 +27,7 @@ No admin can move depositor funds, no order rests where a liquidation cannot rea
 
 ## Demo
 
-[![Catch demo: a vault that buys dreamDEX liquidations, on Somnia](https://img.youtube.com/vi/BdENOUNUph8/maxresdefault.jpg)](https://youtu.be/BdENOUNUph8)
+[![Catch demo: a vault that buys dreamDEX liquidations, on Somnia](https://img.youtube.com/vi/BdENOUNUph8/hqdefault.jpg)](https://youtu.be/BdENOUNUph8)
 
 **[Watch the 4:48 walkthrough on YouTube](https://youtu.be/BdENOUNUph8)**: overview, liquidation map, Somnia Agents prices, the vault and its proofs, a live deposit from a wallet, share cards, Telegram alerts and the deposit lock, all on Hideki testnet.
 
