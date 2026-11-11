@@ -46,6 +46,7 @@ _Recording in progress._
 | v4's depositor result | **+21.4%** | 45.90 USDso in, 55.72 USDso back on full redemption (`0x14b6ac0a…8597`), computed from the vault's own `Deposited` and `Redeemed` events by `scripts/live/performance.mjs` |
 | v5's depositor result | **+8.4%** | 155.76 USDso in; share price 1.0835 at retirement. 126.56 USDso paid back (`0x7e23f2bc…802a`, `0x2402c01e…0755`) and 42.21 USDso still inside v5, in open positions with their unwind orders resting |
 | Somnia Agents price check | **Live** | before every order, the keeper reads Somnia Price Feeds, the median that Somnia Agents subcommittees write on chain every 500 ms. It quotes only while that price is under 15 s old, backed by 2+ agents, and the venue mark is within 1.5% of it; refusals are recorded as `AgentPriceCheck`. [More below](#somnia-primitives) |
+| Live alerts | **Telegram** | [t.me/catch_liquidation](https://t.me/catch_liquidation): every catch, every fill, and any stage-4 takeover, posted by `scripts/live/alerts.mjs` from the proven record and the engine's `PositionTakenOver` logs |
 | Reactivity | **Live, per account** | one `PositionUpdated` subscription per backing account plus the vault itself, reconciled by the keeper every pass |
 | Dashboard and landing page | **Live** | [catch-backstop.vercel.app](https://catch-backstop.vercel.app), every figure read from Hideki by the engine |
 

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { LayoutDashboard, Vault, ChartColumn, Rows3, ArrowDownToLine, FileCode2, ArrowLeft } from "lucide-react"
+import { LayoutDashboard, Vault, ChartColumn, Rows3, ArrowDownToLine, FileCode2, ArrowLeft, Send } from "lucide-react"
 import { Logo } from "@/components/logo"
 import { NavMain } from "@/components/nav-main"
 import { useCatch } from "@/lib/api"
@@ -79,6 +79,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <ChainStatus />
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton render={<a href="https://t.me/catch_liquidation" target="_blank" rel="noreferrer" />}>
+              <Send />
+              <span>Live alerts on Telegram</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton render={<a href="/" />}>
               <ArrowLeft />
