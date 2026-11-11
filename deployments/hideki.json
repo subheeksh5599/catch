@@ -1111,6 +1111,45 @@
       "tx": "0xa50e0c12b5c03dc89634bc4fa215f6b9698a6053e05fa69578cea6d50d538cd5",
       "block": 47836234,
       "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x868ce1bf2841b2af90711d4a0950f0b44a80ce07",
+      "tx": "0xb4ce66c37002af1eb04ad66849420f2a8ab9a5e688adb5acc51b004bfc22b2d4",
+      "block": 47848594,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xa5a270d0ad550ac7432a3966765546c5e42b1682",
+      "tx": "0x616b620ca7adb2bee5b5eaf5f0cc20e581a93f9f0208858e0b00e42343fe38db",
+      "block": 47848768,
+      "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0xad285232b8a4436d62e7d40b45e1223162edc2351650d07d3dbb74153c05af43",
+      "block": 47851966,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": false,
+      "price": "3859800000000000000",
+      "quantity": "14700000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x9de4d33716c0d562e2c991e9d79c987e3d8120a8",
+      "tx": "0xf4cc744b04357991f011362f81aeef067d276bbf0b5580e38fc4f02a1dbdc1b2",
+      "block": 47855961,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xd062ee901068dd72ee0e7509fef6f05970611ea3",
+      "tx": "0x94476863cc7abfa11c642a68e7860298c829d5dfb27d6744e47b094c9aceb213",
+      "block": 47855980,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -1493,7 +1532,8 @@
       "subscriptionId": "39788432",
       "tx": "0xd20a842cbe847fa0cccdc66b9c336bd652ff0ed01216495e2e522a9554b856ff",
       "block": 47825926,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0xb4ce66c37002af1eb04ad66849420f2a8ab9a5e688adb5acc51b004bfc22b2d4"
     },
     {
       "account": "0xe8395c0211d97a2f5ad76c57ba22cc43a928c3f1",
@@ -1522,6 +1562,21 @@
       "subscriptionId": "39805129",
       "tx": "0xa50e0c12b5c03dc89634bc4fa215f6b9698a6053e05fa69578cea6d50d538cd5",
       "block": 47836234,
+      "status": "removed",
+      "removedTx": "0x616b620ca7adb2bee5b5eaf5f0cc20e581a93f9f0208858e0b00e42343fe38db"
+    },
+    {
+      "account": "0x9de4d33716c0d562e2c991e9d79c987e3d8120a8",
+      "subscriptionId": "39837064",
+      "tx": "0xf4cc744b04357991f011362f81aeef067d276bbf0b5580e38fc4f02a1dbdc1b2",
+      "block": 47855961,
+      "status": "active"
+    },
+    {
+      "account": "0xd062ee901068dd72ee0e7509fef6f05970611ea3",
+      "subscriptionId": "39837076",
+      "tx": "0x94476863cc7abfa11c642a68e7860298c829d5dfb27d6744e47b094c9aceb213",
+      "block": 47855980,
       "status": "active"
     }
   ],
@@ -1655,9 +1710,22 @@
           "tx": "0x599f2d17fdfea54e73c654a4b80b146a5fd72b5f7deae62ab5ff65c15f1ac9a9"
         }
       ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 47845962,
+      "detail": "Slot 35 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x0b2ba618fd1d77de029d012d797737b625c8804fdf37d4f90f68e4c608b36eeb"
+        }
+      ]
     }
   ],
-  "evidenceCursor": 47837356,
+  "evidenceCursor": 47855989,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -1958,6 +2026,18 @@
       "block": 47836337,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-11T23:11:55.085Z",
+      "block": 47845358,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-11T23:29:44.284Z",
+      "block": 47856038,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
     }
   ],
   "refusals": [
@@ -1986,6 +2066,19 @@
       "venueMark": "3450000000000000000000",
       "agentMark": null,
       "validators": 0
+    },
+    {
+      "at": "2026-11-11T23:15:08.085Z",
+      "kind": "place",
+      "error": "AgentPriceCheck",
+      "args": [
+        "agent price 147.1 s old"
+      ],
+      "pool": "0xdcb0ad226727b2ce92857f0af5751389d42b2a3f",
+      "pair": "LIT/USDC:PERP",
+      "venueMark": "3196439187248000000",
+      "agentMark": "3213704362854661913",
+      "validators": 3
     }
   ]
 }
