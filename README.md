@@ -27,8 +27,9 @@ No admin can move depositor funds, no order rests where a liquidation cannot rea
 
 ## Demo
 
-<!-- demo video: drop the recording here (GitHub renders an mp4 uploaded through the web editor inline) -->
-_Recording in progress._
+[![Catch demo: a vault that buys dreamDEX liquidations, on Somnia](https://img.youtube.com/vi/BdENOUNUph8/maxresdefault.jpg)](https://youtu.be/BdENOUNUph8)
+
+**[Watch the 4:48 walkthrough on YouTube](https://youtu.be/BdENOUNUph8)**: overview, liquidation map, Somnia Agents prices, the vault and its proofs, a live deposit from a wallet, share cards, Telegram alerts and the deposit lock, all on Hideki testnet.
 
 ## Live status
 
@@ -352,10 +353,9 @@ Found while building Catch, in the bounty's format, in [`feedback/`](feedback/):
 
 ## X posts
 
-<!-- 2–3 posts about Catch tagging @DreamDEXSomnia; paste the links here -->
-- _link_
-- _link_
-- _link_
+- [Catch, a vault that buys dreamDEX liquidations](https://x.com/subheeksh/status/2120582581221781825): what it does, the empty-book data and the on-chain results, with the demo video
+- [The stage-4 backstop](https://x.com/subheeksh/status/2120582748847153307): the undocumented bidder interface and the fork replay where the engine picked Catch
+- [What keeps Catch from quoting into a bad price](https://x.com/subheeksh/status/2120583043710845016): the Somnia Agents price check, the contract's caps, and the risks
 
 ## Repository layout
 
