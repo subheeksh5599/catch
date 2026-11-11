@@ -94,7 +94,8 @@ for (;;) {
     events.sort((a, b) => (a.block ?? 0) - (b.block ?? 0));
     if (first && !state.seeded) {
       // start quiet: everything already on record counts as posted, except the last N if asked
-      const keep = backfill ? events.slice(-backfill) : [];
+      // the channel opens with every proven catch (they are rare), plus the last N fills if asked
+      const keep = [...events.filter((e) => e.kind === "catch"), ...(backfill ? events.filter((e) => e.kind === "fill").slice(-backfill) : [])];
       for (const e of events) if (!keep.includes(e)) posted.add(key(e));
       state.seeded = true;
     }
