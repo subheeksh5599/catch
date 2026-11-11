@@ -21,15 +21,16 @@ export async function shareData(kind, id) {
     const catches = (dep?.evidence || []).filter((e) => e.kind === "catch" && e.status === "proven");
     const e = (isHash(id) && catches.find((x) => x.txs?.some((t) => t.tx.toLowerCase() === id.toLowerCase()))) || catches[0];
     if (!e) return null;
-    const size = Math.abs(Number(e.size));
+    const size = Number(Math.abs(Number(e.size)).toPrecision(6));
+    const at = Number(Number(e.price).toPrecision(6));
     return {
       kind,
       id: e.txs?.[0]?.tx,
       eyebrow: "Liquidation caught",
-      headline: `${e.base} ${e.side} · ${size} at ${e.price}`,
+      headline: `${e.base} ${e.side} · ${size} at ${at}`,
       sub: "A real trader's position was force-closed into Catch's resting order. Somnia Reactivity took the position and re-offered it in the same block.",
       stats: [["Block", fmt(e.block, 0)], ["Liquidated", `${e.liquidatedAccount?.slice(0, 6)}…`], ["Vault", e.vaultTag || "live"]],
-      text: `A liquidated ${e.base} ${e.side} on ${TAG} landed in Catch's resting order at ${e.price}. Somnia Reactivity took the position and offered it back in the same block, block ${e.block}.`,
+      text: `A liquidated ${e.base} ${e.side} on ${TAG} landed in Catch's resting order at ${at}. Somnia Reactivity took the position and offered it back in the same block, block ${e.block}.`,
     };
   }
   if (kind === "vault") {

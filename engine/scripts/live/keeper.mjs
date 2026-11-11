@@ -201,7 +201,10 @@ async function fillTrigger(block) {
   const [tx, rc] = await Promise.all([client.getTransaction({ hash: mine.transactionHash }), client.getTransactionReceipt({ hash: mine.transactionHash })]);
   const engine = cfg.liquidationEngine.toLowerCase();
   const liquidation = tx.to?.toLowerCase() === engine || rc.logs.some((x) => x.address.toLowerCase() === engine);
-  return { tx: mine.transactionHash, liquidation };
+  // the liquidated account: the first account-indexed engine log in the same transaction
+  const liqLog = liquidation ? rc.logs.find((x) => x.address.toLowerCase() === engine && x.topics.length > 1) : null;
+  const account = liqLog ? `0x${liqLog.topics[1].slice(26)}` : null;
+  return { tx: mine.transactionHash, liquidation, account, sender: tx.from };
 }
 
 async function recordEvidence() {
@@ -222,11 +225,22 @@ const RELEASE_REASON = ["", "filled", "a backer moved out of the window", "repla
       if (l.eventName === "Caught") {
         const trigger = await fillTrigger(l.blockNumber);
         const forced = trigger && trigger.liquidation;
+        // sizes in the pool's own base unit (BTC is 1e8, most markets 1e18); prices are 1e18
+        const snapC = await client.readContract({ address: l.args.pool, abi: poolAbi, functionName: "getHealthSnapshot" });
+        const sizeC = Number(l.args.newSize) / Number(snapC.oneBase);
+        const entryC = Number(l.args.avgEntryPrice) / 1e18;
+        const baseC = baseOf.get(l.args.pool.toLowerCase()) ?? null;
         rec.evidence.push({
+          base: baseC,
+          side: sizeC < 0 ? "short" : "long",
+          size: sizeC,
+          price: entryC,
+          pool: l.args.pool,
+          ...(forced && trigger.account ? { liquidatedAccount: trigger.account, liquidationSender: trigger.sender } : {}),
           kind: forced ? "catch" : "fill",
           title: forced ? "A liquidation filled into a vault order" : "A resting order filled and the callback took the position",
           status: "proven", block: at,
-          detail: `${forced ? "The liquidation engine's forced close" : "An ordinary taker order"} filled the vault on ${l.args.pool}; the vault's position became ${Number(l.args.newSize) / 1e18} at an average entry of ${Number(l.args.avgEntryPrice) / 1e18}, recorded by the reactivity callback in the same block.`,
+          detail: `${forced ? "The liquidation engine's forced close" : "An ordinary taker order"} filled the vault on ${baseC ?? l.args.pool}; the vault's position became ${sizeC} at an average entry of ${entryC}, recorded by the reactivity callback in the same block.`,
           txs: [...(trigger ? [{ label: forced ? "Liquidation" : "Taker order", tx: trigger.tx }] : []), { label: byCallback ? "Reactivity callback (onEvent)" : "Transaction", tx: l.transactionHash }],
         });
       } else if (l.eventName === "Unwinding") {
