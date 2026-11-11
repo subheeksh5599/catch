@@ -1,7 +1,7 @@
 // Network bindings and the minimal ABIs the engine reads. Every venue signature below is
 // copied from the markets-sdk read ABIs (0.32.1); the vault ABI comes from the Foundry build.
 import { createPublicClient, http, parseAbi, defineChain } from "viem";
-import { SOMNIA_HIDEKI_TESTNET_ADDRESSES, SOMNIA_TESTNET_ADDRESSES } from "@somnia-chain/markets-sdk";
+import { SOMNIA_HIDEKI_TESTNET_ADDRESSES, SOMNIA_TESTNET_ADDRESSES, SOMNIA_MAINNET_ADDRESSES } from "@somnia-chain/markets-sdk";
 import { hidekiTestnet, somniaShannon } from "@somnia-chain/markets-sdk/chains";
 
 export const NETWORKS = {
@@ -23,6 +23,27 @@ export const NETWORKS = {
     indexerUrl: "https://dev.smk.somnia.host/v1/graphql",
     explorer: "https://shannon-explorer.somnia.network",
   },
+};
+
+// Mainnet, for the day dreamDEX perps launch there. The SDK ships no perps manifest for mainnet
+// yet, so the venue's MarginBank comes from the environment; everything else the vault needs
+// (collateral, liquidation engine) it reads from the MarginBank's system config at deploy.
+// Check readiness with: node scripts/live/mainnet-check.mjs
+const MAINNET_CHAIN_ID = Number(process.env.MAINNET_CHAIN_ID || 50321); // Tokyo subchain; 5031 for Global
+const MAINNET_RPC = process.env.MAINNET_RPC || (MAINNET_CHAIN_ID === 5031 ? "https://api.infra.mainnet.somnia.network" : "https://api.tokyo.infra.mainnet.somnia.network");
+NETWORKS.mainnet = {
+  key: "mainnet",
+  label: MAINNET_CHAIN_ID === 5031 ? "Somnia" : "Somnia Tokyo",
+  chain: defineChain({
+    id: MAINNET_CHAIN_ID,
+    name: MAINNET_CHAIN_ID === 5031 ? "Somnia" : "Somnia Tokyo",
+    nativeCurrency: { name: "SOMI", symbol: "SOMI", decimals: 18 },
+    rpcUrls: { default: { http: [MAINNET_RPC] } },
+  }),
+  rpc: MAINNET_RPC,
+  addresses: { ...SOMNIA_MAINNET_ADDRESSES, ...(process.env.MAINNET_MARGIN_BANK ? { marginBank: process.env.MAINNET_MARGIN_BANK } : {}) },
+  indexerUrl: process.env.MAINNET_INDEXER || null,
+  explorer: "https://explorer.somnia.network",
 };
 
 export function publicClient(net) {

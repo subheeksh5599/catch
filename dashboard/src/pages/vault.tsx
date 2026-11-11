@@ -151,6 +151,7 @@ function EarlierVaults({ v }: { v: VaultState }) {
               <b className={`num text-base font-medium ${res >= 0 ? "text-short" : "text-long"}`}>
                 {res >= 0 ? "+" : ""}
                 {pct(res, 1)}
+                {r.lifetimeMs ? <span className="ml-1 text-xs font-normal text-muted-foreground">over {span(r.lifetimeMs)}</span> : null}
               </b>
             </div>
             <div className="text-muted-foreground">
@@ -158,6 +159,9 @@ function EarlierVaults({ v }: { v: VaultState }) {
               {p.stillInside > 0.01 ? <>, {usd(p.stillInside, { compact: false, digits: 2 })} still inside in open positions</> : " on redemption"}
             </div>
             {r.retired?.reason && <div className="text-xs text-muted-foreground">Replaced: {r.retired.reason}</div>}
+            <div>
+              <ShareOnX kind="vault" id={r.tag} label={`Share ${r.tag}'s result`} />
+            </div>
           </div>
         )
       })}
@@ -230,7 +234,10 @@ export function Proofs({ d }: { d: Deployment | null | undefined }) {
             <div key={e.kind} className="grid gap-2 py-3 first:pt-0 last:pb-0">
               <div className="flex items-baseline justify-between gap-3">
                 <b className="text-sm font-medium">{e.title}</b>
-                <Tag tone="ok">{n > 1 ? `Proven ${n}×` : "Proven"}</Tag>
+                <span className="flex shrink-0 items-center gap-2">
+                  {e.kind === "catch" && e.txs?.[0] && <ShareOnX kind="catch" id={e.txs[0].tx} />}
+                  <Tag tone="ok">{n > 1 ? `Proven ${n}×` : "Proven"}</Tag>
+                </span>
               </div>
               <p className="text-sm text-muted-foreground">{e.detail}</p>
               {(e.txs || []).map((t) => (
@@ -275,6 +282,7 @@ export default function VaultPage() {
   const v = vault?.state
   const d = vault?.deployment
   const [mine, reload] = useMine(v)
+  const wallet = useCatch((s) => s.wallet)
 
   if (!vault) {
     return (
@@ -309,6 +317,7 @@ export default function VaultPage() {
           value={mine ? usd(fromUnits(mine.assets), { compact: false, digits: 2 }) : null}
           reading="Connect a wallet"
           sub={mine ? `${qty(fromUnits(mine.shares))} shares${locked ? ` · unlocks ${new Date(mine.unlockAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}` : ""}` : "To see your shares"}
+          action={mine && mine.shares > 0n && wallet?.account ? <ShareOnX kind="depositor" id={wallet.account} label="Share" /> : undefined}
         />
       </div>
 
@@ -483,4 +492,30 @@ function Backstop({ b, vault }: { b: NonNullable<VaultState["backstop"]>; vault:
       </div>
     </Section>
   )
+}
+
+/** A share link: the server builds the post and its card from records and chain reads only. */
+export function ShareOnX({ kind, id, label = "Post on X" }: { kind: "catch" | "vault" | "depositor"; id: string; label?: string }) {
+  const href = `/api/share?kind=${kind}&id=${encodeURIComponent(id)}&post=1`
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs font-medium text-foreground hover:bg-muted"
+      title="Opens X with the post and a card built from on-chain data"
+    >
+      <svg viewBox="0 0 24 24" className="size-3" aria-hidden="true">
+        <path fill="currentColor" d="M18.244 2H21.5l-7.5 8.57L23 22h-6.828l-5.35-6.99L4.6 22H1.34l8.02-9.17L1 2h7.002l4.835 6.39L18.244 2Zm-1.196 18h1.803L7.03 3.894H5.096L17.048 20Z" />
+      </svg>
+      {label}
+    </a>
+  )
+}
+
+/** A vault's running time in plain words: "15 hours", "12.5 days". */
+function span(ms: number) {
+  const h = ms / 3_600_000
+  if (h < 48) return `${Math.max(1, Math.round(h))} hour${Math.round(h) === 1 ? "" : "s"}`
+  return `${(h / 24).toFixed(1)} days`
 }

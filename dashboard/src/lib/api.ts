@@ -78,7 +78,8 @@ export type Retired = {
   vault: string
   deployBlock: number
   deployTx: string
-  retired: { reason?: string } | null
+  retired: { reason?: string; at?: string } | null
+  lifetimeMs?: number
   performance: { deposited: number; redeemed: number; stillInside: number } | null
   trades: Trade[]
 }

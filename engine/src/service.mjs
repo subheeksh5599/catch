@@ -24,6 +24,23 @@ export function loadDeployment(netKey) {
   const p = new URL(`../../deployments/${netKey}.json`, import.meta.url);
   if (!existsSync(p)) return null;
   const rec = JSON.parse(readFileSync(p, "utf8"));
+  // proofs outlive the vault that made them: every retired vault's proven evidence is shown with
+  // the live vault's, newest vault first, each item once, tagged with the vault it happened on
+  const key = (e) => `${e.kind}:${e.txs?.[0]?.tx ?? e.title}`;
+  const seen = new Set((rec.evidence || []).map(key));
+  rec.evidence = [...(rec.evidence || [])];
+  const dir = new URL("../../deployments/", import.meta.url);
+  const older = existsSync(dir)
+    ? readdirSync(dir).map((f) => f.match(new RegExp(`^${netKey}-v(\\d+)\\.json$`))).filter(Boolean).sort((x, y) => Number(y[1]) - Number(x[1]))
+    : [];
+  for (const m of older) {
+    const old = JSON.parse(readFileSync(new URL(m[0], dir), "utf8"));
+    for (const e of old.evidence || []) {
+      if (e.status !== "proven" || seen.has(key(e))) continue;
+      seen.add(key(e));
+      rec.evidence.push({ ...e, vault: e.vault ?? old.vault, vaultTag: e.vaultTag ?? `v${m[1]}` });
+    }
+  }
   // the live vault's trades live in their own file: the keeper rewrites the record while it runs
   const t = new URL(`../../deployments/${netKey}.trades.json`, import.meta.url);
   if (existsSync(t)) {
@@ -392,10 +409,26 @@ export class CatchService {
       free: num(state.unlockedCollateralBalance),
       markets,
       history: (d.navHistory || []).slice(-500),
-      retired: loadRetired(this.net.key),
+      retired: await this.withLifetimes(loadRetired(this.net.key)),
       updatedAt: Date.now(),
     };
     await this.refreshVaultEvents();
+  }
+
+  /** How long each retired vault ran: its deploy block's timestamp to its retirement. A result
+   *  is shown over its real period, never annualised from a short testnet run. */
+  async withLifetimes(list) {
+    this.deployTimes ??= new Map();
+    for (const r of list) {
+      if (r.deployBlock == null || !r.retired?.at) continue;
+      if (!this.deployTimes.has(r.deployBlock)) {
+        const b = await this.client.getBlock({ blockNumber: BigInt(r.deployBlock) }).catch(() => null);
+        if (b) this.deployTimes.set(r.deployBlock, Number(b.timestamp) * 1000);
+      }
+      const start = this.deployTimes.get(r.deployBlock);
+      if (start) r.lifetimeMs = Date.parse(r.retired.at) - start;
+    }
+    return list;
   }
 
   async refreshVaultEvents() {

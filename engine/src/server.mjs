@@ -60,6 +60,7 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, "http://x");
   const p = url.pathname;
   try {
+    if (p === "/api/og" || p === "/api/share") return (await import(`../../api/${p.slice(5)}.mjs`)).default(req, res);
     if (routes[p]) return send(res, 200, await routes[p]());
     if (p.startsWith("/api/map/")) {
       const pool = p.slice("/api/map/".length).toLowerCase();

@@ -39,8 +39,8 @@ _Recording in progress._
 | Stage-4 backstop | **Built, fork-proven, waiting on one owner transaction** | on a fork of Hideki, the real LiquidationEngine handed Catch a liquidated BTC long, and picked Catch over the live bidder. Registration is owner-only; the exact call is in [`docs/stage4-backstop.md`](docs/stage4-backstop.md) and simulates successfully from the owner today. [More below](#stage-4-the-backstop) |
 | Depositors | **Two** | a second wallet (208 USDso) and the operator (18 USDso), $226 in total, each a separate `deposit` with its own lock |
 | Orders on the venue's book | **Live** | a keeper on a server quotes the ten busiest markets around the clock; every order and fill is in `deployments/` |
-| Same-block auto-cancel | **Proven, 17 times** | e.g. a test trader closed its HYPE long at tx index 2 of block 35,466,495 (`0x24e2230d…d441`); the validator-issued `onEvent` cancelled the bid it backed at index 16 of the same block (`0x51109d89…bb38`) |
-| Fill → position → unwind | **Proven, 21 times** | every fill was recorded by the callback in its own block, with an unwind rested at or beyond entry, e.g. ETH short at 2,415.43 offered back at 2,324.28 (`0x91db9c26…53be`) |
+| Same-block auto-cancel | **Proven, 18 times** | e.g. a test trader closed its HYPE long at tx index 2 of block 35,466,495 (`0x24e2230d…d441`); the validator-issued `onEvent` cancelled the bid it backed at index 16 of the same block (`0x51109d89…bb38`) |
+| Fill → position → unwind | **Proven, 23 times** | every fill was recorded by the callback in its own block, with an unwind rested at or beyond entry, e.g. ETH short at 2,415.43 offered back at 2,324.28 (`0x91db9c26…53be`) |
 | Contract refusing an order on chain | **Observed** | keeper proposals whose backers moved before the send reverted `OutsideBand(account, lo, hi, price)` |
 | Every trade, priced by the venue | **17 fills on v4, every close in profit** | the vault's own MarginBank `PositionUpdated` logs: 8 closes, all positive, +4.66 USDso realized in total; the caught liquidation itself closed for +0.10 (`scripts/live/trades.mjs`, the Trades card on the Vault page) |
 | v4's depositor result | **+21.4%** | 45.90 USDso in, 55.72 USDso back on full redemption (`0x14b6ac0a…8597`), computed from the vault's own `Deposited` and `Redeemed` events by `scripts/live/performance.mjs` |
@@ -80,6 +80,7 @@ flowchart TD
 - [The dashboard](#the-dashboard)
 - [Run it](#run-it)
 - [Going live on Hideki](#going-live-on-hideki)
+- [Going live on mainnet](#going-live-on-mainnet)
 - [What's real vs pending](#whats-real-vs-pending)
 - [Feedback to the venue](#feedback-to-the-venue)
 - [X posts](#x-posts)
@@ -150,7 +151,7 @@ bidders, and one of them takes it over at the price it quoted. Catch v6 is a bid
 **Reactivity: the vault's re-check.** Every order is backed by the accounts whose liquidation it
 waits for. The vault subscribes to each one's MarginBank `PositionUpdated`. When a backer's
 position changes, the validators call `CatchVault.onEvent` in the same block, and the order is
-re-derived or cancelled before anyone can trade against a stale quote. 17 cancels and 21 fills
+re-derived or cancelled before anyone can trade against a stale quote. 18 cancels and 23 fills
 on chain so far ([Live status](#live-status)).
 
 **Somnia Agents: the price Catch trusts.** Somnia Price Feeds is run by Somnia Agents:
@@ -158,16 +159,19 @@ subcommittees of validators price each pair across exchanges every 500 ms and wr
 on chain (`0x1998C88D…7D81F` on the Tokyo subchain). Catch relies on it in two places:
 
 - **In the contract, through the venue.** The vault refuses to quote while the venue's mark is
-  more than 1.5% from its oracle index, or the index is older than 120 s. A call trace of a
-  real Hideki liquidation shows where that index comes from: the pool reads `BTC/USDC` and
-  `BTC/USDC:PERP` from this feed.
+  more than 1.5% from its oracle index, or the index is older than 120 s. Both come from this
+  feed: per the venue's SDK, a perp pool's oracle reads `<BASE>/USDC:PERP` for the mark and
+  `<BASE>/USDC` for the index, and a call trace of a real Hideki liquidation shows the BTC pool
+  reading both.
 - **In the keeper, directly and tighter.** Before it snapshots a market, and again right before
   each order, the keeper reads `latestWithQuality("<BASE>/USDC:PERP")`. It quotes only while the
   agents' price is under 15 s old and backed by at least 2 agents, and the venue mark is within
-  1.5% of it (`engine/src/pricefeed.mjs`, 6 tests). The feed's `feedHealth()` reports write
-  stalls of 20–40 s at times; the keeper stops quoting through them, and each refusal is kept
-  in the record as `AgentPriceCheck` with both prices. The Markets page shows the agents'
-  price, the gap and the agent count for every market.
+  1.5% of it (`engine/src/pricefeed.mjs`, 6 tests). The freshness and agent count do most of the
+  work: the feed's `feedHealth()` reports write stalls of 20–40 s at times, and the keeper stops
+  quoting through them. The gap is a backstop, since the venue builds its mark from this same
+  feed and blends in other sources on some networks; on Hideki it runs at 0–7 bps. Each refusal
+  is kept in the record as `AgentPriceCheck` with both prices, and the Markets page shows the
+  agents' price, the gap and the agent count for every market.
 
 ## Invariants
 
@@ -257,6 +261,15 @@ The first run caught an over-strict check in the suite itself: an order whose pr
 | Liquidations | the venue's waterfall stage distribution, position liquidations, recent accounts |
 | Contracts | every address the app reads, including retired vaults |
 
+**Share cards.** The proven catch, each earlier vault's result and a connected wallet's own
+position have a "Post on X" button. It opens a post tagging @DreamDEXSomnia with a link whose
+preview is an image card (`/api/share`, drawn by `/api/og`). The link names only which catch,
+which vault or which address; every figure on the card is read from the records or the chain
+when the card is drawn, so a shared card cannot carry a made-up number.
+
+Results are shown over the period they took ("+21.4% over 12.5 days"), never annualised: a
+yearly rate from a short testnet run would be arithmetic, not information.
+
 Red and green only mean longs and shorts being liquidated; amber marks the vault's own catch windows and orders. Every number is read from chain or from the venue's indexer by the engine. A value that has not been read yet is shown as being read, never as zero.
 
 ## Run it
@@ -289,6 +302,25 @@ REDEEM_ALL=1 RETIRE_REASON="…" node scripts/live/retire.mjs hideki v5   # rede
 ```
 
 Deployment costs about 104M gas. Every transaction lands in `deployments/hideki.json`, which the engine and the dashboard read.
+
+## Going live on mainnet
+
+The bounty's second payment needs Catch placing orders on mainnet within 30 days of the perps
+launch. Everything is parameterised for it; the one missing input is the venue's mainnet
+MarginBank, which the SDK does not ship yet.
+
+```bash
+cd engine
+MAINNET_MARGIN_BANK=0x… node scripts/live/mainnet-check.mjs   # read-only readiness check
+MAINNET_MARGIN_BANK=0x… node scripts/live/deploy.mjs mainnet 5000 2500 30 200 150 120 3600
+MAINNET_MARGIN_BANK=0x… node scripts/live/keeper.mjs mainnet --markets 10
+```
+
+`mainnet-check.mjs` checks the RPC and chain id (Tokyo `50321` by default, `MAINNET_CHAIN_ID=5031`
+for the Global chain), the MarginBank and its wired system config, the Somnia Price Feeds entry,
+and that the operator holds the 32 SOMI a Reactivity subscription needs. Run today, it reports
+the Tokyo mainnet RPC and the agents' feed live (BTC from 3 agents, under 2 s old), and the
+MarginBank not yet published.
 
 ## What's real vs pending
 
