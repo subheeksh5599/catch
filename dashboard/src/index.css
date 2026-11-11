@@ -1,0 +1,178 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Catch's own type, served by the landing site at /static/assets */
+@font-face { font-family: "Matter"; src: url("/static/assets/3121Tsk68mHZwJJf1twQpB418.woff2") format("woff2"); font-weight: 430; font-display: swap; }
+@font-face { font-family: "Matter"; src: url("/static/assets/zhl7xb7lRo26db3SQvE84y4ccA0.woff2") format("woff2"); font-weight: 570; font-display: swap; }
+@font-face { font-family: "Matter"; src: url("/static/assets/ODEa6AVNH3HOjTVde2fZEWKVVao.woff2") format("woff2"); font-weight: 670; font-display: swap; }
+@font-face { font-family: "Jokker"; src: url("/static/assets/MIJfOnqlX0RU6hcUu7Aq1Lh6rI.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Jokker"; src: url("/static/assets/titenLuGocWoKtfsJtx6dXLuioM.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-body);
+  --font-heading: var(--font-display);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-long: var(--long);
+  --color-short: var(--short);
+  --color-vault: var(--vault);
+}
+
+/* Light: same hues as the landing, on paper */
+:root {
+  --font-body: "Matter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Jokker", "Matter", ui-sans-serif, system-ui, sans-serif;
+  --radius: 0.75rem;
+  --background: #f6f8fb;
+  --foreground: #00172f;
+  --card: #ffffff;
+  --card-foreground: #00172f;
+  --popover: #ffffff;
+  --popover-foreground: #00172f;
+  --primary: #1c6cff;
+  --primary-foreground: #ffffff;
+  --secondary: #eaf0f8;
+  --secondary-foreground: #00172f;
+  --muted: #eaf0f8;
+  --muted-foreground: #5979a6;
+  --accent: #e3ecfa;
+  --accent-foreground: #00172f;
+  --destructive: #e5484d;
+  --success: #03a63c;
+  --success-foreground: #ffffff;
+  --warning: #d98a00;
+  --warning-foreground: #ffffff;
+  --info: #1c6cff;
+  --info-foreground: #ffffff;
+  --border: #d7e1ee;
+  --input: #d7e1ee;
+  --ring: #1c6cff;
+  --long: #e5484d;
+  --short: #03a63c;
+  --vault: #d98a00;
+  --chart-1: #1c6cff;
+  --chart-2: #03a63c;
+  --chart-3: #e5484d;
+  --chart-4: #d98a00;
+  --chart-5: #5979a6;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #00172f;
+  --sidebar-primary: #1c6cff;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eaf0f8;
+  --sidebar-accent-foreground: #00172f;
+  --sidebar-border: #d7e1ee;
+  --sidebar-ring: #1c6cff;
+}
+
+/* Dark (default): the landing's navy */
+.dark {
+  --background: #000814;
+  --foreground: #ffffff;
+  --card: #010d1e;
+  --card-foreground: #ffffff;
+  --popover: #001533;
+  --popover-foreground: #ffffff;
+  --primary: #1c6cff;
+  --primary-foreground: #ffffff;
+  --secondary: #001533;
+  --secondary-foreground: #ffffff;
+  --muted: #001533;
+  --muted-foreground: #8d9198;
+  --accent: #001a40;
+  --accent-foreground: #ffffff;
+  --destructive: #ff5c4d;
+  --success: #22c55e;
+  --success-foreground: #000814;
+  --warning: #ffb020;
+  --warning-foreground: #000814;
+  --info: #3388ff;
+  --info-foreground: #ffffff;
+  --border: #11263b;
+  --input: #11263b;
+  --ring: #1c6cff;
+  --long: #ff5c4d;
+  --short: #22c55e;
+  --vault: #ffb020;
+  --chart-1: #1c6cff;
+  --chart-2: #22c55e;
+  --chart-3: #ff5c4d;
+  --chart-4: #ffb020;
+  --chart-5: #5979a6;
+  --sidebar: #000814;
+  --sidebar-foreground: #ccced0;
+  --sidebar-primary: #1c6cff;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #001533;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #11263b;
+  --sidebar-ring: #1c6cff;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.route-progress-bar {
+  animation: route-progress 1s ease-in-out infinite;
+}
+@keyframes route-progress {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(300%); }
+}

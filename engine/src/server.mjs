@@ -7,7 +7,7 @@ import { CatchService } from "./service.mjs";
 
 const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 const SITE = join(ROOT, "site");
-const APP = join(ROOT, "app");
+const APP = join(ROOT, "dashboard", "dist"); // build with: npm --prefix dashboard run build
 const PORT = Number(process.env.PORT || 8787);
 const NETWORK = process.env.NETWORK || "hideki";
 

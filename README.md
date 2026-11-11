@@ -187,14 +187,14 @@ The first run caught an over-strict check in the suite itself: an order whose pr
 | `src/reader.mjs` | block-pinned snapshot of one market: holders, positions, health, bankruptcy prices, via Multicall3 |
 | `src/math.mjs` | liquidation solve, bins, at-risk notional, catch window, cluster sweep, order sizing |
 | `src/service.mjs` | markets, maps, the venue's liquidation history, vault state, events, earlier vaults |
-| `src/server.mjs` | `/api/status`, `/api/markets`, `/api/map/:pool`, `/api/liquidations`, `/api/vault`; serves `site/` at `/` and `app/` at `/app/` |
+| `src/server.mjs` | `/api/status`, `/api/markets`, `/api/map/:pool`, `/api/liquidations`, `/api/vault`; serves `site/` at `/` and the built dashboard (`dashboard/dist`) at `/app/` |
 | `scripts/live/*` | rehearse, fund, deploy, deposit, keeper, liquidator, performance, trades, retire |
 
 `npm test` checks the liquidation solve against the SDK's own `perpLiquidationPrice` and every cluster rule (12 tests).
 
 ## The dashboard
 
-`/` is a one-page explainer: the last catch as a receipt with both transactions, four live figures, the map of the busiest market, the on-chain proofs and what the contract refuses. `/app/` is the product.
+`/` is the landing page. `/app/` is the product: a React dashboard (Vite, Tailwind, shadcn/ui, Recharts) with a sidebar, in Catch's own navy, type and colours, light and dark.
 
 | Page | What it shows |
 |---|---|
@@ -205,7 +205,7 @@ The first run caught an over-strict check in the suite itself: an order whose pr
 | Liquidations | the venue's waterfall stage distribution, position liquidations, recent accounts |
 | Contracts | every address the app reads, including retired vaults |
 
-One accent colour marks the vault's own orders and the primary action; red and green only mean longs and shorts being liquidated. Every number is read from chain or from the venue's indexer by the engine. A value that has not been read yet is shown as being read, never as zero.
+Red and green only mean longs and shorts being liquidated; amber marks the vault's own catch windows and orders. Every number is read from chain or from the venue's indexer by the engine. A value that has not been read yet is shown as being read, never as zero.
 
 ## Run it
 
@@ -213,6 +213,7 @@ One accent colour marks the vault's own orders and the primary action; red and g
 git clone --recurse-submodules https://github.com/subheeksh5599/catch && cd catch
 cd contracts && forge test                      # 75 unit + 11 invariants (2,000 runs, 200,000 calls), about a minute
 cd ../engine && npm install && npm test          # 12 passed
+npm --prefix ../dashboard install && npm --prefix ../dashboard run build   # the dashboard, once
 npm start                                        # http://127.0.0.1:8787 (site) and /app/ (dashboard), live Hideki data
 ```
 
@@ -273,8 +274,8 @@ Found while building Catch, in the bounty's format, in [`feedback/`](feedback/):
 ```
 contracts/    CatchVault, venue interfaces, tests (Foundry)
 engine/       reader, map math, API server, live scripts (Node)
-app/          dashboard (HTML, CSS, ES modules, no build step)
-site/         landing page, reads the same API
+dashboard/    dashboard (React, Vite, shadcn/ui, Recharts), built to /app/
+site/         landing page
 api/          the same API as serverless functions
 deployments/  per-network deployment records, retired vaults, trades, rehearsal output
 feedback/     reports to the venue, each with a read-only reproduction
