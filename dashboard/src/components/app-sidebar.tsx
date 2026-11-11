@@ -1,6 +1,5 @@
 import * as React from "react"
 import { LayoutDashboard, Vault, ChartColumn, Rows3, ArrowDownToLine, FileCode2, ArrowLeft } from "lucide-react"
-import { Link } from "react-router-dom"
 import { Logo } from "@/components/logo"
 import { NavMain } from "@/components/nav-main"
 import { useCatch } from "@/lib/api"
@@ -58,7 +57,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" render={<Link to="/" />}>
+            <SidebarMenuButton size="lg" render={<a href="/" aria-label="Catch home page" />}>
               <div className="flex aspect-square size-8 items-center justify-center text-primary">
                 <Logo size={28} />
               </div>

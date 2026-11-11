@@ -224,7 +224,7 @@ export function Proofs({ d }: { d: Deployment | null | undefined }) {
       {!pick.length ? (
         <Empty>The keeper records proofs here as they land on chain.</Empty>
       ) : (
-        <div className="divide-y">
+        <div className="max-h-96 divide-y overflow-y-auto overscroll-contain pr-1">
           {pick.map(({ e, n }) => (
             <div key={e.kind} className="grid gap-2 py-3 first:pt-0 last:pb-0">
               <div className="flex items-baseline justify-between gap-3">
@@ -415,7 +415,7 @@ export default function VaultPage() {
             )}
           </Section>
         </div>
-        <div className="grid min-w-0 gap-4">
+        <div className="grid min-w-0 gap-4 lg:sticky lg:top-4 lg:max-h-[calc(100svh-2rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-1">
           <Section title="What the contract enforces">
             <ol className="grid gap-3 text-sm">
               {[
