@@ -778,6 +778,31 @@
       "tx": "0x69184321149f8cc8c995c17b11ba0a3675300bc8e72a1fff14a27d624293a878",
       "block": 47604306,
       "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0x81253bdca27ec2358841ecac7a5bd2fd2a3decf51b997efdd1412be13b420151",
+      "block": 47609721,
+      "status": "success",
+      "pool": "0x2a1822b02039ddf0e293f3f7243673fc03eaf16c",
+      "isBid": false,
+      "price": "1713500000000000000",
+      "quantity": "33100000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x5dc42a7d2e39e53acd0f4edee76bd0f45177ccdc",
+      "tx": "0x8a55c63ff2649cbd69e608785c6ea48b66a430676f4ab609651ae822518e478c",
+      "block": 47611049,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xf0025b54e80ddd9da9e7ef0337b025f2586035b6",
+      "tx": "0x8405bd8e6dd3c8cd5095bd81ea06890121658387521bc0f67192afdeddb7b84a",
+      "block": 47611191,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -1076,7 +1101,8 @@
       "subscriptionId": "39429529",
       "tx": "0x9530f096f628aeee68c72a874a9971aaa044785b62f5cfbea6a1d79902a4bb92",
       "block": 47604052,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x8a55c63ff2649cbd69e608785c6ea48b66a430676f4ab609651ae822518e478c"
     },
     {
       "account": "0x98532af22f85cbab0c1a8b1dddff809b000bcd05",
@@ -1098,10 +1124,83 @@
       "tx": "0x69184321149f8cc8c995c17b11ba0a3675300bc8e72a1fff14a27d624293a878",
       "block": 47604306,
       "status": "active"
+    },
+    {
+      "account": "0xf0025b54e80ddd9da9e7ef0337b025f2586035b6",
+      "subscriptionId": "39441059",
+      "tx": "0x8405bd8e6dd3c8cd5095bd81ea06890121658387521bc0f67192afdeddb7b84a",
+      "block": 47611191,
+      "status": "active"
     }
   ],
-  "evidence": [],
-  "evidenceCursor": 47516836,
+  "evidence": [
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 47571945,
+      "detail": "Slot 6 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xab4ce1eb8e39feb08db7ef72245cb6a431ff024eb5d1172a1dcfed3c171c2d2c"
+        }
+      ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 47572144,
+      "detail": "Slot 5 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x5231be24db8d9e8f67d2a80f7ee22962fc3038c82bb6456ace2f0445faa707c6"
+        }
+      ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 47572364,
+      "detail": "Slot 3 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x02ca750f9cc2c681ccc45481422a9caf3108c3e368bc3ec44615db103f856921"
+        }
+      ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 47601144,
+      "detail": "Slot 4 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xc1b1c028dfb04b235f9cc8654ac6c3cf93a68db832a0df2592313ea7e1321afb"
+        }
+      ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 47605050,
+      "detail": "Slot 23 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x4a34b942a87babf208b7f853dbbeda9886e7a4978120c332afbe8051ae8d7720"
+        }
+      ]
+    }
+  ],
+  "evidenceCursor": 47622111,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -1204,6 +1303,24 @@
       "block": 47517223,
       "totalAssets": "226000000000000000000",
       "totalSupply": "226000000000000000000000"
+    },
+    {
+      "at": "2026-11-11T16:32:57.704Z",
+      "block": 47606200,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-11T16:44:47.108Z",
+      "block": 47613306,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-11T16:55:39.810Z",
+      "block": 47619826,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
     }
   ],
   "refusals": [
