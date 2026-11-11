@@ -1,0 +1,1686 @@
+{
+  "network": "hideki",
+  "chainId": 50383,
+  "vault": "0x5e5e036370ad8615f4144f17ff6519d1f2db9f70",
+  "deployTx": "0x9c9ecf916df2d4f3f9e370c8dedfc365b4b142dce44a73ac997ee850db622efc",
+  "deployBlock": 46806728,
+  "operator": "0x68A7Be0E0402dd17EA3CDFfA9Bff84b266F3eE9e",
+  "args": {
+    "marginBank": "0x478769E1177C0773c43A593DCCc4Ad15F15F1394",
+    "marketCapBps": 5000,
+    "clusterCapBps": 2500,
+    "unwindSpreadBps": 30,
+    "oiCapBps": 200,
+    "maxIndexDeviationBps": 150,
+    "maxIndexAgeSeconds": 120,
+    "redeemDelaySeconds": 3600
+  },
+  "readBack": {
+    "bank": "0x478769E1177C0773c43A593DCCc4Ad15F15F1394",
+    "asset": "0xed7993A74dAe1e6656B704A424DcD8711aAf4F72"
+  },
+  "txs": [
+    {
+      "kind": "approve",
+      "tx": "0x14fdf9eacb49533cbd9efc5cda0596289206a9da4d2ebe3a717f9d348376a56b",
+      "block": 46807299,
+      "from": "0x68A7Be0E0402dd17EA3CDFfA9Bff84b266F3eE9e"
+    },
+    {
+      "kind": "deposit",
+      "tx": "0x2ea89b66c75f367eabf8d28b8fdc026921796413a5b4024d3f8a82141183c2e9",
+      "block": 46807323,
+      "status": "success",
+      "amount": "55.7716",
+      "from": "0x68A7Be0E0402dd17EA3CDFfA9Bff84b266F3eE9e"
+    },
+    {
+      "kind": "approve",
+      "tx": "0x51013b9d6e40eb4b4e99b7a13fa5339e9d10359ca9795003a6de15c2142998f5",
+      "block": 46808603,
+      "from": "0x0b8e630761AC8b6597e7ceFFFD87A1a8635F0db0"
+    },
+    {
+      "kind": "deposit",
+      "tx": "0xd767dfa1425b3b41b0de51358f0474283baf5ba0676b316a0c50a41750e5b42a",
+      "block": 46808631,
+      "status": "success",
+      "amount": "99.99",
+      "from": "0x0b8e630761AC8b6597e7ceFFFD87A1a8635F0db0"
+    },
+    {
+      "kind": "subscribe",
+      "tx": "0x3a0910a45da5462e069015ff7ac79b86d418baa1b8e8272de3d1d9c81b4611ca",
+      "status": "success",
+      "block": 46808743
+    },
+    {
+      "kind": "place",
+      "tx": "0xcd542842a5a12d47f62f2bdb39969c3ee5f8e962b714c9b216b0eb94bd86e29e",
+      "block": 46816180,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": false,
+      "price": "3815900000000000000",
+      "quantity": "10200000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xfd8cb4ff6de1ef62a69eaa808a8d7835c2c9b40c5dbe5c149ef9e5ddd7135f9b",
+      "block": 46822443,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454"
+    },
+    {
+      "kind": "place",
+      "tx": "0x11fa43d3a31f6c9c0fd11ef23333acb3517fda7c636122fc118b61ceb1b75180",
+      "block": 46833146,
+      "status": "success",
+      "pool": "0x2a1822b02039ddf0e293f3f7243673fc03eaf16c",
+      "isBid": false,
+      "price": "1636000000000000000",
+      "quantity": "23800000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x5e5e036370ad8615f4144f17ff6519d1f2db9f70",
+      "tx": "0x4dd5e2e4db3e3552ee341add11a6aa136f2602a651554d0dd3510ee3161d4498",
+      "block": 46833183,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x27e5a7f56c7bc58e558d1953968f7cb13eb4a852",
+      "tx": "0xe3d9920bd3513fdcbe0fb3c4eea24ef4ce999e3a1d5ff8e0449603dcb3ba6208",
+      "block": 46833200,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x792c289c1f945d239d12db3dcfdd841b59e3ba99",
+      "tx": "0x1b7b34b8740b1a6aff029b402fcaf6e26580f16f382e19e862f1f82f50547702",
+      "block": 46833218,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x5dc42a7d2e39e53acd0f4edee76bd0f45177ccdc",
+      "tx": "0x26cbbc9263f8f30448e0a1be4396268196980a1695e696a131c4d38979e0e053",
+      "block": 46833234,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x98532af22f85cbab0c1a8b1dddff809b000bcd05",
+      "tx": "0xb740de196e1581d899163066c945d898db5aae0c5d10093c52f7428bdb0270ec",
+      "block": 46833257,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x27e5a7f56c7bc58e558d1953968f7cb13eb4a852",
+      "tx": "0xa2c161f21b953b29054ce9cf2f59a6cc9fa7722d1cc0b4fc1203d61d96538d38",
+      "block": 47296376,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x792c289c1f945d239d12db3dcfdd841b59e3ba99",
+      "tx": "0xd117feca036da9a96d2e2b06490c996a520be22409652b1bb403f9e4e39ce969",
+      "block": 47296388,
+      "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0x4cfd47ac0e53f03d4f6f5e43404cccbcaccf368df9627debf27a03b2c2a7f0fd",
+      "block": 47298343,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": true,
+      "price": "3348700000000000000",
+      "quantity": "11700000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0xfa7b264cd1299f569d1db1c4e5c808e7fcf309697e41cce51d15ba55495ee0d2",
+      "block": 47298362,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": false,
+      "price": "3877100000000000000",
+      "quantity": "10100000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x468901a0e2e8f492c9ec1eacd03e9026fbb2fe03357aa728df84473a741fe4e3",
+      "block": 47298453,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf",
+      "isBid": true,
+      "price": "1895090000000000000000",
+      "quantity": "20800000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x7bfa46e553c6721708accde56e6ee9d1698818b0d8b5c3ec159c70c87e56b023",
+      "block": 47298474,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf",
+      "isBid": false,
+      "price": "2208120000000000000000",
+      "quantity": "17800000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "place",
+      "tx": "0xbd2fbcc1fc9f0801c47a369f594f033b6c46393c7f1063906939cde26c232289",
+      "block": 47298853,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad",
+      "isBid": false,
+      "price": "771976000000000000000",
+      "quantity": "51000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "place",
+      "tx": "0xa64963fc677ce3a9ebe0ba42f07567c7970214c46cc13b3ec550dcaf00b24b95",
+      "block": 47299011,
+      "status": "success",
+      "pool": "0xfa9b9e50cc1745113d57893991af200a74c86b6f",
+      "isBid": true,
+      "price": "4672900000000000",
+      "quantity": "8400000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x27199f914dfa0c5fcd2249b3120bc5f1cc76338b761653f20ab554b00101fde6",
+      "block": 47299123,
+      "status": "success",
+      "pool": "0xde9762b6b441133d1314c68864ae4e63a6ee45c7",
+      "isBid": true,
+      "price": "7925000000000000000",
+      "quantity": "4900000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "place",
+      "tx": "0xfb92b249f34120ea9ca68b7d0e88e8d56762342a5765cb96a3a6262604693036",
+      "block": 47299141,
+      "status": "success",
+      "pool": "0xde9762b6b441133d1314c68864ae4e63a6ee45c7",
+      "isBid": false,
+      "price": "9196000000000000000",
+      "quantity": "4200000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x88a3bfd543777d66ef574460513d9d821e3857debe2e88116584761412893415",
+      "block": 47299210,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5",
+      "isBid": true,
+      "price": "9549000000000000000",
+      "quantity": "4100000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x83b91e664c5ac6028e91a7a84dfbde73719b866a97a41d2238365fbd23d4bf7f",
+      "block": 47299230,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5",
+      "isBid": false,
+      "price": "10934000000000000000",
+      "quantity": "3600000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "place",
+      "tx": "0xb3bfe1e890d0b4bc6363aa2bc7182fd6b75c85ad1bc2859e35ffa8e5884ebb72",
+      "block": 47299299,
+      "status": "success",
+      "pool": "0xdcb0ad226727b2ce92857f0af5751389d42b2a3f",
+      "isBid": true,
+      "price": "2998700000000000000",
+      "quantity": "13100000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x3f569f69fdafb94bed53d5f635692f3c01b7379056dee090ca83499e4d53448f",
+      "block": 47299360,
+      "status": "success",
+      "pool": "0x2a1822b02039ddf0e293f3f7243673fc03eaf16c",
+      "isBid": true,
+      "price": "1387100000000000000",
+      "quantity": "28400000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x2d44c79cad33fefb2b46f5757c67ad62f56927ff2c5e1b06edbc7dbbea0dc7fc",
+      "block": 47299507,
+      "status": "success",
+      "pool": "0x0f464d57c1fd839e4d87a408bbccdab8f77e6394",
+      "isBid": true,
+      "price": "273100000000000000",
+      "quantity": "144000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x93405a58436c66d200b7981222379ec5d57fcf3d09f2d7ffe6e7d291f547b453",
+      "block": 47307016,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad",
+      "isBid": true,
+      "price": "630953000000000000000",
+      "quantity": "66000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "place",
+      "tx": "0x3651b15c99a7959d7c4974b9738679571004a017c12e008aafeef78fb9034a2a",
+      "block": 47308457,
+      "status": "success",
+      "pool": "0xde9762b6b441133d1314c68864ae4e63a6ee45c7",
+      "isBid": false,
+      "price": "8715000000000000000",
+      "quantity": "4200000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "redeem",
+      "tx": "0x2402c01e0d4d16db72bcca110c582182faf5507d954632dcbf7eb5680a870755",
+      "block": 47347670,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "tx": "0x158dabd1ef3d63ade2488de73dd4238efbb2c824a96f10d1b43f6928cefd7278",
+      "block": 47347709,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x5e5e036370ad8615f4144f17ff6519d1f2db9f70",
+      "tx": "0x4d5b3e0604534c49f74d8fd1e748197a51311f91b63affb7091f5e6541082203",
+      "block": 47347720,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x5dc42a7d2e39e53acd0f4edee76bd0f45177ccdc",
+      "tx": "0x30c74f309dd85d20d83d8bf1967243cc79be8abd4cd6a260411358a858a97c41",
+      "block": 47347730,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x98532af22f85cbab0c1a8b1dddff809b000bcd05",
+      "tx": "0x66491bda9d5c8d50393c3a3e102df49a868b411e7f056ea8a9ffd1fb35836a0a",
+      "block": 47347746,
+      "status": "success"
+    },
+    {
+      "kind": "redeem",
+      "tx": "0x7e23f2bcff99269055a41a50d64c3f3d9a78d5163e85d1b5430b43d7a8bb802a",
+      "by": "0x0b8e630761AC8b6597e7ceFFFD87A1a8635F0db0",
+      "note": "second depositor redeemed every share before v6"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xd062ee901068dd72ee0e7509fef6f05970611ea3",
+      "tx": "0xf1683e9517bc7d8e5a9d3513dce2977dd7fa08a37ee6ea9e8b667791130a5cc7",
+      "block": 47336670,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xdd2ff058d43a6fb0bc0bc2612d5d8a8652b236bc",
+      "tx": "0xfe609292a6a7fe133d7d972929e8b99a19c5f0c0efe9151316bc7b1a8e60071e",
+      "block": 47336828,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xa5c99c5d1e241a2fb3a491d6579aeb11b7d64764",
+      "tx": "0xefe2f7918299b990c86b6b9959834b003a38a8ab09b0d10ccd2fa683ddd6d975",
+      "block": 47337035,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xdd82c6b8b002204130ca0edc61cf701432e77074",
+      "tx": "0xa79243f545126e58794f12ceb90e623c9e151cbb20e43cfb1fcbe35a819ce507",
+      "block": 47337218,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x12dca4df084f9551cdd4712dfea2cafebf8b6886",
+      "tx": "0xc9624a297b778a8ebacb77e10b69aafe320c61f5d3cc7c1cbc53cb732e6ddb7d",
+      "block": 47337490,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xa70d2aa5ae475c22a8aafdfa967036707d8aabaf",
+      "tx": "0xea2cb98d33b0ee333733cd608c841054e6358c6bbe464ac2727d99c17f7106d7",
+      "block": 47337817,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x1bfb8d7d946d1a741f2e8a25e0c20edc0c759873",
+      "tx": "0xd707e5e3a5cd22bbf55a3f319dcef80b7e9cbf74794e8789ffb642671fad2e99",
+      "block": 47338038,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xd9ec48dd31fcb115ff8b6160f07839e4cb7d9092",
+      "tx": "0x9ad29d07cc6421b1fb9774fb26e473d3b3a4e6de0451326260728e4a42ec9d1b",
+      "block": 47338315,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x06949e3db476d06a43fe964ee5a529eae329ce3e",
+      "tx": "0x8eb10fab3d9a3c186e3086fc5097189b96f638943d392afd4b34189bd75175f1",
+      "block": 47338485,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xf19acf76c9886a38e271a758f558f9ad2e42c84f",
+      "tx": "0x2a5de355926daccdf84b8afc35baef23858e43f061a9292bfb0b1ae723e012a6",
+      "block": 47338762,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xfe0fd6ee75e37f00b9494a1d3f3f3fa512501d85",
+      "tx": "0x7358da73dfeb0c731904f09d2496abd6935cef8aeb9514dc3a2bdce78fd2c743",
+      "block": 47338931,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x0a825462ca6a130feb472c48667622cee7cea430",
+      "tx": "0xc8c136d28b007b5f39c65b26bcd112e379622b7e9eeeb102f77062f3e1465e86",
+      "block": 47339059,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xbc93e7e886120b11b5e66e7d8dc621ccb6304bed",
+      "tx": "0x77ca4578f46abe593569c3f7838d4070254bf122e368478d8097719e25de5889",
+      "block": 47339364,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x1552ef6deec35a59fbdcf4cc8fb6e3f6ec1f9c34",
+      "tx": "0x39ccfe1ed843efb4bb0ebb6082d115d05beba61ff045184e70e29482b13b47f3",
+      "block": 47339533,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x04306e2a59676786d87065b75c09fae046eab4fd",
+      "tx": "0x9612c52311675aad97b6a26fd444621b4fb86b70f6a1b7154cd5370c14251aef",
+      "block": 47339696,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x0535b03768fd2e4e931c3b7f2da8b076e6d96fcb",
+      "tx": "0x4b73c58d1529be9e3aad9bc99537949b4a7fa689fda3a1e306ed4ae2eaa0a766",
+      "block": 47339951,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x6c07ae0643c22b0ffb0c6f8b14cf0845979a9a1d",
+      "tx": "0x3b463974bb0e1b856029d70322dc32fa60ebf31d31dad6c570a27bc5354c4a23",
+      "block": 47340062,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xccc3b94fe63ef9d6a406c56c4259a0c04132dbc9",
+      "tx": "0x9fc5c571de3724713961119f4033cdd555d77ef107b831c95ff9ccfe315dfcb5",
+      "block": 47340167,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xc0980f15308df12da171928c158ba75c14514590",
+      "tx": "0xf36961c848e4514f853b9009a06b7f8d7ecca181355cadf1c1576c1b4e00c043",
+      "block": 47340243,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xceef3aa86419b3747cd6587fa91a22232fd076b2",
+      "tx": "0xa8140a27651e3143abb0e9e7bfa52711c8f1a0196f496f6dde30f2507417780e",
+      "block": 47340401,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x434031611ae5d27c363d8b32764cf03048d9fcd6",
+      "tx": "0x111dccee0beb8f537d752698689d77dc85a27bab5340a5d4c5115f047ff6213a",
+      "block": 47340606,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x43b522bead86aa3ea4cab474af2ad25b199cac3f",
+      "tx": "0xab06620678700e500c7e78575ae22020091db9d1ba9855d5757e463d037ef8a5",
+      "block": 47340781,
+      "status": "success"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled in the same block its backer closed",
+      "status": "proven",
+      "block": 35466495,
+      "detail": "The test trader closed its 3.57 HYPE long (tx index 2). The vault's reactivity callback, a validator-issued onEvent call, cancelled the bid that position backed at 76.98 in the same block (tx index 16).",
+      "txs": [
+        {
+          "label": "Order placed",
+          "tx": "0x7778631b2fdc0c7a1f33c16474865dde4cbb76865b926c2cbdf14ff2b11ee020"
+        },
+        {
+          "label": "Backer closes (block 35,466,495)",
+          "tx": "0x24e2230da523c260f273e57385ff2dc10dda881c063d35fc02afcf41e349d441"
+        },
+        {
+          "label": "Callback cancels (block 35,466,495)",
+          "tx": "0x51109d893b6e60685a73039a5fbd85ac36ab9a951c355ec98478a5503323bb38"
+        }
+      ],
+      "vault": "v2"
+    },
+    {
+      "kind": "redeem",
+      "title": "A redemption cancels resting orders to free collateral",
+      "status": "proven",
+      "block": null,
+      "detail": "Redeeming every share of the first vault cancelled its three resting orders and returned exactly 100 USDso.",
+      "txs": [
+        {
+          "label": "Redeem",
+          "tx": "0xb176c48a98675142120dc2b81a6253a89cbb35f3eb7928b401f5085f092eee6b"
+        }
+      ],
+      "vault": "v1"
+    },
+    {
+      "kind": "refusal",
+      "title": "The contract refuses an order outside a backer's catch window",
+      "status": "proven",
+      "block": null,
+      "detail": "Keeper proposals whose backers moved before the send were rejected with OutsideBand(account, lo, hi, price): one on v1, five in one pass on v2, seven in the first pass on v4.",
+      "txs": [],
+      "vault": "v1, v2, v4"
+    },
+    {
+      "kind": "fill",
+      "vault": "v2",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 35521738,
+      "detail": "ETH ask at 2,415.43 filled; the callback posted a buy-back bid at 2,324.28, beyond entry. The filler was an ordinary placeOrder, not a liquidation; the reactivity callback recorded the position and offered it back in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0xab049160f1f5794a79314b1ae4b4b7ce555563b4a197ffb0ccfc7d87d7c63abc"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x91db9c262b1c39e7966c8da9fb56c68ef29e99459c850a24800a69fe5b0b53be"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "vault": "v2",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 35527908,
+      "detail": "SOL ask at 106.14 filled; the callback posted a buy-back bid at 100.39. The filler was an ordinary placeOrder, not a liquidation; the reactivity callback recorded the position and offered it back in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0xaf8fcd5e3c7e77c97e9ec5a9516b2f127494471b276f5aae6e1e1e7614612cb6"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xb6bbec50872578f5ee3a01b4faf1528deb6eda82369cf4f376aa9998c4830731"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "vault": "v2",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 35530348,
+      "detail": "HYPE bid at 76.80 (the test trader's window edge) filled by a taker; the callback posted a sell-back ask at 79.98. The filler was an ordinary placeOrder, not a liquidation; the reactivity callback recorded the position and offered it back in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x6e990a3dba6521c77d6db8edf3e8ea76ef007803ab8d0f568960f3a4545a8a52"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x29b8d1fb3ca3413c7938c26f72df2e060368231ecc503c17e304546bd78b4c64"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "vault": "v2",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36035348,
+      "detail": "AVAX bid at 8.203 filled; the callback posted a sell-back ask at 8.712. The filler was an ordinary placeOrder, not a liquidation; the reactivity callback recorded the position and offered it back in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x1256ff4b45a6482f6c75a42bb8b3e3f5fdad3135b6512829235359aed78d6b0d"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xe380254a89de4e59b26fec99db3b71f656b6eb01db3491000d0ef614a2102721"
+        }
+      ]
+    },
+    {
+      "kind": "auto-cancel",
+      "vault": "v2",
+      "title": "Six more orders cancelled by callbacks when backers moved",
+      "status": "proven",
+      "block": 35856011,
+      "detail": "Overnight on vault v2, validator-issued onEvent calls released six orders whose backers' windows no longer contained the price.",
+      "txs": [
+        {
+          "label": "Callback cancel",
+          "tx": "0xb06eabd205f50e0d20d6ec968785afda0fba4a0481eaf09d977f084ae401f3d4"
+        },
+        {
+          "label": "Callback cancel",
+          "tx": "0x972e6c462235092ed4487517ca67e5d3a894dca7dd58a517b034298e2676ee66"
+        },
+        {
+          "label": "Callback cancel",
+          "tx": "0x69a3b18445974e1b75753f8daa4a673843687475b86a8a0b2a2994aeb7d88833"
+        }
+      ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36099994,
+      "detail": "Slot 9 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xa350f84d1c6c1cd4d759d6b626f2d2795b91ae65019929a27dd8bd3a2662e7c2"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36101747,
+      "detail": "An ordinary taker order filled the vault on 0x63B47eD4A7DE0FdE659b0d82441dD74828b7297A; the vault's position became -1.4e-13 at an average entry of 81.61, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x647265b3f0d931a699fa5d052f78c7a50ec4e1c9540091d0a71d9739e761d20b"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xf1c6d28a31cb56d67f9764b05b6643138cdb1939514637df73392b699c2c4af5"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36102157,
+      "detail": "An ordinary taker order filled the vault on 0x63B47eD4A7DE0FdE659b0d82441dD74828b7297A; the vault's position became 0 at average entry 0, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x308e59c9fcc21345ffd89ad62d32942b6bf1a0104226a00ec9f2c4d737dbc393"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x72361c78e524d4276aa42d559657ea0b6ef89c021864cab4b7738f24aefbd7c2"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36102157,
+      "detail": "An ordinary taker order filled the vault on 0x63B47eD4A7DE0FdE659b0d82441dD74828b7297A; the vault's position became 1.4e-13 at an average entry of 76.77, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x308e59c9fcc21345ffd89ad62d32942b6bf1a0104226a00ec9f2c4d737dbc393"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x81ef7f0c3a8fa8b8c937dc6bf26d38af0e2d64de51f63156342dbdcd9a82bf3f"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36104299,
+      "detail": "An ordinary taker order filled the vault on 0x63B47eD4A7DE0FdE659b0d82441dD74828b7297A; the vault's position became 0 at average entry 0, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x8f6fd950c74e003fad8af14d970deda7416895a16908d385bbe9523bc70d2978"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xf5f96f7251df91f8c51c7e05f871f9a27854790fbf74849c97f65833d8b4bf5a"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36106561,
+      "detail": "Slot 2 released (filled) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x83ea977c2e3f358d9ce08a8fb512bd34f366f365291dfbd2764ff8cf141fa05a"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36106561,
+      "detail": "An ordinary taker order filled the vault on 0xD6Cb1DD58580B84D76068aC21594219ce03aeddf; the vault's position became -0.0047 at an average entry of 2439.62, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x75c930b7981ab78aaa9ff2cac0f810e46bc9b53c094263d0f59541bcf49c5e31"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xf337733d31d213321de912d64258198a37b923261bb4914c1a3f979233fa845c"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36106890,
+      "detail": "An ordinary taker order filled the vault on 0xD6Cb1DD58580B84D76068aC21594219ce03aeddf; the vault's position became 0 at average entry 0, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0xde48d9ef37118b61198f86dd9d484f0b476df374e82e0917a2a4dbb8074380e9"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x1e5aca76834e14bb1ed700a33cef3e847ee87123d7616a4a42d6b2b7870cb0c0"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36108127,
+      "detail": "An ordinary taker order filled the vault on 0xD6Cb1DD58580B84D76068aC21594219ce03aeddf; the vault's position became -0.0048 at an average entry of 2439.67, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x97512493c513b993bcdb0260a2b7e644c744213b0a9409fbf309be4fbfe50993"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x39bc2347095dbf085b300ecbfc600c77242dd22f39785a208eb77c945ff6dc9c"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36109723,
+      "detail": "Slot 5 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x3d08752a1f80b4259f40881539e7bb74f725cb175e46242c110c6c8f3d9c29cf"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36113657,
+      "detail": "Slot 35 released (filled) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x458084f4538d47fda64182f82d77c189ed356169911d0d5c4cb9ff1d4028b30f"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36124406,
+      "detail": "An ordinary taker order filled the vault on 0x2a73129F26917124bd2A47a9B355C395C537F050; the vault's position became 1e-12 at an average entry of 1055.69, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x40333cc20cbe6995773e3f4d8f717f1b8745872e073d9cba939719cc43aabbad"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x5120a018ebaf6a2100ab533b5fa618fb20b201796ff1f81bea9d982fb80d49c8"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36124694,
+      "detail": "An ordinary taker order filled the vault on 0x2a73129F26917124bd2A47a9B355C395C537F050; the vault's position became 0 at average entry 0, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x856bdfe7894bc03e8a7e71c7888a2d75592d13d74d88e2e2262de26b1183f04a"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x510759a1bef00e147d9f343e4bbd30fd8a81b139082d0532e0f6ffab9cbc046a"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36134856,
+      "detail": "Slot 38 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x625a47eca011692c8646003d4d705357b06c804f018dbda15b6dfdc56bd804a1"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36145121,
+      "detail": "Slot 1 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x323ac10139549f86d0a0baf9c5fd64150146937a9909f848926f9ba34316332a"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "catch",
+      "title": "A real trader's liquidation filled a vault order",
+      "status": "proven",
+      "block": 36167755,
+      "detail": "A HYPE short held by 0x43a3b02f64297536628adbf50a0fabfe9b03476f, an account outside Catch, fell below maintenance. The liquidation engine, called by another outside address, closed it into the vault's ask at 81.61; the reactivity callback recorded the vault's new -0.15 HYPE position in the same block.",
+      "txs": [
+        {
+          "label": "Liquidation",
+          "tx": "0x050f62c94f6fff02e4710d5bdb4ab1073bc1ea72104bfbd91bcbddfc827b371b",
+          "index": 5
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x13e52e119e3999ffd32c0367d8d3f000e590440b5834d843be20b70d77525d31",
+          "index": 22
+        }
+      ],
+      "vault": "v4",
+      "base": "HYPE",
+      "side": "short",
+      "size": -0.15,
+      "price": 81.61,
+      "vaultTag": "v4",
+      "liquidatedAccount": "0x43a3b02f64297536628adbf50a0fabfe9b03476f",
+      "liquidationSender": "0xd47daa55bd8f40fff358ad139dd8549704dc842e"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36167771,
+      "detail": "An ordinary taker order filled the vault on 0x63B47eD4A7DE0FdE659b0d82441dD74828b7297A; the vault's position became 0 at average entry 0, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0xb83f067e9a78730dcb1c012a0aab97dec762caefdec3b55fe9b9dafd53789532"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x0335db901f45e1412477233985345c147f726b0b64f78dcf8f7bb1a526c3211e"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36168293,
+      "detail": "Slot 47 released (filled) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x3b2f2f53758dfe4503d467b3e42c83ea05eae516cf854f45320718958c814b01"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36197021,
+      "detail": "Slot 12 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x9ff4bacfeffbf337064103e275ae8b0cb137f2e3327a871598895204cc7621f1"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36258444,
+      "detail": "An ordinary taker order filled the vault on 0xB483ec1fb34996638677c20ab087b16F1896FA53; the vault's position became -1.1e-10 at an average entry of 105.41, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0xc3ba1d0cd1310e9e5af8a1d289157f272cffc65035fa0f3667078c4b3c3442b3"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xf357d73fa7cad27dcdb988aa9d758a0d5068b0450069e5ea49bf5a70b2f8f542"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36316121,
+      "detail": "An ordinary taker order filled the vault on 0x7058579F3248559963f79AdB937c6De9f953E060; the vault's position became -8.3e-12 at an average entry of 1.3695, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0xb1d43b41a66a33f1b5c06bd3d9f6f925a258ae02ff74f915d772a9cd8335103c"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xb5d8a3c949ca472e63b818ce659474cd1a5d55d26509c7e298bfc87f69284ceb"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36333663,
+      "detail": "Slot 61 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x5178f09d5c8119084577384fadc1b5f7a93207b0d47607a7f7e22e0f5e05312a"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36334015,
+      "detail": "Slot 6 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x2c1d5f8f15b9af0fcc1f2f49245c0ea1e8aafcf4188b3cc726b97cb8eb0dda7a"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36334015,
+      "detail": "An ordinary taker order filled the vault on 0xB483ec1fb34996638677c20ab087b16F1896FA53; the vault's position became 0 at average entry 0, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0xf4c5bc495a99286cf0bb3963a0865632c825e01cc72c0162fe5824b6930c56b5"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x652ac8670b49282563cdfb656280ec27e6fd13253d64a4189b4610179b90b5c3"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36342129,
+      "detail": "An ordinary taker order filled the vault on 0x2a73129F26917124bd2A47a9B355C395C537F050; the vault's position became -9e-13 at an average entry of 1322.92, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x4a2c7c1006ae423f32d6b459eeb7d368c56891056abbeb4469e7f991ee8c6023"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x48ec66c7e36c0a37cf750880044f4731d063981a5700e21b560e6eb7e22c4698"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36344332,
+      "detail": "An ordinary taker order filled the vault on 0x2a73129F26917124bd2A47a9B355C395C537F050; the vault's position became 0 at average entry 0, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x85a2642326a83cfc54de378d4b20ef63139609862883723d7e34780e1eaaa3f6"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xb4e0bf1eb63bd1ab9ba6071506aa367cbb94ec778ace8b9c30f674452acc1ae7"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36346867,
+      "detail": "Slot 82 released (filled) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xe01be47b46f9a57a829e86cfd8580c65251a484e05fa076fd0812946731e3a46"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36372443,
+      "detail": "Slot 40 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x3204217ad7ebfa25a073c379e67be42d8a07e13d485d08a71a48f365bd2ca696"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36381952,
+      "detail": "Slot 55 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xb310a8ae500d01837ca0f1a2276818eaf9e43dd583544d8892bd68b14d92d77b"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36383498,
+      "detail": "An ordinary taker order filled the vault on 0x7058579F3248559963f79AdB937c6De9f953E060; the vault's position became 0 at average entry 0, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0xe10a17ae1e010acf76423ad5784033180eadc757365dbb29d8c20ccc23dfd705"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xc35fe8dd6fd627ba70286beef6373e2045f94d61341e25ed17dbb8d4364fa0da"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36383748,
+      "detail": "Slot 85 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x768c783c0875e4df23f3744d1aec1bbb675a819f215cc86832092668e011d3bc"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 36384614,
+      "detail": "An ordinary taker order filled the vault on 0xDCb0Ad226727b2cE92857F0aF5751389d42B2A3f; the vault's position became 4.7 at an average entry of 2.7011, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x1c082c01d492b3caf84bc0dead63b9a3a2ac2203cf0f319a7a32af12fe2e981c"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x2832393212faf4e204e4903785860559c14b416f8009ac0a2b4d18647e833de0"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 36407839,
+      "detail": "Slot 77 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x9737ca04512d28bf359d2a1d0bec9d9186497949249d72b888d6c54b7cd1558c"
+        }
+      ],
+      "vault": "v4"
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 47064825,
+      "detail": "Slot 1 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xde9e7191d05303a7a5a0b8dc81fe56d4b977566c3e41baeaaaa067dce3d096e6"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235319,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -5.1 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x45ddf618efe696b5e194e130bc7941bdf9877bc31546b9f7ddacedacd67bad90"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x65f6e6f69144dcafa6e5679209116b40698b2eed08d911068969a8b8e27a9812"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235319,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -5.1 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x45ddf618efe696b5e194e130bc7941bdf9877bc31546b9f7ddacedacd67bad90"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x52e891fdf52e7178f55984dd762922b6690235f248482f9bd8a3b47a617ae45a"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235319,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -10.2 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x45ddf618efe696b5e194e130bc7941bdf9877bc31546b9f7ddacedacd67bad90"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x6e801e2aa4615faeb05389eecdc030f409e6867d06fde519ae856018066f9522"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235319,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -10.2 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x45ddf618efe696b5e194e130bc7941bdf9877bc31546b9f7ddacedacd67bad90"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xead13f653378ec86b342723fce26380c841c0582aa048296a7a0de4fc9faf5f5"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235319,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -15.3 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x45ddf618efe696b5e194e130bc7941bdf9877bc31546b9f7ddacedacd67bad90"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xb285ee0b8e45fb823e2fa7d8cca205e237a20635b3e1a1e01e96127d04f83e34"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235319,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -15.3 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x45ddf618efe696b5e194e130bc7941bdf9877bc31546b9f7ddacedacd67bad90"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xf30f15029315d331b7cfab6aed822f6ce676461cfb409f7640d79da3f17cd534"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -10.2 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x34c96fa798b781e86e9cb1bda0704d45ccdb9d6cc73b17a0ee8a95e3aaca29d8"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -10.2 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x41feae57d1a8a8cb4a66441974d8321c7d24761a462e8d77dc5e1308957f456e"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -5.1 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xc6f8349b590e6c1e2b83e7339aaf9c8142faaa3098c463c1e0d4911a3a1bd0c7"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -5.1 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x2f776daf9cc687bf1f02705532b307b0f286d6dd312e2bfb9a4604c481b916b1"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -10.2 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x163c813d5d7f94960fbc952849b1c59ca3a6813ff5f8a67052c4c8ab672680bd"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -10.2 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x64e4cc7a6c458fcdb5a5eb434c5bc5f51c7d70caa423d37286215bf163fcdefc"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -13.6 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x8085b9046cb42ca5527b158aeecf2daec478f3e476ebf2f89ce654204cc19ac0"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -13.6 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xbff036398a94abe2ce4188821878236ef0dc5b0a4a93c49b0a32b0e5c123abd0"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -8.5 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xcfefd9677817afc60625befeb863ad5728c7106cc29c0784f1846de3d348b0fc"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235324,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -8.5 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xe2dc80f7f28d21d4ce7a318d6b495231663e071462225053407a22a065ed2503"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235325,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -3.4 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2c83c389bd09aceb3952906ccbdfe1b86615ffe9f432f18d48fb55c857897f8e"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xc917757ec5c2d445460736a8ed1cc35ba9623be408a852a9e84426b14e341d5e"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235325,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became -3.4 at an average entry of 1.636, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2c83c389bd09aceb3952906ccbdfe1b86615ffe9f432f18d48fb55c857897f8e"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x180a59297077b69e2d8e44a1293b56aac1d594fba137f5fcb82b197fa5f17645"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235325,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became 0 at an average entry of 0, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2c83c389bd09aceb3952906ccbdfe1b86615ffe9f432f18d48fb55c857897f8e"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xb4dc8d4358ecc286db12bf6ec76a76450bda921f2961ad21f73a48b033739483"
+        }
+      ]
+    },
+    {
+      "kind": "fill",
+      "title": "A resting order filled and the callback took the position",
+      "status": "proven",
+      "block": 47235325,
+      "detail": "An ordinary taker order filled the vault on 0x2a1822b02039DDf0e293F3F7243673fc03EAF16c; the vault's position became 0 at an average entry of 0, recorded by the reactivity callback in the same block.",
+      "txs": [
+        {
+          "label": "Taker order",
+          "tx": "0x2c83c389bd09aceb3952906ccbdfe1b86615ffe9f432f18d48fb55c857897f8e"
+        },
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xd929dee2d45069c448b0e4ea3691cb71e5ac79f196a12f9466f34fbaf6a2c887"
+        }
+      ]
+    }
+  ],
+  "previous": [
+    "hideki-v1.json",
+    "hideki-v2.json",
+    "hideki-v3.json",
+    "hideki-v4.json"
+  ],
+  "subscription": {
+    "tx": "0x3a0910a45da5462e069015ff7ac79b86d418baa1b8e8272de3d1d9c81b4611ca",
+    "handler": "0x5e5e036370ad8615f4144f17ff6519d1f2db9f70",
+    "emitter": "0x478769E1177C0773c43A593DCCc4Ad15F15F1394",
+    "topic0": "0xf7816a375f0ca01053ed213b57908bff79f578810301d50971a5f685529b82de",
+    "status": "removed",
+    "block": 46808743,
+    "subscriptionId": "38141689",
+    "unsubscribeTx": "0x158dabd1ef3d63ade2488de73dd4238efbb2c824a96f10d1b43f6928cefd7278"
+  },
+  "subscriptions": [
+    {
+      "account": "0x5e5e036370ad8615f4144f17ff6519d1f2db9f70",
+      "subscriptionId": "38181255",
+      "tx": "0x4dd5e2e4db3e3552ee341add11a6aa136f2602a651554d0dd3510ee3161d4498",
+      "block": 46833183,
+      "status": "removed",
+      "removedTx": "0x4d5b3e0604534c49f74d8fd1e748197a51311f91b63affb7091f5e6541082203"
+    },
+    {
+      "account": "0x27e5a7f56c7bc58e558d1953968f7cb13eb4a852",
+      "subscriptionId": "38181286",
+      "tx": "0xe3d9920bd3513fdcbe0fb3c4eea24ef4ce999e3a1d5ff8e0449603dcb3ba6208",
+      "block": 46833200,
+      "status": "removed",
+      "removedTx": "0xa2c161f21b953b29054ce9cf2f59a6cc9fa7722d1cc0b4fc1203d61d96538d38"
+    },
+    {
+      "account": "0x792c289c1f945d239d12db3dcfdd841b59e3ba99",
+      "subscriptionId": "38181295",
+      "tx": "0x1b7b34b8740b1a6aff029b402fcaf6e26580f16f382e19e862f1f82f50547702",
+      "block": 46833218,
+      "status": "removed",
+      "removedTx": "0xd117feca036da9a96d2e2b06490c996a520be22409652b1bb403f9e4e39ce969"
+    },
+    {
+      "account": "0x5dc42a7d2e39e53acd0f4edee76bd0f45177ccdc",
+      "subscriptionId": "38181346",
+      "tx": "0x26cbbc9263f8f30448e0a1be4396268196980a1695e696a131c4d38979e0e053",
+      "block": 46833234,
+      "status": "removed",
+      "removedTx": "0x30c74f309dd85d20d83d8bf1967243cc79be8abd4cd6a260411358a858a97c41"
+    },
+    {
+      "account": "0x98532af22f85cbab0c1a8b1dddff809b000bcd05",
+      "subscriptionId": "38181380",
+      "tx": "0xb740de196e1581d899163066c945d898db5aae0c5d10093c52f7428bdb0270ec",
+      "block": 46833257,
+      "status": "removed",
+      "removedTx": "0x66491bda9d5c8d50393c3a3e102df49a868b411e7f056ea8a9ffd1fb35836a0a"
+    }
+  ],
+  "evidenceCursor": 47296394,
+  "navHistory": [
+    {
+      "at": "2026-11-10T19:03:34.685Z",
+      "block": 46833367,
+      "totalAssets": "155761600000000000000",
+      "totalSupply": "155761600000000000000000"
+    },
+    {
+      "at": "2026-11-11T07:58:21.213Z",
+      "block": 47297789,
+      "totalAssets": "158015460000000000000",
+      "totalSupply": "155761600000000000000000"
+    }
+  ],
+  "retired": {
+    "reason": "superseded by v6: adds the stage-4 takeover quote, and an unwind no longer pushes a market past its order-slot cap. Free collateral redeemed; the open positions stay in v5 with their unwind orders resting, and the remaining shares stay redeemable",
+    "at": "2026-11-11T09:21:41.981Z"
+  },
+  "performance": {
+    "deposited": 155.7616,
+    "redeemed": 126.55709284132838,
+    "stillInside": 42.21641013400706,
+    "sharesOutstanding": 38948.03825913374,
+    "firstSharePrice": 0.9999999999999999,
+    "lastSharePrice": 1.0834600040506102,
+    "sharesMinted": 155761.6,
+    "sharesBurned": 116813.56174086627,
+    "result": 13.011902975335452,
+    "events": [
+      {
+        "event": "Deposited",
+        "owner": "0x68A7Be0E0402dd17EA3CDFfA9Bff84b266F3eE9e",
+        "assets": 55.7716,
+        "shares": 55771.600000000006,
+        "block": 46807323,
+        "tx": "0x2ea89b66c75f367eabf8d28b8fdc026921796413a5b4024d3f8a82141183c2e9"
+      },
+      {
+        "event": "Deposited",
+        "owner": "0x0b8e630761AC8b6597e7ceFFFD87A1a8635F0db0",
+        "assets": 99.99,
+        "shares": 99990,
+        "block": 46808631,
+        "tx": "0xd767dfa1425b3b41b0de51358f0474283baf5ba0676b316a0c50a41750e5b42a"
+      },
+      {
+        "event": "Redeemed",
+        "owner": "0x0b8e630761AC8b6597e7ceFFFD87A1a8635F0db0",
+        "assets": 108.32943656942372,
+        "shares": 99990,
+        "block": 47346757,
+        "tx": "0x7e23f2bcff99269055a41a50d64c3f3d9a78d5163e85d1b5430b43d7a8bb802a"
+      },
+      {
+        "event": "Redeemed",
+        "owner": "0x68A7Be0E0402dd17EA3CDFfA9Bff84b266F3eE9e",
+        "assets": 18.227656271904657,
+        "shares": 16823.561740866266,
+        "block": 47347670,
+        "tx": "0x2402c01e0d4d16db72bcca110c582182faf5507d954632dcbf7eb5680a870755"
+      }
+    ],
+    "readAt": "2026-11-11T09:27:47.103Z"
+  },
+  "trades": [
+    {
+      "block": 47235319,
+      "tx": "0x45ddf618efe696b5e194e130bc7941bdf9877bc31546b9f7ddacedacd67bad90",
+      "kind": "taker",
+      "pool": "0x2a1822b02039DDf0e293F3F7243673fc03EAF16c",
+      "base": "ZRO",
+      "newSize": -5.1,
+      "avgEntry": 1.636,
+      "realizedPnl": 0
+    },
+    {
+      "block": 47235324,
+      "tx": "0x2f1c43824faee3773e38d3da964c3bd3eb332d6c8acb17b17221dd12ebf6d970",
+      "kind": "taker",
+      "pool": "0x2a1822b02039DDf0e293F3F7243673fc03EAF16c",
+      "base": "ZRO",
+      "newSize": -10.2,
+      "avgEntry": 1.636,
+      "realizedPnl": 0.48297
+    },
+    {
+      "block": 47235325,
+      "tx": "0x2c83c389bd09aceb3952906ccbdfe1b86615ffe9f432f18d48fb55c857897f8e",
+      "kind": "taker",
+      "pool": "0x2a1822b02039DDf0e293F3F7243673fc03EAF16c",
+      "base": "ZRO",
+      "newSize": -3.4,
+      "avgEntry": 1.636,
+      "realizedPnl": 0.48297
+    }
+  ]
+}

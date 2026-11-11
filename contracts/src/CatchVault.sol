@@ -42,6 +42,12 @@ contract CatchVault is ISomniaEventHandler {
     uint256 internal constant BPS = 10_000;
     uint256 public constant MAX_BACKERS = 8;
     uint256 public constant MAX_SLOTS_PER_POOL = 6;
+    /// @notice The LiquidationEngine's stage-4 bidder callback, pinned from a live takeover on
+    /// Somnia Hideki (tx 0x08f6988a…4cfe): (account, pool, size, markPrice) -> (accept, price).
+    bytes4 public constant TAKEOVER_QUOTE_SELECTOR = 0x6627a0db;
+    /// @notice Discount (long) or premium (short) to the mark the vault asks to take a position
+    /// over at; clamped into the engine's own [min, max] liquidation spread.
+    uint256 public constant TAKEOVER_SPREAD_BPS = 100;
     uint256 internal constant VIRTUAL_SHARES = 1e3;
     uint256 internal constant VIRTUAL_ASSETS = 1;
 
@@ -145,6 +151,8 @@ contract CatchVault is ISomniaEventHandler {
     error IndexStale(uint256 updatedAt, uint256 now_);
     error Locked(uint256 unlockAt);
     error DepositForOther();
+    error OnlyEngine();
+    error UnknownCall(bytes4 selector);
 
     modifier nonReentrant() {
         if (_lock != 1) revert Reentrancy();
@@ -393,6 +401,55 @@ contract CatchVault is ISomniaEventHandler {
     /// Permissionless: anyone may choose a better (further) price; nobody may choose a worse one.
     function unwind(address pool, uint256 price, uint256 quantity) external nonReentrant returns (uint64 slotId) {
         return _unwind(pool, price, quantity);
+    }
+
+    // ================================================================ stage-4 takeover
+
+    /// @notice What the vault would answer the LiquidationEngine for taking `size` of `account`'s
+    /// position on `pool` over at `mark`. Every rule that bounds a book order bounds this too:
+    /// a sane price, the per-order cap, the market cap, the open-interest cap, and margin the
+    /// vault can post. Declines (false, 0) rather than reverting, so a "no" never blocks the
+    /// engine's waterfall from reaching the next stage.
+    function takeoverQuote(address account, address pool, int256 size, uint256 mark)
+        public
+        view
+        returns (bool accept, uint256 price)
+    {
+        if (size == 0 || mark == 0 || account == address(this)) return (false, 0);
+        if (!BANK.isPerpPoolRegistered(pool) || IPerpPool(pool).marginBank() != address(BANK)) return (false, 0);
+        if (IPerpPool(pool).isRestricted()) return (false, 0);
+        (uint8 st,,,) = priceStatus(pool);
+        if (st != 0) return (false, 0);
+
+        uint256 spread = TAKEOVER_SPREAD_BPS;
+        uint256 lo = ENGINE.getMinLiquidationSpreadBps();
+        uint256 hi = ENGINE.getMaxLiquidationSpreadBps();
+        if (spread < lo) spread = lo;
+        if (spread > hi) spread = hi;
+        // a long is taken over below the mark, a short above it
+        price = size > 0 ? mark * (BPS - spread) / BPS : mark * (BPS + spread) / BPS;
+
+        IPerpPool.HealthSnapshot memory s = IPerpPool(pool).getHealthSnapshot();
+        uint256 abs = size > 0 ? uint256(size) : uint256(-size);
+        uint256 notional = abs * price / s.oneBase;
+        uint256 assets = totalAssets();
+        if (notional > assets * CLUSTER_CAP_BPS / BPS) return (false, 0);
+        uint256 exposureAfter = exposure(pool) + notional;
+        if (exposureAfter > assets * MARKET_CAP_BPS / BPS) return (false, 0);
+        if (exposureAfter > openInterestCap(pool)) return (false, 0);
+        if (notional * s.effectiveIMFBps / BPS > BANK.getWithdrawableCollateral(address(this))) return (false, 0);
+        return (true, price);
+    }
+
+    /// @dev The engine calls bidders by selector; the name behind 0x6627a0db is not published,
+    /// so the vault answers that selector here and nothing else.
+    fallback(bytes calldata data) external returns (bytes memory) {
+        if (msg.sig != TAKEOVER_QUOTE_SELECTOR) revert UnknownCall(msg.sig);
+        if (msg.sender != address(ENGINE)) revert OnlyEngine();
+        (address account, address pool, int256 size, uint256 mark) =
+            abi.decode(data[4:], (address, address, int256, uint256));
+        (bool accept, uint256 price) = takeoverQuote(account, pool, size, mark);
+        return abi.encode(accept, price);
     }
 
     // ================================================================ reactivity
@@ -650,6 +707,22 @@ contract CatchVault is ISomniaEventHandler {
         uint64[] storage ids = _poolSlots[pool];
         for (uint256 i = ids.length; i > 0; i--) {
             if (_slots[ids[i - 1]].unwind) _release(ids[i - 1], RELEASE_REPRICE);
+        }
+        // the unwind still counts toward MAX_SLOTS_PER_POOL: getting out of a caught position
+        // outranks resting one more cluster order, so the smallest cluster order makes way
+        if (ids.length >= MAX_SLOTS_PER_POOL) {
+            uint256 oneBase = IPerpPool(pool).getHealthSnapshot().oneBase;
+            uint64 smallest;
+            uint256 smallestNotional = type(uint256).max;
+            for (uint256 i = 0; i < ids.length; i++) {
+                Slot storage sl = _slots[ids[i]];
+                uint256 n = sl.price * sl.quantity / oneBase;
+                if (n < smallestNotional) {
+                    smallestNotional = n;
+                    smallest = ids[i];
+                }
+            }
+            _release(smallest, RELEASE_EVICTED);
         }
 
         slotId = nextSlotId++;

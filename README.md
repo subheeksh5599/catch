@@ -6,7 +6,7 @@
 
 [![Status](https://img.shields.io/badge/status-live%20on%20Hideki-16a34a)](#live-status)
 [![Network](https://img.shields.io/badge/network-Somnia%20Hideki%20testnet%2050383-4DA2FF)](#live-status)
-[![Contract tests](https://img.shields.io/badge/forge%20tests-75%20%2B%2011%20invariants-16a34a)](#invariants)
+[![Contract tests](https://img.shields.io/badge/forge%20tests-92%20%2B%2011%20invariants-16a34a)](#invariants)
 [![Fuzzing](https://img.shields.io/badge/fuzz-2%2C000%20runs%2C%20200k%20stateful%20calls-16a34a)](#invariants)
 [![Engine tests](https://img.shields.io/badge/engine%20tests-12%20passing-16a34a)](#the-engine)
 ![Stack](https://img.shields.io/badge/Solidity%20%2B%20Somnia%20Reactivity%20%2B%20markets--sdk-1f1f23)
@@ -35,18 +35,20 @@ _Recording in progress._
 | Surface | Status | Evidence |
 |---|---|---|
 | **A real trader's liquidation filled a Catch order** | **Proven** | block 36,167,755: a HYPE short held by `0x43a3…476f`, an account outside Catch, fell below maintenance. The liquidation engine, called by another outside address, closed it at tx index 5 into the vault's resting ask at 81.61 (`0x050f62c9…371b`). The Reactivity callback recorded the vault's new −0.15 HYPE position and rested the unwind at index 22 of the same block (`0x13e52e11…5d31`) |
-| `CatchVault` v5 on Hideki | **Live** | [`0x5e5e036370ad8615f4144f17ff6519d1f2db9f70`](deployments/hideki.json), tx `0x9c9ecf91…2efc`, block 46,806,728. 50% market cap, 25% cluster cap, 2% of open interest per market, 1.5% mark-vs-index limit, 120 s index age, 1 hour redeem lock |
-| Depositors | **Two** | the operator (55.77 USDso, everything v4 paid back) and a second wallet (99.99 USDso), each a separate `deposit` with its own lock |
-| Orders on the venue's book | **Live** | the keeper quotes the ten busiest markets; v5's first order, a NEAR ask over two short positions, landed in `0xcd542842…e29e` |
+| `CatchVault` v6 on Hideki | **Live** | [`0x8d457dd604a7a386e9766f51bb45f9d5faa4431a`](deployments/hideki.json), tx `0xb1bd0126…5060`, block 47,347,823. 50% market cap, 25% cluster cap, 2% of open interest per market, 1.5% mark-vs-index limit, 120 s index age, 1 hour redeem lock, and the stage-4 takeover quote |
+| Stage-4 backstop | **Built, fork-proven, waiting on one owner transaction** | on a fork of Hideki, the real LiquidationEngine handed Catch a liquidated BTC long, and picked Catch over the live bidder. Registration is owner-only; the exact call is in [`docs/stage4-backstop.md`](docs/stage4-backstop.md) and simulates successfully from the owner today. [More below](#stage-4-the-backstop) |
+| Depositors | **Two** | a second wallet (208 USDso) and the operator (18 USDso), $226 in total, each a separate `deposit` with its own lock |
+| Orders on the venue's book | **Live** | a keeper on a server quotes the ten busiest markets around the clock; every order and fill is in `deployments/` |
 | Same-block auto-cancel | **Proven, 17 times** | e.g. a test trader closed its HYPE long at tx index 2 of block 35,466,495 (`0x24e2230d…d441`); the validator-issued `onEvent` cancelled the bid it backed at index 16 of the same block (`0x51109d89…bb38`) |
 | Fill → position → unwind | **Proven, 21 times** | every fill was recorded by the callback in its own block, with an unwind rested at or beyond entry, e.g. ETH short at 2,415.43 offered back at 2,324.28 (`0x91db9c26…53be`) |
 | Contract refusing an order on chain | **Observed** | keeper proposals whose backers moved before the send reverted `OutsideBand(account, lo, hi, price)` |
 | Every trade, priced by the venue | **17 fills on v4, every close in profit** | the vault's own MarginBank `PositionUpdated` logs: 8 closes, all positive, +4.66 USDso realized in total; the caught liquidation itself closed for +0.10 (`scripts/live/trades.mjs`, the Trades card on the Vault page) |
 | v4's depositor result | **+21.4%** | 45.90 USDso in, 55.72 USDso back on full redemption (`0x14b6ac0a…8597`), computed from the vault's own `Deposited` and `Redeemed` events by `scripts/live/performance.mjs` |
+| v5's depositor result | **+8.4%** | 155.76 USDso in; share price 1.0835 at retirement. 126.56 USDso paid back (`0x7e23f2bc…802a`, `0x2402c01e…0755`) and 42.21 USDso still inside v5, in open positions with their unwind orders resting |
 | Reactivity | **Live, per account** | one `PositionUpdated` subscription per backing account plus the vault itself, reconciled by the keeper every pass |
 | Dashboard and landing page | **Live** | [catch-backstop.vercel.app](https://catch-backstop.vercel.app), every figure read from Hideki by the engine |
 
-Earlier vaults stay on chain with their records: v1 (`deployments/hideki-v1.json`, venue-wide subscription, too costly), v2 (`hideki-v2.json`, found that the venue's `getOrder` reverts on a deleted order, which made re-checks revert; fixed in the contract with three regression tests), v3 (`hideki-v3.json`, caps too small for the deposit), v4 (`hideki-v4.json`, the vault that made the catch; replaced by v5 to add the open-interest cap, the price check and the redeem lock, with no open position at retirement).
+Earlier vaults stay on chain with their records: v1 (`deployments/hideki-v1.json`, venue-wide subscription, too costly), v2 (`hideki-v2.json`, found that the venue's `getOrder` reverts on a deleted order, which made re-checks revert; fixed in the contract with three regression tests), v3 (`hideki-v3.json`, caps too small for the deposit), v4 (`hideki-v4.json`, the vault that made the catch; replaced by v5 to add the open-interest cap, the price check and the redeem lock, with no open position at retirement), v5 (`hideki-v5.json`, +8.4%; replaced by v6 to add the stage-4 takeover quote and a fix the stateful fuzzer found: an unwind could take a seventh order slot on a market already holding six).
 
 ```mermaid
 flowchart TD
@@ -68,6 +70,7 @@ flowchart TD
 - [The problem](#the-problem)
 - [The catch loop, step by step](#the-catch-loop-step-by-step)
 - [The catch window](#the-catch-window)
+- [Stage 4: the backstop](#stage-4-the-backstop)
 - [Invariants](#invariants)
 - [Attack → test](#attack--test)
 - [Risks](#risks)
@@ -96,7 +99,7 @@ From the venue's own LiquidationEngine history on Hideki:
 
 The dashboard recomputes the second row live. On the busiest markets, the resting book inside the windows where the largest clusters would be closed is close to zero; the map page shows it per cluster.
 
-The live LiquidationEngine reports one registered bidder and a 0.5–5% liquidation spread. With the book empty, a liquidation falls toward the insurance fund and ADL sooner than the configuration implies. Of the last 1,000 account liquidations, 114 (11.4%) ended in auto-deleveraging.
+The live LiquidationEngine reports two registered bidders and a 0.5–5% liquidation spread. With the book empty, a liquidation falls toward the insurance fund and ADL sooner than the configuration implies. Of the last 1,000 account liquidations, 114 (11.4%) ended in auto-deleveraging.
 
 ## The catch loop, step by step
 
@@ -119,6 +122,27 @@ The engine closes a liquidated position into the book no further than its maximu
 
 The short-side rule exists because the live venue reports a short's bankruptcy price at its entry, below the liquidation price. The contract ignores a bankruptcy figure on the wrong side instead of refusing every ask. `CatchVault.catchWindow(account, pool)` exposes the window; `engine/src/math.mjs` computes the same one, and the rehearsal checks they agree.
 
+## Stage 4: the backstop
+
+When the book can't absorb a liquidation, the engine offers the whole position to its registered
+bidders, and one of them takes it over at the price it quoted. Catch v6 is a bidder:
+
+- **The interface, recovered from a real takeover.** The engine calls each bidder with
+  `0x6627a0db(account, pool, size, markPrice)` and reads `(bool accept, uint256 price)`. Catch
+  answers from `fallback`, only when the engine is the caller.
+- **The same rules as a book order.** The price is 1% past the mark, inside the engine's own
+  0.5–5% band. Catch says no when the mark is off the index or the index is stale, above the
+  per-order, per-market or open-interest caps, or without the margin to post. A "no" is
+  `(false, 0)`, never a revert, so the engine's waterfall always continues.
+- **Proven against the real engine.** `contracts/test/CatchVault.takeover.fork.t.sol` forks Hideki
+  one block before a real takeover (BTC, block 45,209,705), registers Catch the way the owner
+  registered the live bidder, and replays the original liquidation byte for byte. The engine
+  hands Catch the position at 73,159.55. With both bidders registered, it still picks Catch: the
+  live bidder took the same position at 73,076.68, a worse price for the liquidated trader.
+- **One transaction from live.** Registration is owner-only (`OwnableUnauthorizedAccount` for
+  anyone else). The calldata for v6 simulates successfully from the owner today:
+  [`docs/stage4-backstop.md`](docs/stage4-backstop.md). The dashboard reads `isBidder` live.
+
 ## Invariants
 
 | # | Invariant | Enforced in | Tests |
@@ -132,7 +156,7 @@ The short-side rule exists because the live venue reports a short's bankruptcy p
 | 7 | No order is placed, and a resting one is released, while the mark is more than `MAX_INDEX_DEVIATION_BPS` from the oracle index or the index is older than `MAX_INDEX_AGE` | `_requireSanePrice`, `priceStatus`, re-check | `test_invariant7_*` (5), `test_priceStatus_reportsEachState` |
 | 8 | New shares cannot be redeemed or transferred for `REDEEM_DELAY`; nobody can deposit for, and so re-lock, someone else | `deposit`, `redeem`, `_move` | `test_invariant8_*` (4) |
 
-`cd contracts && forge test` → 75 unit tests plus a stateful suite of 11 invariants, all passing.
+`cd contracts && forge test` → 92 tests (75 vault, 13 takeover-quote, 4 on a fork of the live engine) plus a stateful suite of 11 invariants, all passing. The fork tests skip unless `HIDEKI_RPC` is set; see [Stage 4](#stage-4-the-backstop).
 
 Each fuzz test runs 2,000 random inputs. The stateful suite (`test/CatchVault.invariant.t.sol`) runs 2,000 random sequences of 100 calls (200,000 calls) through a handler that does what the real world does to the vault: depositors arrive and leave, shares move, keepers propose good and bad orders, the engine fills them, backers trade or close and Reactivity calls back, the mark drifts, the oracle separates or goes stale, open interest shrinks, time passes. After every call it checks:
 
@@ -175,7 +199,7 @@ The first run caught an over-strict check in the suite itself: an order whose pr
 - **Catching a falling position.** A vault that buys liquidations in a crash can lose money. The caps, the open-interest limit and the entry-bounded unwind limit that loss; they do not remove it.
 - **Handler gas.** The callback re-checks only the orders the changed account backs, at most six per market, so each invocation stays bounded.
 - **Subscription cost.** The subscription owner holds 32 STT and pays for every callback. Catch subscribes per backing account, not venue-wide; the venue-wide filter on v1 cost about 0.1 STT a minute.
-- **Stage 4.** After the book, the engine hands positions to registered bidders. No public registration function was found on the Hideki engine (it lists one bidder), so Catch covers the book stage only.
+- **Stage 4.** Catch v6 quotes takeovers and won one on a fork of the real engine, but registration is owner-only. Until the venue registers it, Catch covers the book stage on chain and the takeover stage only on the fork.
 
 ## The engine
 
@@ -211,7 +235,9 @@ Red and green only mean longs and shorts being liquidated; amber marks the vault
 
 ```bash
 git clone --recurse-submodules https://github.com/subheeksh5599/catch && cd catch
-cd contracts && forge test                      # 75 unit + 11 invariants (2,000 runs, 200,000 calls), about a minute
+cd contracts && forge test                      # 92 tests + 11 invariants (2,000 runs, 200,000 calls), about a minute
+python3 script/hideki-fork-rpc.py 8547 &        # optional: read-only RPC shim for the fork tests
+HIDEKI_RPC=http://127.0.0.1:8547 forge test --match-contract TakeoverFork -vv   # the real engine, on a fork
 cd ../engine && npm install && npm test          # 12 passed
 npm --prefix ../dashboard install && npm --prefix ../dashboard run build   # the dashboard, once
 npm start                                        # http://127.0.0.1:8787 (site) and /app/ (dashboard), live Hideki data
@@ -244,14 +270,14 @@ Deployment costs about 104M gas. Every transaction lands in `deployments/hideki.
 | A large share of liquidations found an empty book | **Measured** | the table above, recomputed live |
 | Every position and its liquidation price readable from head state | **Real** | the engine maps every market |
 | Contract windows match the engine on real accounts | **Rehearsed** | 16/16 identical, `deployments/rehearsal-hideki.txt` |
-| Vault rules | **Tested** | 75 Foundry tests against venue doubles that follow the published ABIs |
+| Vault rules | **Tested** | 88 Foundry tests against venue doubles that follow the published ABIs, and 4 against the deployed engine on a fork |
 | A contract-owned account resting orders on Hideki | **Real** | v4 and v5 orders; hashes in `deployments/` |
 | Same-block cancel from a reactivity callback | **Real** | 17 recorded, e.g. block 35,466,495 |
 | Fill handled by the callback, unwind at or beyond entry | **Real** | 21 recorded |
 | A liquidation filled into a Catch order | **Real** | block 36,167,755, a trader outside Catch, liquidated by an address outside Catch |
 | Every closed trade's result | **Real** | 8 closes on v4, all in profit, +4.66 USDso realized as booked by MarginBank |
-| Depositors got more back than they put in | **Real, once** | v4: +21.4% on 45.90 USDso. One vault, small size, testnet; not a forecast |
-| Stage-4 bidder registration | **Not found** | no public registration function on the Hideki engine; one bidder registered |
+| Depositors got more back than they put in | **Real, twice** | v4: +21.4% on 45.90 USDso; v5: +8.4% on 155.76 USDso. Small size, testnet; not a forecast |
+| Stage-4 takeover | **Proven on a fork, pending registration** | the real engine handed Catch a BTC long and picked it over the live bidder; registration is owner-only, one transaction ([`docs/stage4-backstop.md`](docs/stage4-backstop.md)) |
 | Mainnet | **Pending** | dreamDEX perps are testnet-only today; the same scripts deploy to mainnet when the venue launches there |
 
 A fork test was tried and dropped: neither Somnia RPC serves historical state, so neither Foundry nor anvil can fork it. The rehearsal script replaces it.
@@ -261,6 +287,7 @@ A fork test was tried and dropped: neither Somnia RPC serves historical state, s
 Found while building Catch, in the bounty's format, in [`feedback/`](feedback/):
 
 - [`getBankruptcyPrice` returns the entry price (or less) for every short that is in profit](feedback/bankruptcy-price-shorts-in-profit.md): reproduced on HYPE and BTC with a read-only script, with longs and losing shorts as the control.
+- [The stage-4 bidder interface and registration are undocumented](feedback/stage4-bidder-interface-undocumented.md): the callback, the registration arguments and the market-tier list all had to be recovered from traces; a bidder registered for the wrong tier is silently never asked.
 
 ## X posts
 
@@ -279,13 +306,14 @@ site/         landing page
 api/          the same API as serverless functions
 deployments/  per-network deployment records, retired vaults, trades, rehearsal output
 feedback/     reports to the venue, each with a read-only reproduction
+docs/         the stage-4 backstop: interface, fork proof, the registration call
 ```
 
 ## How the numbers were measured
 
 - **27% (98 of 363):** `client.listLiquidations({ limit: 1000 })` on 2026-10-22 returned 1,000 rows from 2026-10-20 14:55 UTC to 2026-10-22 07:10 UTC, 363 of them `AccountLiquidated`; 98 had `stageReached 1` and `positionsProcessed 0`.
 - **33.6% (336 of 1,000):** `client.listLiquidations({ kind: "AccountLiquidated", limit: 1000 })` with the same rule, recomputed every 20 s by `engine/src/service.mjs`.
-- **+21.4%:** `scripts/live/performance.mjs hideki v4` sums the vault's `Deposited` and `Redeemed` events from its deploy block.
+- **+21.4% and +8.4%:** `scripts/live/performance.mjs hideki v4` (and `v5`) sums the vault's `Deposited` and `Redeemed` events from the deposit and redeem transactions in its record, plus what is still inside at the current share price.
 - **Trades:** `scripts/live/trades.mjs hideki` reads the receipt of every recorded fill and takes the MarginBank `PositionUpdated` log for the vault: new size, average entry and `realizedPnl` as the venue booked them.
 - **The catch:** the liquidation receipt's LiquidationEngine logs name the liquidated account and the sender; the vault's `Caught` event and the callback transaction sit in the same block.
 - **Map figures:** `engine/scripts/snapshot.mjs` prints them for any market at the current block.

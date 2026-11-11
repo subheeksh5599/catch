@@ -2,10 +2,12 @@
 // history, and (once deployed) the vault. Everything here is read from the chain or the venue's
 // indexer; nothing is invented. Values leave this module as plain JSON numbers/strings.
 import { readFileSync, existsSync, readdirSync } from "node:fs";
-import { parseEventLogs } from "viem";
+import { parseEventLogs, parseAbi } from "viem";
 import { SomniaMarkets } from "@somnia-chain/markets-sdk";
 import { NETWORKS, publicClient, vaultAbi, erc20Abi, bankAbi, poolAbi } from "./chain.mjs";
 import { snapshotPool } from "./reader.mjs";
+
+const engineBidderAbi = parseAbi(["function isBidder(address) view returns (bool)", "function getBidders() view returns (address[])"]);
 import { binMap, atRisk, bestCluster, sizeOrder, catchWindow, depthBetween, BPS } from "./math.mjs";
 
 const E18 = 1e18;
@@ -301,6 +303,17 @@ export class CatchService {
     // v5 limits; a vault deployed before them answers with no data, and the fields stay null
     const opt = (fn) => rd(fn).then(Number).catch(() => null);
     const [oiCapBps, maxDevBps, maxAge, redeemDelay] = await Promise.all([opt("OI_CAP_BPS"), opt("MAX_INDEX_DEVIATION_BPS"), opt("MAX_INDEX_AGE"), opt("REDEEM_DELAY")]);
+    // v6: the stage-4 takeover quote, and whether the engine's owner has registered the vault
+    const takeoverSpreadBps = await opt("TAKEOVER_SPREAD_BPS");
+    let backstop = null;
+    const engine = this.system?.liquidationEngine;
+    if (takeoverSpreadBps != null && engine) {
+      const [registered, bidders] = await Promise.all([
+        this.client.readContract({ address: engine, abi: engineBidderAbi, functionName: "isBidder", args: [v] }).catch(() => null),
+        this.client.readContract({ address: engine, abi: engineBidderAbi, functionName: "getBidders" }).catch(() => null),
+      ]);
+      backstop = { engine, registered, bidders, spreadBps: takeoverSpreadBps, selector: "0x6627a0db" };
+    }
     const state = await this.client.readContract({ address: this.net.addresses.marginBank, abi: bankAbi, functionName: "getAccountState", args: [v] });
     const markets = await Promise.all(pools.map(async (pool) => {
       const [ids, exposure, pos, snap] = await Promise.all([
@@ -322,6 +335,7 @@ export class CatchService {
       return { pool, symbol: m?.symbol ?? pool, exposure: num(exposure), oiCap, price, position: { size: num(pos.size < 0n ? -pos.size : pos.size, Number(oneBase)) * (pos.size < 0n ? -1 : 1), entry: num(pos.avgEntryPrice) }, slots };
     }));
     this.vault = {
+      backstop,
       address: v,
       deployBlock: d.deployBlock,
       deployTx: d.deployTx,

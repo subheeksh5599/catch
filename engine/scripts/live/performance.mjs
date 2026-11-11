@@ -1,6 +1,6 @@
 // What a vault paid back against what it took in, from its own Deposited and Redeemed events.
-// Reads the receipts of every transaction in the record plus a scan from the deploy block, and
-// writes rec.performance. Nothing is estimated: every figure is the sum of on-chain events.
+// Reads the receipts of the deposit and redeem transactions listed in the record (rec.txs), and
+// writes rec.performance; a deposit or redemption sent outside the scripts must be added there. Nothing is estimated: every figure is the sum of on-chain events.
 //   node scripts/live/performance.mjs [network] [file-tag]   (file-tag: "" for the live record, or v4)
 import { readFileSync, writeFileSync } from "node:fs";
 import { parseEventLogs } from "viem";

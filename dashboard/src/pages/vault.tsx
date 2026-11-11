@@ -154,7 +154,8 @@ function EarlierVaults({ v }: { v: VaultState }) {
               </b>
             </div>
             <div className="text-muted-foreground">
-              {usd(p.deposited, { compact: false, digits: 2 })} in, {usd(back, { compact: false, digits: 2 })} paid back on redemption
+              {usd(p.deposited, { compact: false, digits: 2 })} in, {usd(p.redeemed, { compact: false, digits: 2 })} paid back
+              {p.stillInside > 0.01 ? <>, {usd(p.stillInside, { compact: false, digits: 2 })} still inside in open positions</> : " on redemption"}
             </div>
             {r.retired?.reason && <div className="text-xs text-muted-foreground">Replaced: {r.retired.reason}</div>}
           </div>
@@ -416,6 +417,7 @@ export default function VaultPage() {
           </Section>
         </div>
         <div className="grid min-w-0 gap-4 lg:sticky lg:top-4 lg:max-h-[calc(100svh-2rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-1">
+          {v.backstop && <Backstop b={v.backstop} vault={v.address} />}
           <Section title="What the contract enforces">
             <ol className="grid gap-3 text-sm">
               {[
@@ -429,6 +431,9 @@ export default function VaultPage() {
                       ["Price check", `No quote while the mark is more than ${v.maxIndexDeviationBps / 100}% from the oracle index or the index is older than ${v.maxIndexAgeSeconds} seconds.`],
                       ["Lock", `New shares can't be redeemed or moved for ${fmtDelay(v.redeemDelaySeconds)}.`],
                     ]
+                  : []),
+                ...(v.backstop
+                  ? [["Takeover", `Asked by the liquidation engine, it takes a whole position over at ${v.backstop.spreadBps / 100}% past the mark, under every cap above, or says no.`]]
                   : []),
               ].map(([t, dsc], i) => (
                 <li key={t} className="grid grid-cols-[20px_1fr] gap-2">
@@ -452,5 +457,30 @@ export default function VaultPage() {
         </div>
       </div>
     </BaseLayout>
+  )
+}
+
+function Backstop({ b, vault }: { b: NonNullable<VaultState["backstop"]>; vault: string }) {
+  const others = (b.bidders || []).filter((x) => x.toLowerCase() !== vault.toLowerCase())
+  return (
+    <Section title="Liquidation backstop">
+      <div className="grid gap-3 text-sm">
+        <div className="flex items-center gap-2">
+          <span className={`inline-block size-2 rounded-full ${b.registered ? "bg-emerald-500" : "bg-amber-500"}`} />
+          <span className="font-medium">{b.registered ? "Registered bidder" : b.registered === false ? "Built, waiting for registration" : "Status unavailable"}</span>
+        </div>
+        <p className="text-muted-foreground">
+          When the order book can't absorb a liquidation, the engine offers the whole position to its registered bidders. Catch answers that call
+          ({b.selector}) with a price {b.spreadBps / 100}% past the mark. On a fork of this chain the real engine handed Catch a BTC long,
+          and picked Catch over the live bidder.
+        </p>
+        <p className="text-muted-foreground">
+          Registration is a single owner-only transaction on the engine. {others.length} other bidder{others.length === 1 ? " is" : "s are"} registered today.
+        </p>
+        <a className="text-primary underline-offset-4 hover:underline" href="https://github.com/subheeksh5599/catch/blob/main/docs/stage4-backstop.md" target="_blank" rel="noreferrer">
+          How it works and the transaction it needs
+        </a>
+      </div>
+    </Section>
   )
 }

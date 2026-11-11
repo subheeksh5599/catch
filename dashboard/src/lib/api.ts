@@ -90,6 +90,7 @@ export type VaultState = {
   marketCapBps: number
   clusterCapBps: number
   oiCapBps: number | null
+  backstop?: { engine: string; registered: boolean | null; bidders: string[] | null; spreadBps: number; selector: string } | null
   maxIndexDeviationBps: number | null
   maxIndexAgeSeconds: number | null
   redeemDelaySeconds: number | null
