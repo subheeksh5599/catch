@@ -392,6 +392,70 @@
       "price": "4673300000000000",
       "quantity": "12000000000000000000000",
       "backers": 2
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xfe25a78c1a11a9556684d0f08013f14c00ad1be5320a7a227ac2ad0bf3397e85",
+      "block": 47555480,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454"
+    },
+    {
+      "kind": "place",
+      "tx": "0xb48f8eb4fbd2eac861c6e5e608abb362740ca1148fc82a470b9368ab849e9995",
+      "block": 47559544,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf",
+      "isBid": false,
+      "price": "2338260000000000000000",
+      "quantity": "24100000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x9d8d2d77b8871272a5d85042e20c0becab8e8e1a02ba21fda99e5120d74ab72b",
+      "block": 47559701,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf"
+    },
+    {
+      "kind": "place",
+      "tx": "0x5b9c09d3e34705df3c3a6f7aade8756abe83b6c7d117c6289f74e96c05470ed6",
+      "block": 47563184,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad",
+      "isBid": false,
+      "price": "780226000000000000000",
+      "quantity": "72000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x3c04113a277139e3fb338ed4c715691b7d1af465a2afda5e1741b51f391fe2e9",
+      "block": 47563260,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x67eed5771e950ed43fa5b4b6f33a2af6f59ada4f64668d3c2cca94469e3ee153",
+      "block": 47566009,
+      "status": "success",
+      "pool": "0xfa9b9e50cc1745113d57893991af200a74c86b6f"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x2b9af87e905de8868e228e7efaf96b6445498078106115d5d5a3f11b68f8e638",
+      "block": 47568343,
+      "status": "success",
+      "pool": "0xde9762b6b441133d1314c68864ae4e63a6ee45c7"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x80e2f8361dd1efd19df5987e1d5c9ad9f1f66ca80ec985a38d9f87551598ea28",
+      "block": 47568586,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5"
     }
   ],
   "subscriptions": [
@@ -638,6 +702,19 @@
   "refusals": [
     {
       "at": "2026-11-11T14:51:22.222Z",
+      "kind": "place",
+      "error": "AgentPriceCheck",
+      "args": [
+        "no agent price for this market"
+      ],
+      "pool": "0xe3f6dcda98595764970e5a6ffd167af1d1b35123",
+      "pair": null,
+      "venueMark": "3450000000000000000000",
+      "agentMark": null,
+      "validators": 0
+    },
+    {
+      "at": "2026-11-11T15:15:29.215Z",
       "kind": "place",
       "error": "AgentPriceCheck",
       "args": [
