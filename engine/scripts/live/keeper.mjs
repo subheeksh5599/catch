@@ -7,6 +7,7 @@ import { parseEther, BaseError, ContractFunctionRevertedError } from "viem";
 import { NETWORKS, publicClient, vaultAbi, erc20Abi, systemAbi, engineAbi, bankAbi, poolAbi } from "../../src/chain.mjs";
 import { loadAccount, walletFor } from "../../src/signer.mjs";
 import { snapshotPool } from "../../src/reader.mjs";
+import { readFeed, feedCheck, FEED_RULES } from "../../src/pricefeed.mjs";
 import { bestCluster, sizeOrder } from "../../src/math.mjs";
 import { reconcile, POSITION_UPDATED } from "../../src/subscriptions.mjs";
 import { pad } from "viem";
@@ -92,7 +93,34 @@ async function followBacker(pool, backer, slots, capNotional) {
   const size = pos.size > 0n ? pos.size : -pos.size;
   const q = sizeOrder({ size, price, oneBase: snap.oneBase, lotSize: book.lotSize, minQuantity: book.minQuantity, capNotional });
   if (q === 0n) { log(pool, "followed order below venue minimum"); return; }
+  if (!(await agentsAllow(pool, { isBid, followed: backer }))) return;
   await send("place", "place", [pool, isBid, price, q, [backer]], { pool, isBid, price: price.toString(), quantity: q.toString(), backers: 1, followed: backer });
+}
+
+/** The Somnia Agents price check: before quoting a market, the agents' price for it must be
+ *  fresh, backed by enough agents, and close to the venue's mark. Refusals are kept as evidence,
+ *  once per change of reason so a long outage does not flood the record. */
+const baseOf = new Map(); // pool -> base symbol, filled once the market list is loaded
+const feedState = new Map(); // pool -> last refusal reason ("" when quoting is allowed)
+async function agentsAllow(pool, extra = {}) {
+  const k = pool.toLowerCase();
+  const [snap, feed] = await Promise.all([
+    client.readContract({ address: pool, abi: poolAbi, functionName: "getHealthSnapshot" }),
+    readFeed(client, baseOf.get(k) ?? ""),
+  ]);
+  const r = feedCheck(feed, snap.markPrice, Date.now());
+  const reason = r.ok ? "" : r.reason;
+  if (feedState.get(k) !== reason) {
+    feedState.set(k, reason);
+    if (!r.ok) {
+      log(pool, "agents' price check:", reason);
+      rec.refusals ??= [];
+      rec.refusals.push({ at: new Date().toISOString(), kind: "place", error: "AgentPriceCheck", args: [reason], pool, pair: feed?.pair ?? null, venueMark: snap.markPrice.toString(), agentMark: feed?.mark?.toString() ?? null, validators: feed?.validators ?? 0, ...extra });
+      rec.refusals = rec.refusals.slice(-300);
+      save();
+    }
+  }
+  return r.ok;
 }
 
 async function pass(engineSpread, pools) {
@@ -119,6 +147,7 @@ async function pass(engineSpread, pools) {
       if (live.length && passNo % Number(opt("refresh-every", 90)) === 0) await send("refreshPool", "refreshPool", [pool], { pool });
       continue;
     }
+    if (!(await agentsAllow(pool))) continue;
     const s = await snapshotPool(client, { bank: net.addresses.marginBank, pool });
     if (passNo === 0) log(pool, "snapshot", s.positions.length, "positions");
     let idle = false;
@@ -128,6 +157,7 @@ async function pass(engineSpread, pools) {
       if (!c) { idle = true; continue; } // nothing reachable on this side right now
       const q = sizeOrder({ size: c.size, price: c.price, oneBase: s.oneBase, lotSize: s.lotSize, minQuantity: s.minQuantity, capNotional });
       if (q === 0n) { log(pool, isBid ? "bid" : "ask", "below venue minimum"); idle = true; continue; }
+      if (!(await agentsAllow(pool, { isBid }))) break;
       await send("place", "place", [pool, isBid, c.price, q, c.backers], { pool, isBid, price: c.price.toString(), quantity: q.toString(), backers: c.backers.length });
     }
     if (idle) belowMin.set(skipKey, passNo);
@@ -243,6 +273,8 @@ for (const pair of (opt("follow") || "").split(",").filter(Boolean)) {
   const k = m.info.poolAddress.toLowerCase();
   follow.set(k, [...(follow.get(k) || []), who]);
 }
+for (const m of all) baseOf.set(m.info.poolAddress.toLowerCase(), m.base);
+log("agents' price check:", `fresh within ${FEED_RULES.maxAgeMs / 1000} s, at least ${FEED_RULES.minValidators} agents, venue mark within ${FEED_RULES.maxGapBps / 100}%`);
 // the busiest markets, plus any market the vault already holds (it must keep re-checking those)
 const top = all.slice(0, Number(opt("markets", all.length))).map((x) => x.info.poolAddress);
 for (const p of pools) if (!top.some((x) => x.toLowerCase() === p.toLowerCase())) top.push(p);

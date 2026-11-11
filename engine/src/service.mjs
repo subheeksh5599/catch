@@ -6,6 +6,11 @@ import { parseEventLogs, parseAbi } from "viem";
 import { SomniaMarkets } from "@somnia-chain/markets-sdk";
 import { NETWORKS, publicClient, vaultAbi, erc20Abi, bankAbi, poolAbi } from "./chain.mjs";
 import { snapshotPool } from "./reader.mjs";
+import { PRICE_FEED } from "./pricefeed.mjs";
+
+const feedAbi = parseAbi([
+  "function latestWithQuality(string symbol) view returns (uint256 price, uint256 markPrice, uint256 updatedAtMs, uint256 sourceUpdatedAtMs, uint256 validatorCount, uint256 medianControlCount, uint256 flags)",
+]);
 
 const engineBidderAbi = parseAbi(["function isBidder(address) view returns (bool)", "function getBidders() view returns (address[])"]);
 import { binMap, atRisk, bestCluster, sizeOrder, catchWindow, depthBetween, BPS } from "./math.mjs";
@@ -110,7 +115,42 @@ export class CatchService {
         baseDecimals: i.baseDecimals ?? 18,
         pricePrecision: m.precision?.price ?? 2,
         snapshotAt: prev?.snapshotAt ?? null,
+        agent: prev?.agent ?? null,
       });
+    }
+    await this.refreshAgentPrices();
+  }
+
+  /** Somnia Price Feeds: the Somnia Agents median for each market's perp pair, read in one call. */
+  async refreshAgentPrices() {
+    const rows = [...this.markets.values()];
+    const [res, snaps] = await Promise.all([
+      this.client.multicall({
+        contracts: rows.map((m) => ({ address: PRICE_FEED, abi: feedAbi, functionName: "latestWithQuality", args: [`${m.base}/USDC:PERP`] })),
+        allowFailure: true,
+      }),
+      // the gap is taken against the pool's live mark; the indexer's copy can lag by minutes
+      this.client.multicall({
+        contracts: rows.map((m) => ({ address: m.pool, abi: poolAbi, functionName: "getHealthSnapshot" })),
+        allowFailure: true,
+      }),
+    ]);
+    const nowMs = Date.now();
+    for (const [k, m] of rows.entries()) {
+      const r = res[k];
+      if (r.status !== "success" || r.result[0] === 0n) { m.agent = null; continue; }
+      const [priceRaw, markRaw, updatedAtMs, , validators] = r.result;
+      const mark = num(markRaw > 0n ? markRaw : priceRaw);
+      const venueMark = snaps[k].status === "success" ? num(snaps[k].result.markPrice) : m.markPrice;
+      m.agent = {
+        pair: `${m.base}/USDC:PERP`,
+        mark,
+        updatedAtMs: Number(updatedAtMs),
+        ageMs: nowMs - Number(updatedAtMs),
+        validators: Number(validators),
+        venueMark,
+        gapBps: venueMark && mark ? Math.round((Math.abs(venueMark - mark) / mark) * 10_000) : null,
+      };
     }
   }
 

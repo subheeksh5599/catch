@@ -59,6 +59,7 @@ export type Market = {
   positions: number | null
   risk: Risk | null
   clusters: (Cluster | null)[] | null
+  agent?: { pair: string; mark: number; updatedAtMs: number; ageMs: number; validators: number; gapBps: number | null } | null
 }
 
 export type Slot = { id: number; side: "bid" | "ask"; unwind: boolean; price: number; quantity?: number; notional: number | null; backers: string[] }

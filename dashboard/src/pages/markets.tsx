@@ -22,6 +22,9 @@ export default function MarketsPage() {
                   <TableRow>
                     <TableHead>Market</TableHead>
                     <TableHead className="text-right">Mark</TableHead>
+                    <TableHead className="text-right" title="Somnia Price Feeds: the median across exchanges, written on chain by Somnia Agents every 500 ms. The keeper quotes a market only while this is under 15 s old, backed by 2+ agents, and the venue mark is within 1.5% of it.">
+                      Agents' price
+                    </TableHead>
                     <TableHead className="text-right">Open interest</TableHead>
                     <TableHead className="text-right">Funding</TableHead>
                     <TableHead className="text-right">Positions</TableHead>
@@ -43,6 +46,18 @@ export default function MarketsPage() {
                           <Sym symbol={m.symbol} />
                         </TableCell>
                         <TableCell className="num text-right">{price(m.markPrice)}</TableCell>
+                        <TableCell className="num text-right">
+                          {m.agent ? (
+                            <span title={`${m.agent.pair} · ${m.agent.validators} agents · ${(m.agent.ageMs / 1000).toFixed(1)} s old when read`}>
+                              {price(m.agent.mark)}{" "}
+                              <span className={`text-xs ${m.agent.gapBps != null && m.agent.gapBps > 150 ? "text-long" : "text-muted-foreground"}`}>
+                                {m.agent.gapBps == null ? "" : `${(m.agent.gapBps / 100).toFixed(2)}%`}
+                              </span>
+                            </span>
+                          ) : (
+                            <span className="text-muted-foreground">none</span>
+                          )}
+                        </TableCell>
                         <TableCell className="num text-right">{usd(m.openInterest * m.markPrice)}</TableCell>
                         <TableCell className={`num text-right ${(m.fundingRate ?? 0) >= 0 ? "text-short" : "text-long"}`}>{m.fundingRate == null ? "—" : `${(m.fundingRate * 100).toFixed(4)}%`}</TableCell>
                         <TableCell className="num text-right">{m.positions == null ? <span className="text-muted-foreground">queued</span> : int(m.positions)}</TableCell>

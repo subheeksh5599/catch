@@ -8,7 +8,7 @@
 [![Network](https://img.shields.io/badge/network-Somnia%20Hideki%20testnet%2050383-4DA2FF)](#live-status)
 [![Contract tests](https://img.shields.io/badge/forge%20tests-92%20%2B%2011%20invariants-16a34a)](#invariants)
 [![Fuzzing](https://img.shields.io/badge/fuzz-2%2C000%20runs%2C%20200k%20stateful%20calls-16a34a)](#invariants)
-[![Engine tests](https://img.shields.io/badge/engine%20tests-12%20passing-16a34a)](#the-engine)
+[![Engine tests](https://img.shields.io/badge/engine%20tests-18%20passing-16a34a)](#the-engine)
 ![Stack](https://img.shields.io/badge/Solidity%20%2B%20Somnia%20Reactivity%20%2B%20markets--sdk-1f1f23)
 
 [![Live](https://img.shields.io/badge/Live-catch--backstop.vercel.app-e2a336?labelColor=141415)](https://catch-backstop.vercel.app) [![Run it](https://img.shields.io/badge/Run%20it-three%20commands-141415?labelColor=141415)](#run-it) [![Mechanism](https://img.shields.io/badge/Mechanism-step%20by%20step-141415?labelColor=141415)](#the-catch-loop-step-by-step) [![Evidence](https://img.shields.io/badge/Evidence-what%20is%20proven-141415?labelColor=141415)](#whats-real-vs-pending)
@@ -45,6 +45,7 @@ _Recording in progress._
 | Every trade, priced by the venue | **17 fills on v4, every close in profit** | the vault's own MarginBank `PositionUpdated` logs: 8 closes, all positive, +4.66 USDso realized in total; the caught liquidation itself closed for +0.10 (`scripts/live/trades.mjs`, the Trades card on the Vault page) |
 | v4's depositor result | **+21.4%** | 45.90 USDso in, 55.72 USDso back on full redemption (`0x14b6ac0a…8597`), computed from the vault's own `Deposited` and `Redeemed` events by `scripts/live/performance.mjs` |
 | v5's depositor result | **+8.4%** | 155.76 USDso in; share price 1.0835 at retirement. 126.56 USDso paid back (`0x7e23f2bc…802a`, `0x2402c01e…0755`) and 42.21 USDso still inside v5, in open positions with their unwind orders resting |
+| Somnia Agents price check | **Live** | before every order, the keeper reads Somnia Price Feeds, the median that Somnia Agents subcommittees write on chain every 500 ms. It quotes only while that price is under 15 s old, backed by 2+ agents, and the venue mark is within 1.5% of it; refusals are recorded as `AgentPriceCheck`. [More below](#somnia-primitives) |
 | Reactivity | **Live, per account** | one `PositionUpdated` subscription per backing account plus the vault itself, reconciled by the keeper every pass |
 | Dashboard and landing page | **Live** | [catch-backstop.vercel.app](https://catch-backstop.vercel.app), every figure read from Hideki by the engine |
 
@@ -71,6 +72,7 @@ flowchart TD
 - [The catch loop, step by step](#the-catch-loop-step-by-step)
 - [The catch window](#the-catch-window)
 - [Stage 4: the backstop](#stage-4-the-backstop)
+- [Somnia primitives](#somnia-primitives)
 - [Invariants](#invariants)
 - [Attack → test](#attack--test)
 - [Risks](#risks)
@@ -143,6 +145,30 @@ bidders, and one of them takes it over at the price it quoted. Catch v6 is a bid
   anyone else). The calldata for v6 simulates successfully from the owner today:
   [`docs/stage4-backstop.md`](docs/stage4-backstop.md). The dashboard reads `isBidder` live.
 
+## Somnia primitives
+
+**Reactivity: the vault's re-check.** Every order is backed by the accounts whose liquidation it
+waits for. The vault subscribes to each one's MarginBank `PositionUpdated`. When a backer's
+position changes, the validators call `CatchVault.onEvent` in the same block, and the order is
+re-derived or cancelled before anyone can trade against a stale quote. 17 cancels and 21 fills
+on chain so far ([Live status](#live-status)).
+
+**Somnia Agents: the price Catch trusts.** Somnia Price Feeds is run by Somnia Agents:
+subcommittees of validators price each pair across exchanges every 500 ms and write the median
+on chain (`0x1998C88D…7D81F` on the Tokyo subchain). Catch relies on it in two places:
+
+- **In the contract, through the venue.** The vault refuses to quote while the venue's mark is
+  more than 1.5% from its oracle index, or the index is older than 120 s. A call trace of a
+  real Hideki liquidation shows where that index comes from: the pool reads `BTC/USDC` and
+  `BTC/USDC:PERP` from this feed.
+- **In the keeper, directly and tighter.** Before it snapshots a market, and again right before
+  each order, the keeper reads `latestWithQuality("<BASE>/USDC:PERP")`. It quotes only while the
+  agents' price is under 15 s old and backed by at least 2 agents, and the venue mark is within
+  1.5% of it (`engine/src/pricefeed.mjs`, 6 tests). The feed's `feedHealth()` reports write
+  stalls of 20–40 s at times; the keeper stops quoting through them, and each refusal is kept
+  in the record as `AgentPriceCheck` with both prices. The Markets page shows the agents'
+  price, the gap and the agent count for every market.
+
 ## Invariants
 
 | # | Invariant | Enforced in | Tests |
@@ -155,6 +181,8 @@ bidders, and one of them takes it over at the price it quoted. Catch v6 is a bid
 | 6 | Exposure in a market, counting the vault's own position, stays ≤ `OI_CAP_BPS` of that market's open interest | `_enforceCaps`, `openInterestCap` | `test_invariant6_openInterestCapRevertsWithNumbers`, `test_invariant6_capCountsTheVaultsOwnPosition`, `testFuzz_placementNeverExceedsOpenInterestCap` |
 | 7 | No order is placed, and a resting one is released, while the mark is more than `MAX_INDEX_DEVIATION_BPS` from the oracle index or the index is older than `MAX_INDEX_AGE` | `_requireSanePrice`, `priceStatus`, re-check | `test_invariant7_*` (5), `test_priceStatus_reportsEachState` |
 | 8 | New shares cannot be redeemed or transferred for `REDEEM_DELAY`; nobody can deposit for, and so re-lock, someone else | `deposit`, `redeem`, `_move` | `test_invariant8_*` (4) |
+
+`cd engine && npm test` → 18 engine tests, including the agents' price check.
 
 `cd contracts && forge test` → 92 tests (75 vault, 13 takeover-quote, 4 on a fork of the live engine) plus a stateful suite of 11 invariants, all passing. The fork tests skip unless `HIDEKI_RPC` is set; see [Stage 4](#stage-4-the-backstop).
 
