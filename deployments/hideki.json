@@ -65,6 +65,39 @@
       "price": "2208250000000000000000",
       "quantity": "25500000000000000",
       "backers": 1
+    },
+    {
+      "kind": "place",
+      "tx": "0xd7349719653148dd53fe0cacdeaf3755492a94c8e2928f34e17a03b69b97c248",
+      "block": 47493343,
+      "status": "success",
+      "pool": "0xb483ec1fb34996638677c20ab087b16f1896fa53",
+      "isBid": true,
+      "price": "78200000000000000000",
+      "quantity": "720000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0xfcfec058d89b6b49ec970592a5c697acbb934d91077ee46942da1b9339b63a3e",
+      "block": 47496710,
+      "status": "success",
+      "pool": "0x63b47ed4a7de0fde659b0d82441dd74828b7297a",
+      "isBid": true,
+      "price": "68570000000000000000",
+      "quantity": "820000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0xa05cfb89f5c347ccae231777ccaafeacd80865bdc798e3a809e76433ca3a1c62",
+      "block": 47497014,
+      "status": "success",
+      "pool": "0x63b47ed4a7de0fde659b0d82441dd74828b7297a",
+      "isBid": false,
+      "price": "76450000000000000000",
+      "quantity": "730000",
+      "backers": 2
     }
   ],
   "subscriptions": [
