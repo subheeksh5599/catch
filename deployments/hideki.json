@@ -854,5 +854,14 @@
       "block": 46833257,
       "status": "active"
     }
+  ],
+  "evidenceCursor": 46839187,
+  "navHistory": [
+    {
+      "at": "2026-11-10T19:03:34.685Z",
+      "block": 46833367,
+      "totalAssets": "155761600000000000000",
+      "totalSupply": "155761600000000000000000"
+    }
   ]
 }
