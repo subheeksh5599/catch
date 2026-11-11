@@ -222,7 +222,17 @@ if (opt("deposit")) await deposit(opt("deposit"));
 const pools = (opt("pools") || "").split(",").filter(Boolean);
 const { SomniaMarkets } = await import("@somnia-chain/markets-sdk");
 const ex = new SomniaMarkets({ chain: net.chain, addresses: net.addresses, indexerUrl: net.indexerUrl });
-const all = Object.values(await ex.loadMarkets()).filter((x) => x.type === "swap" && x.perpStatus?.restricted === false);
+// the market list comes from the venue's indexer; an empty or failed answer is retried, never
+// taken as "no markets" (that would leave a fresh vault quoting nothing until a restart)
+let all = [];
+for (let attempt = 1; !all.length; attempt++) {
+  try {
+    all = Object.values(await ex.loadMarkets()).filter((x) => x.type === "swap" && x.perpStatus?.restricted === false);
+  } catch (e) {
+    log("market list failed:", e.shortMessage || e.message);
+  }
+  if (!all.length) await new Promise((r) => setTimeout(r, Math.min(60, 5 * attempt) * 1000));
+}
 all.sort((a, b) => Number(b.info.openInterest) * Number(b.info.markPrice) - Number(a.info.openInterest) * Number(a.info.markPrice));
 // --follow HYPE=0xabc,ETH=0xdef : on those markets, quote only that account's window
 const follow = new Map();
@@ -233,7 +243,9 @@ for (const pair of (opt("follow") || "").split(",").filter(Boolean)) {
   const k = m.info.poolAddress.toLowerCase();
   follow.set(k, [...(follow.get(k) || []), who]);
 }
-const top = pools.length ? pools : all.slice(0, Number(opt("markets", all.length))).map((x) => x.info.poolAddress);
+// the busiest markets, plus any market the vault already holds (it must keep re-checking those)
+const top = all.slice(0, Number(opt("markets", all.length))).map((x) => x.info.poolAddress);
+for (const p of pools) if (!top.some((x) => x.toLowerCase() === p.toLowerCase())) top.push(p);
 for (const p of follow.keys()) if (!top.some((x) => x.toLowerCase() === p)) top.unshift(p);
 log("keeper on", net.label, "vault", vault, "markets", top.length, "engine spread bps", spread);
 for (;;) {
