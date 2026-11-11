@@ -338,6 +338,60 @@
       "price": "11225000000000000000",
       "quantity": "3900000000000000000",
       "backers": 1
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x1bfb8d7d946d1a741f2e8a25e0c20edc0c759873",
+      "tx": "0x4715f422db8baaea017d018e449dc199ebde474fc892eed0227411713da50583",
+      "block": 47534392,
+      "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0xba6a8c06957889784ca61d9b77413d3048af2b38e8dd2cd0c8d021ed8a68667c",
+      "block": 47544701,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": true,
+      "price": "3439100000000000000",
+      "quantity": "16400000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0xe3b17408b885165763a57fc7c14034f58befa08c64aa211c95c495189491f184",
+      "block": 47545074,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": false,
+      "price": "4044900000000000000",
+      "quantity": "13900000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x3d44d8b87a3d0f974b82427f646a87939cbf3118e09d2c0a5fb527e634f0d7f0",
+      "block": 47545247,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x28f87b9ccef555c92b156a670ab7ae5b88748b51fc4efa35dff24a9440fc0b34",
+      "block": 47545838,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad"
+    },
+    {
+      "kind": "place",
+      "tx": "0x225de94e78abc306e5e353521189434abb58848fb1f84e21ccee35c843706425",
+      "block": 47548806,
+      "status": "success",
+      "pool": "0xfa9b9e50cc1745113d57893991af200a74c86b6f",
+      "isBid": true,
+      "price": "4673300000000000",
+      "quantity": "12000000000000000000000",
+      "backers": 2
     }
   ],
   "subscriptions": [
@@ -466,6 +520,13 @@
       "tx": "0xb831d87b971ece100c55d3cf616cf49d7847822c69302dd093100727dda82730",
       "block": 47516828,
       "status": "active"
+    },
+    {
+      "account": "0x1bfb8d7d946d1a741f2e8a25e0c20edc0c759873",
+      "subscriptionId": "39316676",
+      "tx": "0x4715f422db8baaea017d018e449dc199ebde474fc892eed0227411713da50583",
+      "block": 47534392,
+      "status": "active"
     }
   ],
   "evidence": [],
@@ -572,6 +633,21 @@
       "block": 47517223,
       "totalAssets": "226000000000000000000",
       "totalSupply": "226000000000000000000000"
+    }
+  ],
+  "refusals": [
+    {
+      "at": "2026-11-11T14:51:22.222Z",
+      "kind": "place",
+      "error": "AgentPriceCheck",
+      "args": [
+        "no agent price for this market"
+      ],
+      "pool": "0xe3f6dcda98595764970e5a6ffd167af1d1b35123",
+      "pair": null,
+      "venueMark": "3450000000000000000000",
+      "agentMark": null,
+      "validators": 0
     }
   ]
 }
