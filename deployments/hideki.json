@@ -1231,6 +1231,24 @@
       "price": "7809000000000000000",
       "quantity": "6300000000000000000",
       "backers": 1
+    },
+    {
+      "kind": "place",
+      "tx": "0xf25f2ba7320a47ecf3c6e5a1dfd84d3806077fde32bca9259b3b52952f91721e",
+      "block": 47917186,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5",
+      "isBid": false,
+      "price": "10660000000000000000",
+      "quantity": "3900000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xccc3b94fe63ef9d6a406c56c4259a0c04132dbc9",
+      "tx": "0xe5a13daee4b296e83e0afbd27d7713e90b416b5df1f3a0eb3855bee53742ff87",
+      "block": 47920847,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -1661,6 +1679,13 @@
       "tx": "0x94476863cc7abfa11c642a68e7860298c829d5dfb27d6744e47b094c9aceb213",
       "block": 47855980,
       "status": "active"
+    },
+    {
+      "account": "0xccc3b94fe63ef9d6a406c56c4259a0c04132dbc9",
+      "subscriptionId": "39942040",
+      "tx": "0xe5a13daee4b296e83e0afbd27d7713e90b416b5df1f3a0eb3855bee53742ff87",
+      "block": 47920847,
+      "status": "active"
     }
   ],
   "evidence": [
@@ -1808,7 +1833,7 @@
       ]
     }
   ],
-  "evidenceCursor": 47903300,
+  "evidenceCursor": 47928447,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -2161,6 +2186,24 @@
     {
       "at": "2026-11-12T00:48:52.270Z",
       "block": 47903469,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T01:04:05.676Z",
+      "block": 47912576,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T01:18:04.678Z",
+      "block": 47920972,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T01:28:28.876Z",
+      "block": 47927183,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
