@@ -1429,6 +1429,38 @@
       "tx": "0x7b96dbba963efd1d38543309e712eb7a0b3f4188cfb3f23aba8c2c14a810eb33",
       "block": 48162932,
       "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x43b522bead86aa3ea4cab474af2ad25b199cac3f",
+      "tx": "0x184635d3c8ca2596fd8589d10624a06454a31b5e14ab5b79a302c1f982defec7",
+      "block": 48163025,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x9de4d33716c0d562e2c991e9d79c987e3d8120a8",
+      "tx": "0x96b4ec8b927e64344402b144cc88804b553348c8565eb64d08e7c035c490ee74",
+      "block": 48178474,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xd062ee901068dd72ee0e7509fef6f05970611ea3",
+      "tx": "0x798be9233d26df8e396c97a262b1cdd1f36753ec1315db66a7c365521ba86785",
+      "block": 48178517,
+      "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0xc4d1b96c2b3862dbb1822761e6f173e2452882762b9933957e671a634c637466",
+      "block": 48180970,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": false,
+      "price": "3788900000000000000",
+      "quantity": "14900000000000000000000000",
+      "backers": 2
     }
   ],
   "subscriptions": [
@@ -1857,14 +1889,16 @@
       "subscriptionId": "39837064",
       "tx": "0xf4cc744b04357991f011362f81aeef067d276bbf0b5580e38fc4f02a1dbdc1b2",
       "block": 47855961,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x96b4ec8b927e64344402b144cc88804b553348c8565eb64d08e7c035c490ee74"
     },
     {
       "account": "0xd062ee901068dd72ee0e7509fef6f05970611ea3",
       "subscriptionId": "39837076",
       "tx": "0x94476863cc7abfa11c642a68e7860298c829d5dfb27d6744e47b094c9aceb213",
       "block": 47855980,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x798be9233d26df8e396c97a262b1cdd1f36753ec1315db66a7c365521ba86785"
     },
     {
       "account": "0xccc3b94fe63ef9d6a406c56c4259a0c04132dbc9",
@@ -1908,6 +1942,13 @@
       "subscriptionId": "40333625",
       "tx": "0x7b96dbba963efd1d38543309e712eb7a0b3f4188cfb3f23aba8c2c14a810eb33",
       "block": 48162932,
+      "status": "active"
+    },
+    {
+      "account": "0x43b522bead86aa3ea4cab474af2ad25b199cac3f",
+      "subscriptionId": "40333777",
+      "tx": "0x184635d3c8ca2596fd8589d10624a06454a31b5e14ab5b79a302c1f982defec7",
+      "block": 48163025,
       "status": "active"
     }
   ],
@@ -2080,9 +2121,22 @@
           "tx": "0x7bc60d8dbb6301c72b998336c3c383d44e059801ddd1e6a1ad444ee820b2b420"
         }
       ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 48177840,
+      "detail": "Slot 36 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x40727f813fc779c67e6dac473d7c1265370ff3f33b2f78ec3ef80b78bcc6d022"
+        }
+      ]
     }
   ],
-  "evidenceCursor": 48155551,
+  "evidenceCursor": 48178535,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -2633,6 +2687,24 @@
     {
       "at": "2026-11-12T07:49:33.452Z",
       "block": 48155635,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T08:02:05.751Z",
+      "block": 48163147,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T08:15:39.152Z",
+      "block": 48171242,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T08:27:52.851Z",
+      "block": 48178603,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
