@@ -1320,6 +1320,27 @@
       "tx": "0x8eae77d6bcf011a284623d52887d831f82b1d8a151fce4fc26ed50b2cf322599",
       "block": 48009349,
       "status": "success"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xb38622484e6b9369e6a9b1fa6f3eb0fcc6eeeb91b612ef9262055a65f487294e",
+      "block": 48054075,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x362484af43a5ed2bc5f2c36a84302e251836b2452d757d3c635069e1fe672843",
+      "block": 48054222,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x57b46baac5792b8418efe3ec65ff7a4af56e363949efa64740088ad61c7e660a",
+      "block": 48054509,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad"
     }
   ],
   "subscriptions": [
@@ -1961,7 +1982,7 @@
       ]
     }
   ],
-  "evidenceCursor": 48036531,
+  "evidenceCursor": 48053554,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -2416,6 +2437,24 @@
     {
       "at": "2026-11-12T04:23:15.464Z",
       "block": 48031949,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T04:34:28.065Z",
+      "block": 48038652,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T04:45:36.666Z",
+      "block": 48045371,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T04:59:23.663Z",
+      "block": 48053639,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
