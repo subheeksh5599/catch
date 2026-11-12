@@ -2077,6 +2077,83 @@
       "tx": "0xca93131598e77292e22678c10a1d6e8bb425223048637d1fc29da2d5a4cb5080",
       "block": 48602638,
       "status": "success"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x31f28c065173e236c90b5f7d81d5896f106737859798cf8e2bc1f5ff9e66375d",
+      "block": 48671410,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x670e541f123ccd9652f68be2a59a22d28ffb292e750f103a1f491f26cc577d63",
+      "block": 48671603,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xbf980241e0f71ea1d1ba325ff48b2a2b78e511e667b05efd64d6668fc239b8ee",
+      "block": 48671834,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xd33b03938840521905162d506b43a2a7381898becbd3a9658501551e873d1688",
+      "block": 48671968,
+      "status": "success",
+      "pool": "0xfa9b9e50cc1745113d57893991af200a74c86b6f"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x61447e5e4e9708013b38fa503eb1eb0ac7e8ac75b825702183d2fd2fb8ba90a1",
+      "block": 48672128,
+      "status": "success",
+      "pool": "0xde9762b6b441133d1314c68864ae4e63a6ee45c7"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x93c51d483dd310769faffd29a66b8f0f9418771ed19aea5c19ef60488e08b45f",
+      "block": 48672281,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x3e1a474bb67c575ed46351927fbfab51c2567c636c369f0a108fd3f4d68ae61b",
+      "block": 48672385,
+      "status": "success",
+      "pool": "0xdcb0ad226727b2ce92857f0af5751389d42b2a3f"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x399cb2908993a0de4f034372e9208c0d1e00eadce47ac1c43ae8e40199498e66",
+      "block": 48672501,
+      "status": "success",
+      "pool": "0x0f464d57c1fd839e4d87a408bbccdab8f77e6394"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xf63026fe515ee044383ccb2458620e24554044e2bcf230a269aae83362bdf843",
+      "block": 48672711,
+      "status": "success",
+      "pool": "0x2a1822b02039ddf0e293f3f7243673fc03eaf16c"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xccc3b94fe63ef9d6a406c56c4259a0c04132dbc9",
+      "tx": "0x3332d06b62fc199086e391ab1c92e80aee28efdc2423bc9a3725aefa1dd6d4b2",
+      "block": 48672971,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x5a5271086d513053a9a367c651095cc62b6b2edc",
+      "tx": "0x8291f3c56d9839667b170ac0183f2889ffb32c69466f5403016d6c4e951f87fc",
+      "block": 48673029,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -2523,7 +2600,8 @@
       "subscriptionId": "39942040",
       "tx": "0xe5a13daee4b296e83e0afbd27d7713e90b416b5df1f3a0eb3855bee53742ff87",
       "block": 47920847,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x3332d06b62fc199086e391ab1c92e80aee28efdc2423bc9a3725aefa1dd6d4b2"
     },
     {
       "account": "0x1efd0cae1463018c93a60d15c17d29898febe063",
@@ -2746,7 +2824,8 @@
       "subscriptionId": "41031850",
       "tx": "0x1c7fd70434dbadafc17ae419716b2a22249ae6100c2f6f56dae1cd1e989de53f",
       "block": 48594352,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x8291f3c56d9839667b170ac0183f2889ffb32c69466f5403016d6c4e951f87fc"
     },
     {
       "account": "0xc4a3e4abed748f97629fa059fa79a3045084aa71",
@@ -3018,7 +3097,7 @@
       ]
     }
   ],
-  "evidenceCursor": 48665476,
+  "evidenceCursor": 48681739,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -3971,6 +4050,18 @@
     {
       "at": "2026-11-12T21:57:33.193Z",
       "block": 48663780,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T22:07:43.993Z",
+      "block": 48669875,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T22:27:37.489Z",
+      "block": 48681808,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
