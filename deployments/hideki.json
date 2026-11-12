@@ -1783,6 +1783,49 @@
       "tx": "0xc2edec229ec8bc211d64933e659b510c396acf2188fb9b7f63c180e95aa13b53",
       "block": 48340749,
       "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0x9cdc7b7900a3b7b817951e5b8e236df0ec7832e531338ce311fced48561dc3e6",
+      "block": 48344370,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": false,
+      "price": "3689900000000000000",
+      "quantity": "15300000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xe2323d16d6685d90d8d1d18f2b5564a83dd67a9c",
+      "tx": "0x05d69188cc694b919662f2676c4b2673e2af65c433f04294b8a680837b18f2c7",
+      "block": 48350924,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xf1f9b5bd405af211e61e4706201b7e69a0a9e4f3",
+      "tx": "0x2602ee38c0569e21ec02ded291e3f4ec06912d4ea29edee654814d341ff448b8",
+      "block": 48351205,
+      "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0x9f15d53678324a85412707f18b8b44017fdf1f871e7a28650804e37e645b83e2",
+      "block": 48358377,
+      "status": "success",
+      "pool": "0x0f464d57c1fd839e4d87a408bbccdab8f77e6394",
+      "isBid": false,
+      "price": "343000000000000000",
+      "quantity": "39000000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xce96882a506914b1e306d358d8846e085a30fa17",
+      "tx": "0x0f62f5309927033f18a01b5a1a0ef6c1c46cdd3bf938ccc1315d46ee6f8d5639",
+      "block": 48358820,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -2384,6 +2427,27 @@
       "tx": "0xc2edec229ec8bc211d64933e659b510c396acf2188fb9b7f63c180e95aa13b53",
       "block": 48340749,
       "status": "active"
+    },
+    {
+      "account": "0xe2323d16d6685d90d8d1d18f2b5564a83dd67a9c",
+      "subscriptionId": "40637839",
+      "tx": "0x05d69188cc694b919662f2676c4b2673e2af65c433f04294b8a680837b18f2c7",
+      "block": 48350924,
+      "status": "active"
+    },
+    {
+      "account": "0xf1f9b5bd405af211e61e4706201b7e69a0a9e4f3",
+      "subscriptionId": "40638273",
+      "tx": "0x2602ee38c0569e21ec02ded291e3f4ec06912d4ea29edee654814d341ff448b8",
+      "block": 48351205,
+      "status": "active"
+    },
+    {
+      "account": "0xce96882a506914b1e306d358d8846e085a30fa17",
+      "subscriptionId": "40650606",
+      "tx": "0x0f62f5309927033f18a01b5a1a0ef6c1c46cdd3bf938ccc1315d46ee6f8d5639",
+      "block": 48358820,
+      "status": "active"
     }
   ],
   "evidence": [
@@ -2635,7 +2699,7 @@
       ]
     }
   ],
-  "evidenceCursor": 48340797,
+  "evidenceCursor": 48360474,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -3330,6 +3394,18 @@
     {
       "at": "2026-11-12T12:58:42.535Z",
       "block": 48340961,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T13:16:36.633Z",
+      "block": 48351635,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T13:28:46.232Z",
+      "block": 48358953,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
