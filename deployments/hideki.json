@@ -1985,6 +1985,62 @@
       "tx": "0x1c026850a1580014ac0874cadeca54d70c0e72d5bb71827a5ece315f3e98b8b6",
       "block": 48435849,
       "status": "success"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xe52b00cd7280887ca990aba36c688f317fa102d013ed7a595b6cda12ddecb317",
+      "block": 48545886,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xa73a86a675086e1462dcde6093656eca2764b5aa5a60092498c7eead02e647f7",
+      "block": 48545999,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x4424e672544b054d9fc8254b60b253fd2a276de299b70fb12cdaa8382c94777d",
+      "block": 48546127,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x78fe5352e5b6432cca520e84f98badec4f9cfdb8c128b52807ea518e3007f561",
+      "block": 48546270,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x41dec4ee725c714d86a43cb1a31194a6bfc6b8e491231493d9bb56d35b2459c2",
+      "block": 48546352,
+      "status": "success",
+      "pool": "0xdcb0ad226727b2ce92857f0af5751389d42b2a3f"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x0d9bc5fac79573d494d856d6c7927a944ab819057a072d340f12c5b1ceaa5e0d",
+      "block": 48546443,
+      "status": "success",
+      "pool": "0x0f464d57c1fd839e4d87a408bbccdab8f77e6394"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x4dcbdea1eff555f6c4fd91943632d235ab78729e4c3686a26533110a3db20a50",
+      "block": 48546827,
+      "status": "success",
+      "pool": "0x2a1822b02039ddf0e293f3f7243673fc03eaf16c"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xce96882a506914b1e306d358d8846e085a30fa17",
+      "tx": "0x878ecbb7f5c55a505663b69c5fec2edc8dfd4bc8d9fbab8b8620b743932fe185",
+      "block": 48547157,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -2646,7 +2702,8 @@
       "subscriptionId": "40775449",
       "tx": "0x1c026850a1580014ac0874cadeca54d70c0e72d5bb71827a5ece315f3e98b8b6",
       "block": 48435849,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x878ecbb7f5c55a505663b69c5fec2edc8dfd4bc8d9fbab8b8620b743932fe185"
     }
   ],
   "evidence": [
@@ -2911,7 +2968,7 @@
       ]
     }
   ],
-  "evidenceCursor": 48539345,
+  "evidenceCursor": 48553041,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -3756,6 +3813,18 @@
     {
       "at": "2026-11-12T18:25:31.706Z",
       "block": 48536653,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T18:36:43.102Z",
+      "block": 48543370,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T18:53:02.295Z",
+      "block": 48553146,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
