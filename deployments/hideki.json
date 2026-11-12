@@ -1461,6 +1461,34 @@
       "price": "3788900000000000000",
       "quantity": "14900000000000000000000000",
       "backers": 2
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xd062ee901068dd72ee0e7509fef6f05970611ea3",
+      "tx": "0xea0b29f64bbbb0b93956e91b9ba12b9035e30e85e091da06e7285983cb380afb",
+      "block": 48181505,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xd88dddfc0a49902cbaf635b9edc4fdb094210de6",
+      "tx": "0xdfae73c430eb12356cd11ce7a3f59e4d7d9aee60fe00cfe0d5438bab6b519381",
+      "block": 48181541,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x214373705e94b4d4a1096b9a1ff5eaeebe86d9cf",
+      "tx": "0x8be241af9e506906ea0c57253e6caaaae5bcd0cd77f62ea810ce2a1b530ade96",
+      "block": 48198612,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xdd2ff058d43a6fb0bc0bc2612d5d8a8652b236bc",
+      "tx": "0x334359e5e23f8e9b2c1452a0667b145c4bd49445e4697b24ed207edbaf112a7d",
+      "block": 48198666,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -1867,14 +1895,16 @@
       "subscriptionId": "39796373",
       "tx": "0x4dce943b23d9302d89f740b18dc59a1f9875064b08f3e58ae499dd00446f201f",
       "block": 47830833,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x8be241af9e506906ea0c57253e6caaaae5bcd0cd77f62ea810ce2a1b530ade96"
     },
     {
       "account": "0xdd2ff058d43a6fb0bc0bc2612d5d8a8652b236bc",
       "subscriptionId": "39796491",
       "tx": "0x4c70fc32a8b6e25c3fafd214ff17092ea22f5a29c9bcb2ac7c5e2c50f83b00bf",
       "block": 47830902,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x334359e5e23f8e9b2c1452a0667b145c4bd49445e4697b24ed207edbaf112a7d"
     },
     {
       "account": "0xa5a270d0ad550ac7432a3966765546c5e42b1682",
@@ -1949,6 +1979,20 @@
       "subscriptionId": "40333777",
       "tx": "0x184635d3c8ca2596fd8589d10624a06454a31b5e14ab5b79a302c1f982defec7",
       "block": 48163025,
+      "status": "active"
+    },
+    {
+      "account": "0xd062ee901068dd72ee0e7509fef6f05970611ea3",
+      "subscriptionId": "40363680",
+      "tx": "0xea0b29f64bbbb0b93956e91b9ba12b9035e30e85e091da06e7285983cb380afb",
+      "block": 48181505,
+      "status": "active"
+    },
+    {
+      "account": "0xd88dddfc0a49902cbaf635b9edc4fdb094210de6",
+      "subscriptionId": "40363740",
+      "tx": "0xdfae73c430eb12356cd11ce7a3f59e4d7d9aee60fe00cfe0d5438bab6b519381",
+      "block": 48181541,
       "status": "active"
     }
   ],
@@ -2134,9 +2178,22 @@
           "tx": "0x40727f813fc779c67e6dac473d7c1265370ff3f33b2f78ec3ef80b78bcc6d022"
         }
       ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 48198176,
+      "detail": "Slot 34 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x7454f69408ebf93049e4fab5c0e761104dffc7ef0903939dfb3618d3e99fc323"
+        }
+      ]
     }
   ],
-  "evidenceCursor": 48178535,
+  "evidenceCursor": 48198691,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -2705,6 +2762,24 @@
     {
       "at": "2026-11-12T08:27:52.851Z",
       "block": 48178603,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T08:38:16.055Z",
+      "block": 48184831,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T08:48:40.756Z",
+      "block": 48191062,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T08:59:27.947Z",
+      "block": 48197545,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
