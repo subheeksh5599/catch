@@ -2911,7 +2911,7 @@
       ]
     }
   ],
-  "evidenceCursor": 48449400,
+  "evidenceCursor": 48464975,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -3692,6 +3692,18 @@
       "block": 48449459,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T16:10:33.516Z",
+      "block": 48455790,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T16:22:25.116Z",
+      "block": 48462901,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
     }
   ],
   "refusals": [
@@ -3732,6 +3744,32 @@
       "pair": "LIT/USDC:PERP",
       "venueMark": "3196439187248000000",
       "agentMark": "3213704362854661913",
+      "validators": 3
+    },
+    {
+      "at": "2026-11-12T16:27:21.316Z",
+      "kind": "place",
+      "error": "AgentPriceCheck",
+      "args": [
+        "agent price 74.3 s old"
+      ],
+      "pool": "0xfa9b9e50cc1745113d57893991af200a74c86b6f",
+      "pair": "1000PEPE/USDC:PERP",
+      "venueMark": "4359839121000000",
+      "agentMark": "4361681945337917",
+      "validators": 3
+    },
+    {
+      "at": "2026-11-12T16:27:23.715Z",
+      "kind": "place",
+      "error": "AgentPriceCheck",
+      "args": [
+        "agent price 76.7 s old"
+      ],
+      "pool": "0xde9762b6b441133d1314c68864ae4e63a6ee45c7",
+      "pair": "AVAX/USDC:PERP",
+      "venueMark": "8315931146832000000",
+      "agentMark": "8324095356672881249",
       "validators": 3
     }
   ]
