@@ -2154,6 +2154,24 @@
       "tx": "0x8291f3c56d9839667b170ac0183f2889ffb32c69466f5403016d6c4e951f87fc",
       "block": 48673029,
       "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0x6ccca064344291c5d13ccbf8ae6e12bb2e000f4fb2c23215fa7d33ffae868eef",
+      "block": 48695210,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5",
+      "isBid": false,
+      "price": "10632000000000000000",
+      "quantity": "3900000000000000000",
+      "backers": 1
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xccc3b94fe63ef9d6a406c56c4259a0c04132dbc9",
+      "tx": "0x9ec04559b41dc7ee042dd0d1bb2a6fb422d3460d8f449d16d1b19e833e7b40d8",
+      "block": 48695859,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -2833,6 +2851,13 @@
       "tx": "0xca93131598e77292e22678c10a1d6e8bb425223048637d1fc29da2d5a4cb5080",
       "block": 48602638,
       "status": "active"
+    },
+    {
+      "account": "0xccc3b94fe63ef9d6a406c56c4259a0c04132dbc9",
+      "subscriptionId": "41196020",
+      "tx": "0x9ec04559b41dc7ee042dd0d1bb2a6fb422d3460d8f449d16d1b19e833e7b40d8",
+      "block": 48695859,
+      "status": "active"
     }
   ],
   "evidence": [
@@ -3097,7 +3122,7 @@
       ]
     }
   ],
-  "evidenceCursor": 48681739,
+  "evidenceCursor": 48701520,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -4062,6 +4087,18 @@
     {
       "at": "2026-11-12T22:27:37.489Z",
       "block": 48681808,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T22:45:45.285Z",
+      "block": 48692678,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-12T22:56:37.183Z",
+      "block": 48699191,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
