@@ -2841,6 +2841,31 @@
       "tx": "0x60a12eeed6f47ae5f85bb47db3b4e4c3c4eeba0bec40af6fce95e914e3517ab6",
       "block": 49230813,
       "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0x6b755a79d78484775560a2dcfa257e171dab15b861390390802fea4b2df36f3d",
+      "block": 49273005,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5",
+      "isBid": true,
+      "price": "8699000000000000000",
+      "quantity": "3900000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x49a86174c4eab59f9e48837ada26b20cf514cca0",
+      "tx": "0xe6a3946bf32d9d2e89df5a6690b1a1791f9a42f83b028a6de4a1dcf8688b9f1d",
+      "block": 49273489,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x695a7dd3d9bf987a05e3653b5a71b66b37d9c61a",
+      "tx": "0x3ef6b00fd65a8e56b48eca2132573bca9a43cece9065f9085ce7854c87cabc55",
+      "block": 49273540,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -3713,6 +3738,20 @@
       "tx": "0x60a12eeed6f47ae5f85bb47db3b4e4c3c4eeba0bec40af6fce95e914e3517ab6",
       "block": 49230813,
       "status": "active"
+    },
+    {
+      "account": "0x49a86174c4eab59f9e48837ada26b20cf514cca0",
+      "subscriptionId": "42131156",
+      "tx": "0xe6a3946bf32d9d2e89df5a6690b1a1791f9a42f83b028a6de4a1dcf8688b9f1d",
+      "block": 49273489,
+      "status": "active"
+    },
+    {
+      "account": "0x695a7dd3d9bf987a05e3653b5a71b66b37d9c61a",
+      "subscriptionId": "42131224",
+      "tx": "0x3ef6b00fd65a8e56b48eca2132573bca9a43cece9065f9085ce7854c87cabc55",
+      "block": 49273540,
+      "status": "active"
     }
   ],
   "evidence": [
@@ -4094,7 +4133,7 @@
       ]
     }
   ],
-  "evidenceCursor": 49258491,
+  "evidenceCursor": 49273561,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -5479,6 +5518,12 @@
     {
       "at": "2026-11-13T14:28:50.836Z",
       "block": 49257586,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-13T14:47:30.028Z",
+      "block": 49268684,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
