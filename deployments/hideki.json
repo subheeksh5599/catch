@@ -2388,6 +2388,70 @@
       "tx": "0x1f30561d1bbb73a974f0556ec517f649df294e3d27a747512594fe750fe4f075",
       "block": 48948251,
       "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x4ad1868f4d61e43ed0c8005146a6d6cd0747a53e",
+      "tx": "0xd07bed1d590125a1eb1210c5299dbbf52ad95b626e6b2dc395bff8c44d6948b6",
+      "block": 48957638,
+      "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0xb9b764f12664cf1788d75460ddb8ada78b1784c34951b3872a1345c407b781c7",
+      "block": 48961389,
+      "status": "success",
+      "pool": "0xde9762b6b441133d1314c68864ae4e63a6ee45c7",
+      "isBid": true,
+      "price": "7404000000000000000",
+      "quantity": "7600000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "place",
+      "tx": "0x2f431cfd0a676aaec4544630ecf5e1779a1ba1530be19fd73a48ec22dbe11056",
+      "block": 48964015,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5",
+      "isBid": true,
+      "price": "8986000000000000000",
+      "quantity": "2600000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xc4a3e4abed748f97629fa059fa79a3045084aa71",
+      "tx": "0x806b6f2c8e08eecc58b8e0c295e3f6ca12738be4804c97e907d4eb44baf5a6c8",
+      "block": 48964489,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x49a86174c4eab59f9e48837ada26b20cf514cca0",
+      "tx": "0x3099a7b41b7fbd0643ee24b1d8cad31c108bde2356f56ee570ca22c20d24b0f2",
+      "block": 48964562,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xffb73fd3f1c3854d4cd678a41b7be2ba92943a5a",
+      "tx": "0xaafe8a0711ad7db67fc820ef1b86edcae713a473c708eee6734a2d5eb0eb35f9",
+      "block": 48964668,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xadeb96264138abf5e22dce571180441c4068769e",
+      "tx": "0x0ed09bb2f26f477c2405a4100be72bf4f8e08f8258253356a17c738305b32ff3",
+      "block": 48966413,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xfed8e2eb45ef062dd1757e1db5abd02db3ef4f0c",
+      "tx": "0x0dfc6503d1d0ff3e057d316a439a2ad09ee4b33a80b364f353ba29a3f3b89ba0",
+      "block": 48966570,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -2995,7 +3059,8 @@
       "subscriptionId": "40621257",
       "tx": "0xc2edec229ec8bc211d64933e659b510c396acf2188fb9b7f63c180e95aa13b53",
       "block": 48340749,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0xd07bed1d590125a1eb1210c5299dbbf52ad95b626e6b2dc395bff8c44d6948b6"
     },
     {
       "account": "0xe2323d16d6685d90d8d1d18f2b5564a83dd67a9c",
@@ -3094,7 +3159,8 @@
       "subscriptionId": "41512609",
       "tx": "0x68434fab7d2fa418f82d30c7f6fc66c3d2802ea0287a942281126e2ad7f6c246",
       "block": 48891407,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x0ed09bb2f26f477c2405a4100be72bf4f8e08f8258253356a17c738305b32ff3"
     },
     {
       "account": "0xc694bc139923e0977d05bdb46bf401d71b2ce6c4",
@@ -3109,7 +3175,8 @@
       "subscriptionId": "41528813",
       "tx": "0x1013a212d1766412010dacfc9c040c5939121679e095bc7c6f398e6768e40972",
       "block": 48901403,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x0dfc6503d1d0ff3e057d316a439a2ad09ee4b33a80b364f353ba29a3f3b89ba0"
     },
     {
       "account": "0xbcb79329340d23636faf86a6aeb67466bd6919bf",
@@ -3130,6 +3197,27 @@
       "subscriptionId": "41604626",
       "tx": "0x1f30561d1bbb73a974f0556ec517f649df294e3d27a747512594fe750fe4f075",
       "block": 48948251,
+      "status": "active"
+    },
+    {
+      "account": "0xc4a3e4abed748f97629fa059fa79a3045084aa71",
+      "subscriptionId": "41630951",
+      "tx": "0x806b6f2c8e08eecc58b8e0c295e3f6ca12738be4804c97e907d4eb44baf5a6c8",
+      "block": 48964489,
+      "status": "active"
+    },
+    {
+      "account": "0x49a86174c4eab59f9e48837ada26b20cf514cca0",
+      "subscriptionId": "41631051",
+      "tx": "0x3099a7b41b7fbd0643ee24b1d8cad31c108bde2356f56ee570ca22c20d24b0f2",
+      "block": 48964562,
+      "status": "active"
+    },
+    {
+      "account": "0xffb73fd3f1c3854d4cd678a41b7be2ba92943a5a",
+      "subscriptionId": "41631232",
+      "tx": "0xaafe8a0711ad7db67fc820ef1b86edcae713a473c708eee6734a2d5eb0eb35f9",
+      "block": 48964668,
       "status": "active"
     }
   ],
@@ -3445,9 +3533,35 @@
           "tx": "0x547c4ad314f1d8df0bdb5d46aa2819d40203d8ef1dd94839e9f6ac4199f774b8"
         }
       ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 48950504,
+      "detail": "Slot 49 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x9b5fe49a77fb70a73b1130c535abd06ee13c1ca0e738a0e1c9c0b0b21a6ea872"
+        }
+      ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 48965921,
+      "detail": "Slot 60 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x8f0a3c467ff2cc56bb842733482a4fc3c2d8161b5242fc3bdeb794b705b02f19"
+        }
+      ]
     }
   ],
-  "evidenceCursor": 48948286,
+  "evidenceCursor": 48970483,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -4610,6 +4724,18 @@
     {
       "at": "2026-11-13T05:45:16.460Z",
       "block": 48943940,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-13T06:08:48.757Z",
+      "block": 48958024,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-13T06:20:07.859Z",
+      "block": 48964753,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
