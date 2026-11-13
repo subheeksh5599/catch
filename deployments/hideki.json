@@ -2491,6 +2491,70 @@
       "tx": "0x34e70ee05b1abdf3d1645b2b01f65c91c4e619f764f158efe202a7ad3d36329d",
       "block": 48988388,
       "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0x05d177e7476da1fc3ed3fc6f8486af38de074480b3857405005e9d7bd73d3c9d",
+      "block": 48991833,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": false,
+      "price": "3689700000000000000",
+      "quantity": "15300000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x180d1a257444c8a180f95307053bc91b98c9adf9",
+      "tx": "0xd9e130e8a09e4dff7e4eb9e0c203c98578b68c4bc101dbbf4df4b0995682c86b",
+      "block": 48993339,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xc9dc4a2bc1134ee98f23fa300cb6d656a40f8c2c",
+      "tx": "0xa2bcad1d998d9bae959799639e4ee8349561ffbaec04503122c8975782a50932",
+      "block": 48993405,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x180d1a257444c8a180f95307053bc91b98c9adf9",
+      "tx": "0x89ef0046d0d2c7c3355aa24a5bb73b27b58679009e6676d2fa04fc784289303c",
+      "block": 48994553,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xc9dc4a2bc1134ee98f23fa300cb6d656a40f8c2c",
+      "tx": "0xaf4cfb5e09981168f60d27f26dfde9790466af426ef66bb93d6f2377ea3fc7bc",
+      "block": 48994594,
+      "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0xaae3ec1b703b2bba6103bf242071559bf639175033f0b8c297376db3299e770a",
+      "block": 48997996,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": false,
+      "price": "3741000000000000000",
+      "quantity": "15100000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "subscribe",
+      "account": "0x5c29418f8511660f18ec6a2cc1b2fb0ecb221afe",
+      "tx": "0x254404e659a26599c26ebbf5b74a2e0dcfae5ff28d659bf0f27a2377941fdce0",
+      "block": 48999229,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xc9dc4a2bc1134ee98f23fa300cb6d656a40f8c2c",
+      "tx": "0xc58d4957a702dbf0b1da2c6e912238edec530410f533e700c1162a2d63b5cd0d",
+      "block": 48999274,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -3274,6 +3338,36 @@
       "block": 48975959,
       "status": "removed",
       "removedTx": "0x34e70ee05b1abdf3d1645b2b01f65c91c4e619f764f158efe202a7ad3d36329d"
+    },
+    {
+      "account": "0x180d1a257444c8a180f95307053bc91b98c9adf9",
+      "subscriptionId": "41677650",
+      "tx": "0xd9e130e8a09e4dff7e4eb9e0c203c98578b68c4bc101dbbf4df4b0995682c86b",
+      "block": 48993339,
+      "status": "removed",
+      "removedTx": "0x89ef0046d0d2c7c3355aa24a5bb73b27b58679009e6676d2fa04fc784289303c"
+    },
+    {
+      "account": "0xc9dc4a2bc1134ee98f23fa300cb6d656a40f8c2c",
+      "subscriptionId": "41677746",
+      "tx": "0xa2bcad1d998d9bae959799639e4ee8349561ffbaec04503122c8975782a50932",
+      "block": 48993405,
+      "status": "removed",
+      "removedTx": "0xaf4cfb5e09981168f60d27f26dfde9790466af426ef66bb93d6f2377ea3fc7bc"
+    },
+    {
+      "account": "0x5c29418f8511660f18ec6a2cc1b2fb0ecb221afe",
+      "subscriptionId": "41687171",
+      "tx": "0x254404e659a26599c26ebbf5b74a2e0dcfae5ff28d659bf0f27a2377941fdce0",
+      "block": 48999229,
+      "status": "active"
+    },
+    {
+      "account": "0xc9dc4a2bc1134ee98f23fa300cb6d656a40f8c2c",
+      "subscriptionId": "41687258",
+      "tx": "0xc58d4957a702dbf0b1da2c6e912238edec530410f533e700c1162a2d63b5cd0d",
+      "block": 48999274,
+      "status": "active"
     }
   ],
   "evidence": [
@@ -3627,9 +3721,22 @@
           "tx": "0x6a4da223e5c6afbfa3dc7df65e597957ad4e1f7ae3ee2ff874e5035d4d02877a"
         }
       ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 48994178,
+      "detail": "Slot 66 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0x6434c6b42b8765f7452b077312c6267c1654e290cfe5dfd948106786d068cdeb"
+        }
+      ]
     }
   ],
-  "evidenceCursor": 48988409,
+  "evidenceCursor": 49006940,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -4816,6 +4923,24 @@
     {
       "at": "2026-11-13T06:49:47.859Z",
       "block": 48982543,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-13T07:08:07.754Z",
+      "block": 48993554,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-13T07:20:04.449Z",
+      "block": 49000700,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-13T07:30:35.955Z",
+      "block": 49007020,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
