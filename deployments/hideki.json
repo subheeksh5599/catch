@@ -2306,6 +2306,31 @@
       "tx": "0x17a3cb74b4f694f81ab5a3c6b207c094eeaa4db4443f4a06eef21ec92dbd1169",
       "block": 48891441,
       "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0xefcf1864598c1ff03c7eafea1c2df2589e113ac97527f6e84a2d488f226b9d85",
+      "block": 48900682,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454",
+      "isBid": false,
+      "price": "3596300000000000000",
+      "quantity": "15700000000000000000000000",
+      "backers": 2
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0xc694bc139923e0977d05bdb46bf401d71b2ce6c4",
+      "tx": "0xfd61a703ecad649ba03aa480fab9d550ee91f567d3529ff57f58d0fa38dfb1a2",
+      "block": 48901336,
+      "status": "success"
+    },
+    {
+      "kind": "subscribe",
+      "account": "0xfed8e2eb45ef062dd1757e1db5abd02db3ef4f0c",
+      "tx": "0x1013a212d1766412010dacfc9c040c5939121679e095bc7c6f398e6768e40972",
+      "block": 48901403,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -3017,6 +3042,14 @@
       "subscriptionId": "41512668",
       "tx": "0x17a3cb74b4f694f81ab5a3c6b207c094eeaa4db4443f4a06eef21ec92dbd1169",
       "block": 48891441,
+      "status": "removed",
+      "removedTx": "0xfd61a703ecad649ba03aa480fab9d550ee91f567d3529ff57f58d0fa38dfb1a2"
+    },
+    {
+      "account": "0xfed8e2eb45ef062dd1757e1db5abd02db3ef4f0c",
+      "subscriptionId": "41528813",
+      "tx": "0x1013a212d1766412010dacfc9c040c5939121679e095bc7c6f398e6768e40972",
+      "block": 48901403,
       "status": "active"
     }
   ],
@@ -3306,9 +3339,22 @@
           "tx": "0x99cf5fbca9fed9f782b5d245262a03f0d402b8832a6e6987082f4ea2f5515ab1"
         }
       ]
+    },
+    {
+      "kind": "auto-cancel",
+      "title": "Order cancelled by the reactivity callback",
+      "status": "proven",
+      "block": 48896179,
+      "detail": "Slot 59 released (a backer moved out of the window) in a validator-issued onEvent call after a backer's position changed.",
+      "txs": [
+        {
+          "label": "Reactivity callback (onEvent)",
+          "tx": "0xb02cc549525e94efe5b62867dacd66d6499abc3590d585ed5e07bd9f70442e3c"
+        }
+      ]
     }
   ],
-  "evidenceCursor": 48893860,
+  "evidenceCursor": 48916490,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -4435,6 +4481,24 @@
     {
       "at": "2026-11-13T04:17:52.046Z",
       "block": 48891581,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-13T04:34:43.355Z",
+      "block": 48901667,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-13T04:45:23.165Z",
+      "block": 48908050,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-13T04:55:59.866Z",
+      "block": 48914413,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
