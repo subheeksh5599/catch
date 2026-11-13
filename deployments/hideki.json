@@ -2905,6 +2905,76 @@
       "tx": "0xb28ebf354511e7f8102168edf3f2f03b467495c1cb9c7f1938e23587bb169b31",
       "block": 49300425,
       "status": "success"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x31ec904cb835546a6cbfe3e19bc8bc19103711efc389186e40076f44ebf84468",
+      "block": 49358325,
+      "status": "success",
+      "pool": "0x1cd15ae8bff0fe0a7f49233be8b90734775ba454"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xc3df3dda69534be21fe8d726f478af6c88138eaf8e946fdfdc3138b2b77f35d8",
+      "block": 49358461,
+      "status": "success",
+      "pool": "0xd6cb1dd58580b84d76068ac21594219ce03aeddf"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0xa01dd7a38a731fec3882493c41475634897044d8cfa49c6535df281b15bb98d0",
+      "block": 49358686,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x3ddb2655978931e959539ae0a9cf009c8e7622ff35b587a0060861c35badbed9",
+      "block": 49358820,
+      "status": "success",
+      "pool": "0xde9762b6b441133d1314c68864ae4e63a6ee45c7"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x25a70a70972dbc0d608cf0846c4602e37d3956dcae2839541c9dd66669bbd9dc",
+      "block": 49358915,
+      "status": "success",
+      "pool": "0xf71b619450bafe953f47b9b556416a3a67b443b5"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x3c3c147c2c11c0cca3aa1877720d8d4b5462e71e0c7af71ad2a2309e08c739ab",
+      "block": 49359106,
+      "status": "success",
+      "pool": "0xdcb0ad226727b2ce92857f0af5751389d42b2a3f"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x728332dfd583f59bc1dbff984b51274fc0e274a0aa7f994d52d5f4615a1e1e2e",
+      "block": 49359245,
+      "status": "success",
+      "pool": "0x0f464d57c1fd839e4d87a408bbccdab8f77e6394"
+    },
+    {
+      "kind": "refreshPool",
+      "tx": "0x1561334b83cc14e7821b2bad6bd88b5abd5e498864513c3964706e8ca78c7688",
+      "block": 49359419,
+      "status": "success",
+      "pool": "0x2a1822b02039ddf0e293f3f7243673fc03eaf16c"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x49a86174c4eab59f9e48837ada26b20cf514cca0",
+      "tx": "0x6e8fa649547c2113993633bf148adb646a574cfe0942f2d72a538ba6c9944892",
+      "block": 49359646,
+      "status": "success"
+    },
+    {
+      "kind": "unsubscribe",
+      "account": "0x695a7dd3d9bf987a05e3653b5a71b66b37d9c61a",
+      "tx": "0xa1090a6dad27daf0c32c5939cd9b23a2ad0f2a4a144b38c99d3eb16a8599b24a",
+      "block": 49359684,
+      "status": "success"
     }
   ],
   "subscriptions": [
@@ -3785,14 +3855,16 @@
       "subscriptionId": "42131156",
       "tx": "0xe6a3946bf32d9d2e89df5a6690b1a1791f9a42f83b028a6de4a1dcf8688b9f1d",
       "block": 49273489,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0x6e8fa649547c2113993633bf148adb646a574cfe0942f2d72a538ba6c9944892"
     },
     {
       "account": "0x695a7dd3d9bf987a05e3653b5a71b66b37d9c61a",
       "subscriptionId": "42131224",
       "tx": "0x3ef6b00fd65a8e56b48eca2132573bca9a43cece9065f9085ce7854c87cabc55",
       "block": 49273540,
-      "status": "active"
+      "status": "removed",
+      "removedTx": "0xa1090a6dad27daf0c32c5939cd9b23a2ad0f2a4a144b38c99d3eb16a8599b24a"
     },
     {
       "account": "0x1f5042e87d33c93be7e183d9e0631c51b024ad45",
@@ -4201,7 +4273,7 @@
       ]
     }
   ],
-  "evidenceCursor": 49348819,
+  "evidenceCursor": 49359699,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -5652,6 +5724,18 @@
     {
       "at": "2026-11-13T16:53:53.822Z",
       "block": 49344444,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-13T17:05:06.219Z",
+      "block": 49351145,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-13T17:16:17.903Z",
+      "block": 49357871,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
