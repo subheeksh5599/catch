@@ -3294,6 +3294,17 @@
       "tx": "0x960ee238603ddda15c5f8dc5e4209c068d93991ab5cf67678bae85d854e75b29",
       "block": 49705342,
       "status": "success"
+    },
+    {
+      "kind": "place",
+      "tx": "0x26b19972db280f24f1d204af795e401f1b4cff1ec8fd70452bf3f9de156a0a3e",
+      "block": 49742952,
+      "status": "success",
+      "pool": "0x3d2a99fe1e2bdeaa25024515a2d2202daf9531ad",
+      "isBid": true,
+      "price": "604063000000000000000",
+      "quantity": "93000000000000000",
+      "backers": 2
     }
   ],
   "subscriptions": [
@@ -4715,7 +4726,7 @@
       ]
     }
   ],
-  "evidenceCursor": 49726155,
+  "evidenceCursor": 49739173,
   "navHistory": [
     {
       "at": "2026-11-11T10:29:32.414Z",
@@ -6454,6 +6465,18 @@
     {
       "at": "2026-11-14T03:21:38.165Z",
       "block": 49720968,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-14T03:32:17.982Z",
+      "block": 49727365,
+      "totalAssets": "227000000000000000000",
+      "totalSupply": "227000000000000000000000"
+    },
+    {
+      "at": "2026-11-14T03:42:49.886Z",
+      "block": 49733684,
       "totalAssets": "227000000000000000000",
       "totalSupply": "227000000000000000000000"
     }
