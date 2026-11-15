@@ -12,7 +12,7 @@ const MARK =
 const h = (type, style, children) => ({ type, props: { style: { display: "flex", ...style }, children } });
 
 function card(d) {
-  const tone = d.headline.startsWith("+") ? C.up : d.headline.startsWith("−") ? C.down : C.fg;
+  const tone = d.headline.startsWith("+") || d.headline.endsWith("has a buyer") ? C.up : d.headline.startsWith("−") || d.headline.startsWith("No buyer") ? C.down : C.fg;
   return h("div", { width: "100%", height: "100%", background: C.bg, color: C.fg, flexDirection: "column", padding: "56px 64px", fontFamily: "sans-serif" }, [
     h("div", { alignItems: "center", gap: 16 }, [
       { type: "img", props: { src: MARK, width: 44, height: 44 } },
@@ -50,7 +50,7 @@ export default async function handler(req, res) {
     const buf = Buffer.from(await img.arrayBuffer());
     res.statusCode = 200;
     res.setHeader("content-type", "image/png");
-    res.setHeader("cache-control", d?.kind === "depositor" ? "public, s-maxage=300" : "public, s-maxage=3600, stale-while-revalidate=86400");
+    res.setHeader("cache-control", d?.kind === "depositor" || d?.kind === "check" ? "public, s-maxage=60" : "public, s-maxage=3600, stale-while-revalidate=86400");
     res.end(buf);
   } catch (e) {
     res.statusCode = 500;

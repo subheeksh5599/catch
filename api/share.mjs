@@ -39,9 +39,9 @@ main{max-width:760px;padding:24px}img{width:100%;border-radius:14px;border:1px s
 .row{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}a{color:#fff;text-decoration:none;padding:10px 16px;border-radius:10px;background:#1c6cff}
 a.alt{background:transparent;border:1px solid #11263b}</style></head>
 <body><main><img src="${esc(img)}" alt="${esc(title)}">
-<div class="row"><a href="${esc(base)}/app/#/vault">Open Catch</a><a class="alt" href="${esc(page)}&amp;post=1">Post on X</a></div></main></body></html>`;
+<div class="row"><a href="${esc(base)}/app/#/${d.kind === "check" ? "check?a=" + encodeURIComponent(d.id) : "vault"}">${d.kind === "check" ? "Check your own" : "Open Catch"}</a><a class="alt" href="${esc(page)}&amp;post=1">Post on X</a></div></main></body></html>`;
   res.statusCode = 200;
   res.setHeader("content-type", "text/html; charset=utf-8");
-  res.setHeader("cache-control", d.kind === "depositor" ? "public, s-maxage=300" : "public, s-maxage=3600, stale-while-revalidate=86400");
+  res.setHeader("cache-control", d.kind === "depositor" || d.kind === "check" ? "public, s-maxage=60" : "public, s-maxage=3600, stale-while-revalidate=86400");
   res.end(html);
 }
