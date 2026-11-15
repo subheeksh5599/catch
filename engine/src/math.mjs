@@ -150,6 +150,35 @@ export function sizeOrder({ size, price, oneBase, lotSize, minQuantity, capNotio
   return qty >= minQuantity ? qty : 0n;
 }
 
+/** What the book holds today for one position's forced close. The engine sells a liquidated
+ *  long into bids (buys a short back from asks) no further than its catch window, so only
+ *  resting orders inside [lo, hi] can take it. Walks those levels best price first and returns
+ *  the base it would fill, the average fill price, and the remainder that would fall past the
+ *  book (to a backstop bidder, then the insurance fund, then auto-deleveraging).
+ *  Plain numbers in, CCXT-style [price, amount] rows. */
+export function closeInBook({ side, size, window, rows }) {
+  const { lo, hi } = window;
+  const levels = rows
+    .filter(([p, a]) => p >= lo && p <= hi && a > 0)
+    .sort((x, y) => (side === "long" ? y[0] - x[0] : x[0] - y[0]));
+  let left = Math.abs(size), filled = 0, quote = 0;
+  for (const [p, a] of levels) {
+    if (left <= 0) break;
+    const take = Math.min(a, left);
+    filled += take;
+    quote += take * p;
+    left -= take;
+  }
+  const total = Math.abs(size);
+  return {
+    filled,
+    unfilled: Math.max(0, total - filled),
+    coverage: total > 0 ? filled / total : 0,
+    avgPrice: filled > 0 ? quote / filled : null,
+    restingNotional: depthBetween(rows, lo, hi),
+  };
+}
+
 /** Resting book depth (quote notional) inside a price window, from CCXT-style [price, amount] rows. */
 export function depthBetween(rows, lo, hi) {
   let n = 0;

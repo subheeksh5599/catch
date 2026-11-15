@@ -128,3 +128,28 @@ test("best cluster prefers a reachable level over a bigger, distant one", () => 
   assert.deepEqual(c.backers, ["0x02"]);
   assert.equal(c.price, 58_800n * E18, "at the edge nearest the mark");
 });
+
+import { closeInBook } from "../src/math.mjs";
+
+test("closeInBook: a long's close walks bids inside its window, best first", () => {
+  const rows = [[101, 5], [99, 1], [98, 2], [96, 10]]; // 101 is above the window, 96 below it
+  const r = closeInBook({ side: "long", size: 2.5, window: { lo: 97, hi: 100 }, rows });
+  assert.equal(r.filled, 2.5);
+  assert.equal(r.unfilled, 0);
+  assert.equal(r.coverage, 1);
+  assert.equal(r.avgPrice, (99 * 1 + 98 * 1.5) / 2.5);
+  assert.equal(r.restingNotional, 99 + 196);
+});
+
+test("closeInBook: what the window cannot hold falls past the book", () => {
+  const r = closeInBook({ side: "short", size: -4, window: { lo: 50, hi: 52 }, rows: [[51, 1], [53, 9]] });
+  assert.equal(r.filled, 1);
+  assert.equal(r.unfilled, 3);
+  assert.equal(r.coverage, 0.25);
+  assert.equal(r.avgPrice, 51);
+});
+
+test("closeInBook: an empty window has no buyer at all", () => {
+  const r = closeInBook({ side: "long", size: 1, window: { lo: 10, hi: 11 }, rows: [] });
+  assert.deepEqual([r.filled, r.unfilled, r.coverage, r.avgPrice, r.restingNotional], [0, 1, 0, null, 0]);
+});
