@@ -58,7 +58,7 @@ A perps screen shows your liquidation price. It does not show whether anyone wil
 |---|---|---|
 | **A real trader's liquidation filled a Catch order** | **Proven** | block 36,167,755: a HYPE short held by `0x43a3…476f`, an account outside Catch, fell below maintenance. The liquidation engine, called by another outside address, closed it at tx index 5 into the vault's resting ask at 81.61 (`0x050f62c9…371b`). The Reactivity callback recorded the vault's new −0.15 HYPE position and rested the unwind at index 22 of the same block (`0x13e52e11…5d31`) |
 | `CatchVault` v6 on Hideki | **Live** | [`0x8d457dd604a7a386e9766f51bb45f9d5faa4431a`](deployments/hideki.json), tx `0xb1bd0126…5060`, block 47,347,823. 50% market cap, 25% cluster cap, 2% of open interest per market, 1.5% mark-vs-index limit, 120 s index age, 1 hour redeem lock, and the stage-4 takeover quote |
-| Stage-4 backstop | **Built, fork-proven, waiting on one owner transaction** | on a fork of Hideki, the real LiquidationEngine handed Catch a liquidated BTC long, and picked Catch over the live bidder. Registration is owner-only; the exact call is in [`docs/stage4-backstop.md`](docs/stage4-backstop.md) and simulates successfully from the owner today. [More below](#stage-4-the-backstop) |
+| Stage-4 backstop | **Done on Catch's side; waiting on the dreamDEX owner** | the takeover quote is deployed in v6. On a fork of Hideki, the real LiquidationEngine handed Catch a liquidated BTC long and picked Catch over the live bidder. Adding a bidder is restricted to the engine's owner (the dreamDEX team), so no outside builder can turn it on: `isBidder(v6)` reads `false` until they send the one registration call in [`docs/stage4-backstop.md`](docs/stage4-backstop.md), which simulates successfully from the owner today. Nothing in Catch changes when they do; the dashboard reads `isBidder` live. [More below](#stage-4-the-backstop) |
 | Depositors | **Two** | a second wallet (208 USDso) and the operator (18 USDso), $226 in total, each a separate `deposit` with its own lock |
 | Orders on the venue's book | **Live** | a keeper on a server quotes the ten busiest markets around the clock; every order and fill is in `deployments/` |
 | Same-block auto-cancel | **Proven, 54 times** (36 on v6) | e.g. a test trader closed its HYPE long at tx index 2 of block 35,466,495 (`0x24e2230d…d441`); the validator-issued `onEvent` cancelled the bid it backed at index 16 of the same block (`0x51109d89…bb38`) |
@@ -167,7 +167,7 @@ bidders, and one of them takes it over at the price it quoted. Catch v6 is a bid
   registered the live bidder, and replays the original liquidation byte for byte. The engine
   hands Catch the position at 73,159.55. With both bidders registered, it still picks Catch: the
   live bidder took the same position at 73,076.68, a worse price for the liquidated trader.
-- **One transaction from live.** Registration is owner-only (`OwnableUnauthorizedAccount` for
+- **One transaction from live, and it is the venue's to send.** Catch's side is complete. Registration is owner-only (`OwnableUnauthorizedAccount` for
   anyone else). The calldata for v6 simulates successfully from the owner today:
   [`docs/stage4-backstop.md`](docs/stage4-backstop.md). The dashboard reads `isBidder` live.
 
@@ -365,7 +365,7 @@ MarginBank not yet published.
 | A liquidation filled into a Catch order | **Real** | block 36,167,755, a trader outside Catch, liquidated by an address outside Catch |
 | Every closed trade's result | **Real** | 8 closes on v4, all in profit, +4.66 USDso realized as booked by MarginBank |
 | Depositors got more back than they put in | **Real, twice** | v4: +21.4% on 45.90 USDso; v5: +8.4% on 155.76 USDso. Small size, testnet; not a forecast |
-| Stage-4 takeover | **Proven on a fork, pending registration** | the real engine handed Catch a BTC long and picked it over the live bidder; registration is owner-only, one transaction ([`docs/stage4-backstop.md`](docs/stage4-backstop.md)) |
+| Stage-4 takeover | **Proven on a fork; registration is the dreamDEX owner's call** | the real engine handed Catch a BTC long and picked it over the live bidder; registration is owner-only, one transaction ([`docs/stage4-backstop.md`](docs/stage4-backstop.md)) |
 | Mainnet | **Pending** | dreamDEX perps are testnet-only today; the same scripts deploy to mainnet when the venue launches there |
 
 Foundry cannot fork Hideki directly, because the RPC rejects the EIP-1898 block objects Foundry sends; it does serve archive state by block number. `contracts/script/hideki-fork-rpc.py` translates between the two, which is how the stage-4 fork tests run against the real engine.
