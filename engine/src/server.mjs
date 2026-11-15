@@ -4,6 +4,7 @@ import { readFile, stat } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import { CatchService } from "./service.mjs";
+import { checkAccount, isAddress } from "./check.mjs";
 
 const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 const SITE = join(ROOT, "site");
@@ -62,6 +63,11 @@ const server = http.createServer(async (req, res) => {
   try {
     if (p === "/api/og" || p === "/api/share") return (await import(`../../api/${p.slice(5)}.mjs`)).default(req, res);
     if (routes[p]) return send(res, 200, await routes[p]());
+    if (p === "/api/check") {
+      const a = url.searchParams.get("address") || "";
+      if (!isAddress(a)) return send(res, 400, { error: "address must be a 0x… account" });
+      return send(res, 200, await checkAccount(svc, a));
+    }
     if (p.startsWith("/api/map/")) {
       const pool = p.slice("/api/map/".length).toLowerCase();
       const m = svc.maps.get(pool);
