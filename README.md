@@ -8,10 +8,10 @@
 [![Network](https://img.shields.io/badge/network-Somnia%20Hideki%20testnet%2050383-4DA2FF)](#live-status)
 [![Contract tests](https://img.shields.io/badge/forge%20tests-92%20%2B%2011%20invariants-16a34a)](#invariants)
 [![Fuzzing](https://img.shields.io/badge/fuzz-2%2C000%20runs%2C%20200k%20stateful%20calls-16a34a)](#invariants)
-[![Engine tests](https://img.shields.io/badge/engine%20tests-18%20passing-16a34a)](#the-engine)
+[![Engine tests](https://img.shields.io/badge/engine%20tests-21%20passing-16a34a)](#the-engine)
 ![Stack](https://img.shields.io/badge/Solidity%20%2B%20Somnia%20Reactivity%20%2B%20markets--sdk-1f1f23)
 
-[![Live](https://img.shields.io/badge/Live-catch--backstop.vercel.app-e2a336?labelColor=141415)](https://catch-backstop.vercel.app) [![Run it](https://img.shields.io/badge/Run%20it-three%20commands-141415?labelColor=141415)](#run-it) [![Mechanism](https://img.shields.io/badge/Mechanism-step%20by%20step-141415?labelColor=141415)](#the-catch-loop-step-by-step) [![Evidence](https://img.shields.io/badge/Evidence-what%20is%20proven-141415?labelColor=141415)](#whats-real-vs-pending)
+[![Live](https://img.shields.io/badge/Live-catch--backstop.vercel.app-e2a336?labelColor=141415)](https://catch-backstop.vercel.app) [![Check your position](https://img.shields.io/badge/Check-your%20liquidation-141415?labelColor=141415)](https://catch-backstop.vercel.app/app/#/check) [![Run it](https://img.shields.io/badge/Run%20it-three%20commands-141415?labelColor=141415)](#run-it) [![Mechanism](https://img.shields.io/badge/Mechanism-step%20by%20step-141415?labelColor=141415)](#the-catch-loop-step-by-step) [![Evidence](https://img.shields.io/badge/Evidence-what%20is%20proven-141415?labelColor=141415)](#whats-real-vs-pending)
 
 </div>
 
@@ -23,7 +23,28 @@ every open position's liquidation price   →   a post-only order inside the eng
 
 No admin can move depositor funds, no order rests where a liquidation cannot reach it, and no exposure is taken beyond caps fixed at deploy.
 
-**Who it's for.** Depositors who want their USDso to earn from forced flow instead of sitting idle, with every rule enforced by the contract rather than by an operator. And the venue, whose liquidations stop falling through an empty book toward the insurance fund and auto-deleveraging of profitable traders.
+**Who it's for.**
+
+- **Every dreamDEX trader.** Paste your address into [Check my position](https://catch-backstop.vercel.app/app/#/check) and see, for each open perp, where it gets liquidated and whether anyone is waiting in the book to take it when it does. If nobody is, your close falls past the book toward a backstop bidder, the insurance fund and auto-deleveraging. It takes ten seconds, needs no wallet and no signature, and the answer changes every time you open or resize a position.
+- **Depositors** who want their USDso to earn from forced flow instead of sitting idle, with every rule enforced by the contract rather than by an operator.
+- **The venue**, whose liquidations stop falling through an empty book toward the insurance fund and auto-deleveraging of profitable traders.
+
+## Is anyone waiting under your liquidation?
+
+[![Check my position: a live BTC short with no buyer in its close window](docs/media/check-page.png)](https://catch-backstop.vercel.app/app/#/check)
+
+A perps screen shows your liquidation price. It does not show whether anyone will buy your position when it gets there. Catch already maps every position on the venue, so it answers it for one account on request:
+
+1. **Paste an address** (or press *Use my wallet*). Catch reads each open position, the account's live health and its bankruptcy prices, pinned to one block.
+2. **See the close window.** The venue's own single-market solve gives the liquidation price; the engine's maximum liquidation spread (5% today), bounded by the bankruptcy price, gives the window it may close you in.
+3. **See who is waiting.** The live book inside that window is walked best price first: how much of your size it would take, at what average price, and how much would fall past it. Catch's own resting orders there are marked, and *waiting for you* when they cite your account.
+4. **Share it.** One button posts a card to X tagging @DreamDEXSomnia. The link names only the address; every figure on the card is read from the chain when someone opens it, so it is never stale and never made up.
+
+[![The share card a trader posts](docs/media/check-card.png)](https://catch-backstop.vercel.app/app/#/check)
+
+**What it found the first time we ran it** (block 50,723,592, 2026-11-15 07:13 UTC): the four BTC positions closest to liquidation, 5.8% to 9.4% from the mark and $351K of notional at their liquidation prices, had **$0** resting inside their close windows. The largest, a 3.86 BTC short (`0x74ff…bA72`) liquidating at 69,472, would fall straight past the book. Run it again on any account: `GET /api/check?address=0x…`.
+
+**The loop.** A trader checks, sees an empty window under their position, and shares the card. Everyone who opens the link can check their own. Those empty windows are exactly where Catch quotes, and depositors fund the quotes; the bigger the vault, the more windows it fills, and the next check shows a buyer where there was none. A trader has a reason to come back each time they open or resize a position, and a depositor each time one of those windows is filled. Both loops run on the same number, read live.
 
 ## Demo
 
@@ -40,7 +61,7 @@ No admin can move depositor funds, no order rests where a liquidation cannot rea
 | Stage-4 backstop | **Built, fork-proven, waiting on one owner transaction** | on a fork of Hideki, the real LiquidationEngine handed Catch a liquidated BTC long, and picked Catch over the live bidder. Registration is owner-only; the exact call is in [`docs/stage4-backstop.md`](docs/stage4-backstop.md) and simulates successfully from the owner today. [More below](#stage-4-the-backstop) |
 | Depositors | **Two** | a second wallet (208 USDso) and the operator (18 USDso), $226 in total, each a separate `deposit` with its own lock |
 | Orders on the venue's book | **Live** | a keeper on a server quotes the ten busiest markets around the clock; every order and fill is in `deployments/` |
-| Same-block auto-cancel | **Proven, 18 times** | e.g. a test trader closed its HYPE long at tx index 2 of block 35,466,495 (`0x24e2230d…d441`); the validator-issued `onEvent` cancelled the bid it backed at index 16 of the same block (`0x51109d89…bb38`) |
+| Same-block auto-cancel | **Proven, 54 times** (36 on v6) | e.g. a test trader closed its HYPE long at tx index 2 of block 35,466,495 (`0x24e2230d…d441`); the validator-issued `onEvent` cancelled the bid it backed at index 16 of the same block (`0x51109d89…bb38`) |
 | Fill → position → unwind | **Proven, 23 times** | every fill was recorded by the callback in its own block, with an unwind rested at or beyond entry, e.g. ETH short at 2,415.43 offered back at 2,324.28 (`0x91db9c26…53be`) |
 | Contract refusing an order on chain | **Observed** | keeper proposals whose backers moved before the send reverted `OutsideBand(account, lo, hi, price)` |
 | Every trade, priced by the venue | **17 fills on v4, every close in profit** | the vault's own MarginBank `PositionUpdated` logs: 8 closes, all positive, +4.66 USDso realized in total; the caught liquidation itself closed for +0.10 (`scripts/live/trades.mjs`, the Trades card on the Vault page) |
@@ -49,6 +70,7 @@ No admin can move depositor funds, no order rests where a liquidation cannot rea
 | Somnia Agents price check | **Live** | before every order, the keeper reads Somnia Price Feeds, the median that Somnia Agents subcommittees write on chain every 500 ms. It quotes only while that price is under 15 s old, backed by 2+ agents, and the venue mark is within 1.5% of it; refusals are recorded as `AgentPriceCheck`. [More below](#somnia-primitives) |
 | Live alerts | **Telegram** | [t.me/catch_liquidation](https://t.me/catch_liquidation): every catch, every fill, and any stage-4 takeover, posted by `scripts/live/alerts.mjs` from the proven record and the engine's `PositionTakenOver` logs |
 | Reactivity | **Live, per account** | one `PositionUpdated` subscription per backing account plus the vault itself, reconciled by the keeper every pass |
+| Position check | **Live** | [`/app/#/check`](https://catch-backstop.vercel.app/app/#/check) and `GET /api/check?address=0x…`: any account's liquidation prices, close windows, the live book inside them and Catch's orders there, with a share card (`/api/share?kind=check&id=0x…`). Read-only, no signature |
 | Dashboard and landing page | **Live** | [catch-backstop.vercel.app](https://catch-backstop.vercel.app), every figure read from Hideki by the engine |
 
 Earlier vaults stay on chain with their records: v1 (`deployments/hideki-v1.json`, venue-wide subscription, too costly), v2 (`hideki-v2.json`, found that the venue's `getOrder` reverts on a deleted order, which made re-checks revert; fixed in the contract with three regression tests), v3 (`hideki-v3.json`, caps too small for the deposit), v4 (`hideki-v4.json`, the vault that made the catch; replaced by v5 to add the open-interest cap, the price check and the redeem lock, with no open position at retirement), v5 (`hideki-v5.json`, +8.4%; replaced by v6 to add the stage-4 takeover quote and a fix the stateful fuzzer found: an unwind could take a seventh order slot on a market already holding six).
@@ -68,6 +90,7 @@ flowchart TD
 ## Table of contents
 
 - [Demo](#demo)
+- [Is anyone waiting under your liquidation?](#is-anyone-waiting-under-your-liquidation)
 - [Live status](#live-status)
 - [What Catch is not](#what-catch-is-not)
 - [The problem](#the-problem)
@@ -153,7 +176,7 @@ bidders, and one of them takes it over at the price it quoted. Catch v6 is a bid
 **Reactivity: the vault's re-check.** Every order is backed by the accounts whose liquidation it
 waits for. The vault subscribes to each one's MarginBank `PositionUpdated`. When a backer's
 position changes, the validators call `CatchVault.onEvent` in the same block, and the order is
-re-derived or cancelled before anyone can trade against a stale quote. 18 cancels and 23 fills
+re-derived or cancelled before anyone can trade against a stale quote. 54 cancels and 23 fills
 on chain so far ([Live status](#live-status)).
 
 **Somnia Agents: the price Catch trusts.** Somnia Price Feeds is run by Somnia Agents:
@@ -188,7 +211,7 @@ on chain (`0x1998C88D…7D81F` on the Tokyo subchain). Catch relies on it in two
 | 7 | No order is placed, and a resting one is released, while the mark is more than `MAX_INDEX_DEVIATION_BPS` from the oracle index or the index is older than `MAX_INDEX_AGE` | `_requireSanePrice`, `priceStatus`, re-check | `test_invariant7_*` (5), `test_priceStatus_reportsEachState` |
 | 8 | New shares cannot be redeemed or transferred for `REDEEM_DELAY`; nobody can deposit for, and so re-lock, someone else | `deposit`, `redeem`, `_move` | `test_invariant8_*` (4) |
 
-`cd engine && npm test` → 18 engine tests, including the agents' price check.
+`cd engine && npm test` → 21 engine tests, including the agents' price check and the close-window walk behind the position check.
 
 `cd contracts && forge test` → 92 tests (75 vault, 13 takeover-quote, 4 on a fork of the live engine) plus a stateful suite of 11 invariants, all passing. The fork tests skip unless `HIDEKI_RPC` is set; see [Stage 4](#stage-4-the-backstop).
 
@@ -256,6 +279,7 @@ The first run caught an over-strict check in the suite itself: an order whose pr
 
 | Page | What it shows |
 |---|---|
+| Check my position | any account's open perps, closest to liquidation first: liquidation price, distance, close window, the live book inside it, how much of the size it would take, Catch's orders there, and a share card |
 | Overview | what Catch does in three steps, the last catch, vault assets and share price, orders resting, the empty-book rate, the busiest market's map, how liquidations ended |
 | Vault | deposit and redeem through any EIP-1193 wallet with a live preview and your lock time, the share-price line from the keeper's reads, earlier vaults and what their depositors got back, exposure against each cap with the price check per market, resting orders, activity, the contract's rules and the proofs |
 | Liquidation map | liquidation notional by trigger price with the resting book in the same bins, cumulative curves, each cluster with its window and the vault order it would produce, what a 1–10% move would force, and the accounts closest to liquidation |
@@ -281,7 +305,7 @@ git clone --recurse-submodules https://github.com/subheeksh5599/catch && cd catc
 cd contracts && forge test                      # 92 tests + 11 invariants (2,000 runs, 200,000 calls), about a minute
 python3 script/hideki-fork-rpc.py 8547 &        # optional: read-only RPC shim for the fork tests
 HIDEKI_RPC=http://127.0.0.1:8547 forge test --match-contract TakeoverFork -vv   # the real engine, on a fork
-cd ../engine && npm install && npm test          # 12 passed
+cd ../engine && npm install && npm test          # 21 passed
 npm --prefix ../dashboard install && npm --prefix ../dashboard run build   # the dashboard, once
 npm start                                        # http://127.0.0.1:8787 (site) and /app/ (dashboard), live Hideki data
 ```
@@ -332,17 +356,19 @@ MarginBank not yet published.
 | A large share of liquidations found an empty book | **Measured** | the table above, recomputed live |
 | Every position and its liquidation price readable from head state | **Real** | the engine maps every market |
 | Contract windows match the engine on real accounts | **Rehearsed** | 16/16 identical, `deployments/rehearsal-hideki.txt` |
-| Vault rules | **Tested** | 88 Foundry tests against venue doubles that follow the published ABIs, and 4 against the deployed engine on a fork |
+| Vault rules | **Tested** | 88 Foundry tests against venue doubles that follow the published ABIs, 4 against the deployed engine on a fork, and 11 stateful invariants |
 | A contract-owned account resting orders on Hideki | **Real** | v4 and v5 orders; hashes in `deployments/` |
-| Same-block cancel from a reactivity callback | **Real** | 17 recorded, e.g. block 35,466,495 |
-| Fill handled by the callback, unwind at or beyond entry | **Real** | 21 recorded |
+| Same-block cancel from a reactivity callback | **Real** | 54 recorded across v4–v6, e.g. block 35,466,495 |
+| Fill handled by the callback, unwind at or beyond entry | **Real** | 23 recorded |
+| Position check for any trader | **Real, read-only** | live reads per request; the close-window walk is unit-tested (`engine/test/math.test.mjs`). It reads today's book, which can change before a liquidation arrives |
+| Depositors | **Two, small** | a second wallet and the operator, $226 in total. The vault works; it has not been marketed to outside depositors yet |
 | A liquidation filled into a Catch order | **Real** | block 36,167,755, a trader outside Catch, liquidated by an address outside Catch |
 | Every closed trade's result | **Real** | 8 closes on v4, all in profit, +4.66 USDso realized as booked by MarginBank |
 | Depositors got more back than they put in | **Real, twice** | v4: +21.4% on 45.90 USDso; v5: +8.4% on 155.76 USDso. Small size, testnet; not a forecast |
 | Stage-4 takeover | **Proven on a fork, pending registration** | the real engine handed Catch a BTC long and picked it over the live bidder; registration is owner-only, one transaction ([`docs/stage4-backstop.md`](docs/stage4-backstop.md)) |
 | Mainnet | **Pending** | dreamDEX perps are testnet-only today; the same scripts deploy to mainnet when the venue launches there |
 
-A fork test was tried and dropped: neither Somnia RPC serves historical state, so neither Foundry nor anvil can fork it. The rehearsal script replaces it.
+Foundry cannot fork Hideki directly, because the RPC rejects the EIP-1898 block objects Foundry sends; it does serve archive state by block number. `contracts/script/hideki-fork-rpc.py` translates between the two, which is how the stage-4 fork tests run against the real engine.
 
 ## Feedback to the venue
 
