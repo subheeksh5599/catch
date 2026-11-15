@@ -11,6 +11,7 @@ import MapPage from "@/pages/map"
 import MarketsPage from "@/pages/markets"
 import LiquidationsPage from "@/pages/liquidations"
 import ContractsPage from "@/pages/contracts"
+import CheckPage from "@/pages/check"
 
 // Hash routes (/app/#/vault) so any static host serves every page without rewrite rules.
 const router = createHashRouter([
@@ -20,6 +21,7 @@ const router = createHashRouter([
     children: [
       { path: "/", element: <OverviewPage /> },
       { path: "/vault", element: <VaultPage /> },
+      { path: "/check", element: <CheckPage /> },
       { path: "/map", element: <MapPage /> },
       { path: "/markets", element: <MarketsPage /> },
       { path: "/liquidations", element: <LiquidationsPage /> },

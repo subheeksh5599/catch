@@ -495,7 +495,7 @@ function Backstop({ b, vault }: { b: NonNullable<VaultState["backstop"]>; vault:
 }
 
 /** A share link: the server builds the post and its card from records and chain reads only. */
-export function ShareOnX({ kind, id, label = "Post on X" }: { kind: "catch" | "vault" | "depositor"; id: string; label?: string }) {
+export function ShareOnX({ kind, id, label = "Post on X" }: { kind: "catch" | "vault" | "depositor" | "check"; id: string; label?: string }) {
   const href = `/api/share?kind=${kind}&id=${encodeURIComponent(id)}&post=1`
   return (
     <a

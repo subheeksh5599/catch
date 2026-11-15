@@ -1,5 +1,5 @@
 import * as React from "react"
-import { LayoutDashboard, Vault, ChartColumn, Rows3, ArrowDownToLine, FileCode2, ArrowLeft, Send } from "lucide-react"
+import { LayoutDashboard, Vault, ShieldCheck, ChartColumn, Rows3, ArrowDownToLine, FileCode2, ArrowLeft, Send } from "lucide-react"
 import { Logo } from "@/components/logo"
 import { NavMain } from "@/components/nav-main"
 import { useCatch } from "@/lib/api"
@@ -20,6 +20,7 @@ const navGroups = [
     items: [
       { title: "Overview", url: "/", icon: LayoutDashboard },
       { title: "Vault", url: "/vault", icon: Vault },
+      { title: "Check my position", url: "/check", icon: ShieldCheck },
     ],
   },
   {

@@ -12,6 +12,7 @@ import { toast } from "@/components/ui/toast"
 const TITLES: Record<string, string> = {
   "/": "Overview",
   "/vault": "Vault",
+  "/check": "Check my position",
   "/map": "Liquidation map",
   "/markets": "Markets",
   "/liquidations": "Liquidations",
