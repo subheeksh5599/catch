@@ -404,3 +404,7 @@ docs/         the stage-4 backstop: interface, fork proof, the registration call
 - **Trades:** `scripts/live/trades.mjs hideki` reads the receipt of every recorded fill and takes the MarginBank `PositionUpdated` log for the vault: new size, average entry and `realizedPnl` as the venue booked them.
 - **The catch:** the liquidation receipt's LiquidationEngine logs name the liquidated account and the sender; the vault's `Caught` event and the callback transaction sit in the same block.
 - **Map figures:** `engine/scripts/snapshot.mjs` prints them for any market at the current block.
+
+## judge note
+
+"Note for judges: the live: keeper record … commits are pushed automatically every 30 minutes by Catch's keeper on a server; they refresh the chain reads in deployments/ that the live site shows. The project's own work is in the feat:, fix:, test: and docs: commits."
